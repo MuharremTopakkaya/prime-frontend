@@ -1,0 +1,27 @@
+{
+  "name": "prime-frontend",
+  "version": "1.0.0",
+  "description": "Prime Frontend Monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev --workspace=@prime/admin",
+    "dev:ui": "npm run dev --workspace=@prime/ui",
+    "install:all": "npm install",
+    "clean": "npm run clean --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
