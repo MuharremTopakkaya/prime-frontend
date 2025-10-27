@@ -25,6 +25,7 @@ export function SidebarLinks(props) {
     const translationMap = {
       'Main Dashboard': t('navigation.dashboard'),
       'Companies': t('navigation.companies'),
+      'Partners': t('navigation.partners'),
       'NFT Marketplace': t('navigation.nftMarketplace'),
       'Data Tables': t('navigation.dataTables'),
       'Profile': t('navigation.profile'),

@@ -32,29 +32,31 @@ class AuthService {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
       // MOCK DATA - Database bağlantısı olmadığı için geçici test
-      // if (credentials.email === 'test@gmail.com' && credentials.password === 'Tester123.') {
-      //   // Mock token - Owner authentication method
-      //   const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2F1dGhlbnRpY2F0aW9ubWV0aG9kIjoiT3duZXIifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-      //   
-      //   return {
-      //     accessToken: {
-      //       token: mockToken,
-      //       expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-      //     }
-      //   };
-      // }
-      // 
-      // if (credentials.email === 'customer@test.com' && credentials.password === 'Customer123.') {
-      //   // Mock token - Customer authentication method
-      //   const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2F1dGhlbnRpY2F0aW9ubWV0aG9kIjoiQ3VzdG9tZXIifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-      //   
-      //   return {
-      //     accessToken: {
-      //       token: mockToken,
-      //       expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-      //     }
-      //   };
-      // }
+      if (credentials.email === 'test@gmail.com' && credentials.password === 'Tester123.') {
+        // Mock token - Owner authentication method
+        const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2F1dGhlbnRpY2F0aW9ubWV0aG9kIjoiT3duZXIifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+        
+        return {
+          accessToken: {
+            token: mockToken,
+            expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        };
+      }
+      
+      if (credentials.email === 'customer@test.com' && credentials.password === 'Customer123.') {
+        // Mock token - Customer authentication method
+        const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2F1dGhlbnRpY2F0aW9ubWV0aG9kIjoiQ3VzdG9tZXIifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+        
+        return {
+          accessToken: {
+            token: mockToken,
+            expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        };
+      }
+      
+      throw new Error('Invalid credentials');
 
       // Gerçek API çağrısı
       const response = await fetch(`${this.API_BASE_URL}/Auth/Login`, {

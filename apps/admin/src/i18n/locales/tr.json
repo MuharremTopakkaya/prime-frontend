@@ -48,9 +48,27 @@
       "customer": "Müşteri"
     }
   },
+  "partners": {
+    "title": "İş Ortakları",
+    "partnerList": "İş Ortağı Listesi",
+    "addPartner": "Yeni İş Ortağı Ekle",
+    "editPartner": "İş Ortağı Düzenle",
+    "partnerName": "İş Ortağı Adı",
+    "apiKey": "API Anahtarı",
+    "apiKeyMasked": "API Anahtarı (Gizli)",
+    "showApiKey": "API Anahtarını Göster",
+    "hideApiKey": "API Anahtarını Gizle",
+    "noPartnersFound": "İş ortağı bulunamadı",
+    "partnerAddedSuccessfully": "İş ortağı başarıyla eklendi",
+    "partnerUpdatedSuccessfully": "İş ortağı başarıyla güncellendi",
+    "partnerDeletedSuccessfully": "İş ortağı başarıyla silindi",
+    "confirmDeletePartner": "İş Ortağını Sil",
+    "confirmDeleteMessage": "{{name}} adlı iş ortağını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+  },
   "navigation": {
     "dashboard": "Ana Sayfa",
     "companies": "Şirketler",
+    "partners": "İş Ortakları",
     "nftMarketplace": "NFT Pazarı",
     "dataTables": "Veri Tabloları",
     "profile": "Profil",

@@ -48,9 +48,27 @@
       "customer": "Customer"
     }
   },
+  "partners": {
+    "title": "Partners",
+    "partnerList": "Partner List",
+    "addPartner": "Add Partner",
+    "editPartner": "Edit Partner",
+    "partnerName": "Partner Name",
+    "apiKey": "API Key",
+    "apiKeyMasked": "API Key (Masked)",
+    "showApiKey": "Show API Key",
+    "hideApiKey": "Hide API Key",
+    "noPartnersFound": "No partners found",
+    "partnerAddedSuccessfully": "Partner added successfully",
+    "partnerUpdatedSuccessfully": "Partner updated successfully",
+    "partnerDeletedSuccessfully": "Partner deleted successfully",
+    "confirmDeletePartner": "Delete Partner",
+    "confirmDeleteMessage": "Are you sure you want to delete {{name}}? This action cannot be undone."
+  },
   "navigation": {
     "dashboard": "Main Dashboard",
     "companies": "Companies",
+    "partners": "Partners",
     "nftMarketplace": "NFT Marketplace",
     "dataTables": "Data Tables",
     "profile": "Profile",
