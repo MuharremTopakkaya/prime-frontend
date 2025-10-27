@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -34,6 +35,7 @@ import Pagination from '../../components/Pagination';
 
 const CompaniesPage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   
@@ -117,6 +119,10 @@ const CompaniesPage: React.FC = () => {
     setCurrentPage(page);
   };
 
+  const handleDetails = (company: Company) => {
+    navigate(`/admin/companies/${company.id}`);
+  };
+
   const getStatusBadge = (status: OperationalStatus) => {
     const statusText = companyService.getStatusText(status);
     const statusColor = companyService.getStatusColor(status);
@@ -150,7 +156,7 @@ const CompaniesPage: React.FC = () => {
   }
 
   return (
-    <Box p={{ base: 4, md: 6 }} pt={{ base: 16, md: 20 }}>
+    <Box p={{ base: 4 , md: 6 }} pt={{ base: 16, md: 20 }}>
       {/* Header Section */}
       <Box mb={12}>
         <Flex justify="flex-end" mb={10}>
@@ -331,7 +337,7 @@ const CompaniesPage: React.FC = () => {
                               <MenuItem onClick={() => handleEditCompany(company)}>
                                 {t('common.edit')}
                               </MenuItem>
-                              <MenuItem isDisabled>
+                              <MenuItem onClick={() => handleDetails(company)}>
                                 {t('common.details')}
                               </MenuItem>
                             </MenuList>

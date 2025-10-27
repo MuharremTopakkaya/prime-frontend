@@ -25,12 +25,17 @@ export default function AdminNavbar(props) {
 	const getPageInfo = () => {
 		const path = location.pathname;
 		
-		if (path.includes('/companies')) {
-			return {
-				breadcrumb: t('navigation.companies'),
-				title: t('navigation.companies')
-			};
-		} else if (path.includes('/partners')) {
+        if (path.includes('/companies')) {
+          return {
+            breadcrumb: t('navigation.companies'),
+            title: t('navigation.companies')
+          };
+        } else if (path.includes('/companies/') && path.split('/').length > 3) {
+          return {
+            breadcrumb: `${t('navigation.companies')} / ${t('common.details')}`,
+            title: t('common.details')
+          };
+        } else if (path.includes('/partners')) {
 			return {
 				breadcrumb: t('navigation.partners'),
 				title: t('navigation.partners')

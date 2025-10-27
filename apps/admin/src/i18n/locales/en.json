@@ -18,7 +18,8 @@
     "address": "Address",
     "createdDate": "Created Date",
     "updatedDate": "Updated Date",
-    "pages": "Pages"
+    "pages": "Pages",
+    "back": "Back"
   },
   "companies": {
     "title": "Companies",
@@ -68,6 +69,7 @@
   "navigation": {
     "dashboard": "Main Dashboard",
     "companies": "Companies",
+    "companyDetail": "Company Detail",
     "partners": "Partners",
     "nftMarketplace": "NFT Marketplace",
     "dataTables": "Data Tables",
@@ -85,6 +87,22 @@
     "showing": "Showing",
     "to": "to",
     "entries": "entries"
+  },
+  "users": {
+    "users": "Users",
+    "name": "Name",
+    "surname": "Surname",
+    "email": "Email",
+    "password": "Password",
+    "passwordRepeat": "Repeat Password",
+    "updatePassword": "I want to update the password",
+    "updateUser": "Update User",
+    "permissionManagement": "Permission Management",
+    "permissionManagementDisabled": "Permission management is disabled for this task",
+    "noUsersFound": "No users found",
+    "userUpdatedSuccessfully": "User updated successfully",
+    "passwordRequired": "Password is required when updating password",
+    "passwordMismatch": "Passwords do not match"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",

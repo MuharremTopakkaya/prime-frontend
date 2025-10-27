@@ -18,6 +18,7 @@ import Profile from './views/admin/profile';
 import DataTables from './views/admin/dataTables';
 import RTL from './views/admin/rtl';
 import CompaniesPage from './views/companies/CompaniesPage';
+import CompanyDetailPage from './views/companies/CompanyDetailPage';
 import PartnersPage from './views/partners/PartnersPage';
 
 // Auth Imports
@@ -37,6 +38,14 @@ const routes = [
     path: '/companies',
     icon: <Icon as={MdBusiness} width="20px" height="20px" color="inherit" />,
     component: <CompaniesPage />,
+  },
+  {
+    name: 'Company Detail',
+    layout: '/admin',
+    path: '/companies/:id',
+    icon: <Icon as={MdBusiness} width="20px" height="20px" color="inherit" />,
+    component: <CompanyDetailPage />,
+    secondary: true,
   },
   {
     name: 'Partners',

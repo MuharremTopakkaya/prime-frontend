@@ -25,6 +25,7 @@ export function SidebarLinks(props) {
     const translationMap = {
       'Main Dashboard': t('navigation.dashboard'),
       'Companies': t('navigation.companies'),
+      'Company Detail': t('navigation.companyDetail'),
       'Partners': t('navigation.partners'),
       'NFT Marketplace': t('navigation.nftMarketplace'),
       'Data Tables': t('navigation.dataTables'),
@@ -68,6 +69,11 @@ export function SidebarLinks(props) {
         route.layout === "/auth" ||
         route.layout === "/rtl"
       ) {
+        // Skip secondary routes (like Company Detail) from sidebar
+        if (route.secondary) {
+          return null;
+        }
+        
         return (
           <NavLink key={index} to={route.layout + route.path}>
             {route.icon ? (

@@ -18,7 +18,8 @@
     "address": "Adres",
     "createdDate": "Oluşturma Tarihi",
     "updatedDate": "Güncelleme Tarihi",
-    "pages": "Sayfalar"
+    "pages": "Sayfalar",
+    "back": "Geri"
   },
   "companies": {
     "title": "Şirketler",
@@ -68,6 +69,7 @@
   "navigation": {
     "dashboard": "Ana Sayfa",
     "companies": "Şirketler",
+    "companyDetail": "Şirket Detayı",
     "partners": "İş Ortakları",
     "nftMarketplace": "NFT Pazarı",
     "dataTables": "Veri Tabloları",
@@ -85,6 +87,22 @@
     "showing": "Gösterilen",
     "to": "-",
     "entries": "kayıt"
+  },
+  "users": {
+    "users": "Kullanıcılar",
+    "name": "Ad",
+    "surname": "Soyad",
+    "email": "E-posta",
+    "password": "Şifre",
+    "passwordRepeat": "Şifre Tekrar",
+    "updatePassword": "Şifreyi de güncellemek istiyorum",
+    "updateUser": "Kullanıcı Güncelle",
+    "permissionManagement": "Yetki Yönetimi",
+    "permissionManagementDisabled": "Yetki yönetimi bu task kapsamında devre dışı",
+    "noUsersFound": "Kullanıcı bulunamadı",
+    "userUpdatedSuccessfully": "Kullanıcı başarıyla güncellendi",
+    "passwordRequired": "Şifre güncellenirken şifre alanı zorunludur",
+    "passwordMismatch": "Şifreler eşleşmiyor"
   },
   "errors": {
     "somethingWentWrong": "Bir şeyler ters gitti",
