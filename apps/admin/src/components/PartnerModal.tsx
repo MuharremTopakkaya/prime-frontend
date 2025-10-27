@@ -86,7 +86,12 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <ModalOverlay />
+      <ModalOverlay 
+        bg="blackAlpha.600"
+        _dark={{
+          bg: "blackAlpha.700"
+        }}
+      />
       <ModalContent
         bg="white"
         _dark={{

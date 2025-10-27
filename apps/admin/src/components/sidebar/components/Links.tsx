@@ -4,9 +4,11 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from "@chakra-ui/react";
+import { useClaimCheck } from '../../../hooks/useClaimCheck';
 
 export function SidebarLinks(props) {
   const { t } = useTranslation();
+  const { hasAnyClaim } = useClaimCheck();
   //   Chakra color mode
   let location = useLocation();
   let activeColor = useColorModeValue("gray.700", "white");
@@ -44,6 +46,16 @@ export function SidebarLinks(props) {
   // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
   const createLinks = (routes) => {
     return routes.map((route, index) => {
+      // Check if user has required claims for this route
+      const hasRequiredClaims = route.requiredClaims ? 
+        route.requiredClaims.length === 0 || hasAnyClaim(route.requiredClaims) : 
+        true;
+
+      // Skip route if user doesn't have required claims
+      if (!hasRequiredClaims) {
+        return null;
+      }
+
       if (route.category) {
         return (
           <>

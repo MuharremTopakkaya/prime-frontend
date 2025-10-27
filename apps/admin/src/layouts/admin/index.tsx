@@ -5,6 +5,7 @@ import Footer from '../../components/footer/FooterAdmin';
 import Navbar from '../../components/navbar/NavbarAdmin';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { SidebarContext } from '../../contexts/SidebarContext';
+import UserSwitcher from '../../components/UserSwitcher';
 import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from '../../routes';
@@ -102,6 +103,7 @@ export default function Dashboard(props: Record<string, unknown>) {
 
   return (
     <Box>
+      <UserSwitcher />
       <Box>
         <SidebarContext.Provider value={{ toggleSidebar, setToggleSidebar }}>
           <Sidebar routes={routes as any} {...rest} />

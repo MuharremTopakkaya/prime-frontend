@@ -19,7 +19,8 @@
     "createdDate": "Created Date",
     "updatedDate": "Updated Date",
     "pages": "Pages",
-    "back": "Back"
+    "back": "Back",
+    "required": "Required"
   },
   "companies": {
     "title": "Companies",
@@ -56,9 +57,20 @@
     "editPartner": "Edit Partner",
     "partnerName": "Partner Name",
     "apiKey": "API Key",
+    "apiToken": "API Token",
+    "contactEmail": "Contact Email",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
     "apiKeyMasked": "API Key (Masked)",
     "showApiKey": "Show API Key",
     "hideApiKey": "Hide API Key",
+    "showApiToken": "Show API Token",
+    "hideApiToken": "Hide API Token",
+    "copyApiKey": "Copy API Key",
+    "copyApiToken": "Copy API Token",
+    "apiKeyCopied": "API Key copied to clipboard",
+    "apiTokenCopied": "API Token copied to clipboard",
     "noPartnersFound": "No partners found",
     "partnerAddedSuccessfully": "Partner added successfully",
     "partnerUpdatedSuccessfully": "Partner updated successfully",
@@ -102,7 +114,8 @@
     "noUsersFound": "No users found",
     "userUpdatedSuccessfully": "User updated successfully",
     "passwordRequired": "Password is required when updating password",
-    "passwordMismatch": "Passwords do not match"
+    "passwordMismatch": "Passwords do not match",
+    "claimsUpdatedSuccessfully": "User permissions updated successfully"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",
@@ -115,6 +128,83 @@
     "invalidEmail": "Invalid email format",
     "minLength": "Minimum length is {{min}} characters",
     "maxLength": "Maximum length is {{max}} characters"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signInDescription": "Enter your email and password to sign in!",
+    "signInWithGoogle": "Sign in with Google",
+    "or": "or",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "mail@example.com",
+    "passwordPlaceholder": "Min. 8 characters",
+    "keepMeLoggedIn": "Keep me logged in",
+    "forgotPassword": "Forgot password?",
+    "notRegisteredYet": "Not registered yet?",
+    "createAnAccount": "Create an Account",
+    "signingIn": "Signing in...",
+    "error": "Error",
+    "success": "Success",
+    "emailPasswordRequired": "Email and password fields are required.",
+    "loginSuccessful": "Login successful! Redirecting...",
+    "invalidCredentials": "Invalid login credentials. Please check and try again.",
+    "loginError": "An error occurred during login. Please try again."
+  },
+  "products": {
+    "title": "Teşviklendir.com's Revolutionary Solutions",
+    "subtitle": "Integrated SaaS Solutions for Health, Thermal and Sports Tourism",
+    "tosHealth": {
+      "title": "TosHealth",
+      "description": "An integrated SaaS solution that manages all health tourism incentives in a single panel. Thanks to APIs that can extract data from software used by clinics, document production is carried out with almost zero human labor. It has been measured that it increased clinics' incentive income by an average of 80% in just a few months."
+    },
+    "tosTicket": {
+      "title": "TosTicket", 
+      "description": "It ensures that every ticket sold for international patients is integrated with the system, instantly reflecting ticket revenues to the support table. While clinics sell tickets from their own domain names; the system automatically converts this data into documents."
+    },
+    "tosTermal": {
+      "title": "TosTermal",
+      "description": "It integrates all operational structures of thermal facilities under a single system, processing all data from guest check-in to treatment completion in real-time. The most systematic way to transform thermal tourism into incentive economy."
+    },
+    "tosSports": {
+      "title": "TosSports",
+      "description": "A system specially developed for sports facilities. All activities such as sports camps, tournaments, physical rehabilitation; It transforms into documents that can be supported with this software, and then into revenue items. At the same time, it gives sports facilities a CEO vision with cross-selling, analysis and budget forecasting screens."
+    },
+    "benefits": {
+      "title": "Benefits",
+      "items": [
+        "Integrated SaaS Solution",
+        "80% Revenue Increase",
+        "Automatic Document Generation", 
+        "API Integration",
+        "Real-time Data Processing",
+        "Cross-selling Opportunities",
+        "Analysis and Reporting",
+        "Global Branding"
+      ]
+    }
+  },
+  "language": {
+    "tr": "Türkçe",
+    "en": "English",
+    "changeLanguage": "Change Language",
+    "currentLanguage": "Current Language"
+  },
+  "permissions": {
+    "noPermission": "No Permission",
+    "noPermissionForAction": "You don't have permission for this action",
+    "unauthorizedAccess": "Unauthorized Access",
+    "noAccessToPage": "You don't have access to this page",
+    "permissionError": "Permission Error",
+    "noPermissionToAddCompany": "You don't have permission to add new companies",
+    "noPermissionToEditCompany": "You don't have permission to edit companies",
+    "noPermissionToAddPartner": "You don't have permission to add new partners",
+    "noPermissionToEditPartner": "You don't have permission to edit partners",
+    "noPermissionToDeletePartner": "You don't have permission to delete partners",
+    "noPermissionToEditUser": "You don't have permission to edit users",
+    "noPermissionToManagePermissions": "You don't have permission for permission management",
+    "noPermissionToViewUsers": "You don't have permission to view users",
+    "checkingPermissions": "Checking permissions...",
+    "permissionCheckError": "Error checking permissions"
   },
   "profile": {
     "myProfile": "My Profile",
@@ -150,5 +240,37 @@
     "errorUpdatingProfile": "Error updating profile",
     "errorChangingPassword": "Error changing password",
     "noProfileData": "No profile data available"
+  },
+  "claim": {
+    "FullControl.group": "Full Control",
+    "FullControl": "Full Control",
+    "FullControl.Description": "You can use the entire system without any restrictions. This permission is only valid for Prime company.",
+    "Company.group": "Company Management",
+    "Companies.Admin": "Company Administrator",
+    "Companies.Admin.Description": "Can perform all operations related to companies",
+    "Companies.Read": "Company View",
+    "Companies.Read.Description": "Can view company information",
+    "Companies.Create": "Company Creation",
+    "Companies.Create.Description": "Can create new companies",
+    "Companies.Update": "Company Update",
+    "Companies.Update.Description": "Can update company information",
+    "User.group": "User Management",
+    "Users.Admin": "User Administrator",
+    "Users.Admin.Description": "Can perform all operations related to users",
+    "Users.Read": "User View",
+    "Users.Read.Description": "Can view user information",
+    "Users.Create": "User Creation",
+    "Users.Create.Description": "Can create new users",
+    "Users.Update": "User Update",
+    "Users.Update.Description": "Can update user information",
+    "Partner.group": "Partner Management",
+    "Partners.Admin": "Partner Administrator",
+    "Partners.Admin.Description": "Can perform all operations related to partners",
+    "Partners.Read": "Partner View",
+    "Partners.Read.Description": "Can view partner information",
+    "Partners.Create": "Partner Creation",
+    "Partners.Create.Description": "Can create new partners",
+    "Partners.Update": "Partner Update",
+    "Partners.Update.Description": "Can update partner information"
   }
 }

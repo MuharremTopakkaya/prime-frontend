@@ -19,7 +19,8 @@
     "createdDate": "Oluşturma Tarihi",
     "updatedDate": "Güncelleme Tarihi",
     "pages": "Sayfalar",
-    "back": "Geri"
+    "back": "Geri",
+    "required": "Zorunlu"
   },
   "companies": {
     "title": "Şirketler",
@@ -56,9 +57,20 @@
     "editPartner": "İş Ortağı Düzenle",
     "partnerName": "İş Ortağı Adı",
     "apiKey": "API Anahtarı",
+    "apiToken": "API Token",
+    "contactEmail": "İletişim E-postası",
+    "status": "Durum",
+    "active": "Aktif",
+    "inactive": "Pasif",
     "apiKeyMasked": "API Anahtarı (Gizli)",
     "showApiKey": "API Anahtarını Göster",
     "hideApiKey": "API Anahtarını Gizle",
+    "showApiToken": "API Token'ını Göster",
+    "hideApiToken": "API Token'ını Gizle",
+    "copyApiKey": "API Key'i Kopyala",
+    "copyApiToken": "API Token'ı Kopyala",
+    "apiKeyCopied": "API Anahtarı kopyalandı",
+    "apiTokenCopied": "API Token kopyalandı",
     "noPartnersFound": "İş ortağı bulunamadı",
     "partnerAddedSuccessfully": "İş ortağı başarıyla eklendi",
     "partnerUpdatedSuccessfully": "İş ortağı başarıyla güncellendi",
@@ -102,7 +114,8 @@
     "noUsersFound": "Kullanıcı bulunamadı",
     "userUpdatedSuccessfully": "Kullanıcı başarıyla güncellendi",
     "passwordRequired": "Şifre güncellenirken şifre alanı zorunludur",
-    "passwordMismatch": "Şifreler eşleşmiyor"
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "claimsUpdatedSuccessfully": "Kullanıcı yetkileri başarıyla güncellendi"
   },
   "errors": {
     "somethingWentWrong": "Bir şeyler ters gitti",
@@ -115,6 +128,83 @@
     "invalidEmail": "Geçersiz e-posta formatı",
     "minLength": "Minimum uzunluk {{min}} karakter olmalıdır",
     "maxLength": "Maksimum uzunluk {{max}} karakter olmalıdır"
+  },
+  "auth": {
+    "signIn": "Giriş Yap",
+    "signInDescription": "Giriş yapmak için email ve şifrenizi girin!",
+    "signInWithGoogle": "Google ile Giriş Yap",
+    "or": "veya",
+    "email": "E-posta",
+    "password": "Şifre",
+    "emailPlaceholder": "mail@example.com",
+    "passwordPlaceholder": "Min. 8 karakter",
+    "keepMeLoggedIn": "Beni hatırla",
+    "forgotPassword": "Şifremi unuttum?",
+    "notRegisteredYet": "Henüz kayıt olmadınız mı?",
+    "createAnAccount": "Hesap Oluştur",
+    "signingIn": "Giriş yapılıyor...",
+    "error": "Hata",
+    "success": "Başarılı",
+    "emailPasswordRequired": "Email ve şifre alanları zorunludur.",
+    "loginSuccessful": "Giriş yapıldı! Yönlendiriliyorsunuz...",
+    "invalidCredentials": "Giriş bilgileri hatalı. Lütfen kontrol edin.",
+    "loginError": "Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "products": {
+    "title": "Teşviklendir.com'un Devrimsel Çözümleri",
+    "subtitle": "Sağlık, Termal ve Spor Turizmi için Entegre SaaS Çözümleri",
+    "tosHealth": {
+      "title": "TosHealth",
+      "description": "Tüm sağlık turizmi teşviklerini tek bir panelde yöneten entegre SaaS çözümü. Kliniklerin kullandığı yazılımlardan veri çekebilen API'leri sayesinde belge üretimi neredeyse sıfır insan emeğiyle gerçekleşiyor. Sadece birkaç ay içinde kliniklerin teşvik gelirini ortalama %80 oranında artırdığı ölçümlenmiş durumda."
+    },
+    "tosTicket": {
+      "title": "TosTicket", 
+      "description": "Uluslararası hastalar için satılan her biletin sistemle entegre edilmesini sağlayarak, bilet gelirlerini anında destek tablosuna yansıtıyor. Klinikler kendi alan adlarından bilet satarken; sistem, bu verileri otomatik olarak belgeler haline getiriyor."
+    },
+    "tosTermal": {
+      "title": "TosTermal",
+      "description": "Termal tesislerin tüm operasyonel yapısını tek bir sistem altında entegre ederek, gelen misafirin check-in'inden tedavi bitimine kadar tüm verileri anbean işliyor. Termal turizmi, teşvik ekonomisine dönüştürmenin en sistematik yolu."
+    },
+    "tosSports": {
+      "title": "TosSports",
+      "description": "Spor tesislerine özel geliştirilmiş bir sistem. Spor kampları, turnuvalar, fiziksel rehabilitasyon gibi tüm faaliyetler; bu yazılımla destek verilecek belgelere, akabinde ise gelir kalemlerine dönüşüyor. Aynı zamanda çapraz satış, analiz ve bütçe tahmin ekranlarıyla spor tesislerine bir CEO vizyonu kazandırıyor."
+    },
+    "benefits": {
+      "title": "Avantajlar",
+      "items": [
+        "Entegre SaaS Çözümü",
+        "%80 Gelir Artışı",
+        "Otomatik Belge Üretimi", 
+        "API Entegrasyonu",
+        "Gerçek Zamanlı Veri İşleme",
+        "Çapraz Satış Fırsatları",
+        "Analiz ve Raporlama",
+        "Global Markalaşma"
+      ]
+    }
+  },
+  "language": {
+    "tr": "Türkçe",
+    "en": "English",
+    "changeLanguage": "Dil Değiştir",
+    "currentLanguage": "Mevcut Dil"
+  },
+  "permissions": {
+    "noPermission": "Yetki Yok",
+    "noPermissionForAction": "Bu işlem için yetkiniz bulunmuyor",
+    "unauthorizedAccess": "Yetkisiz Erişim",
+    "noAccessToPage": "Bu sayfaya erişim yetkiniz bulunmuyor",
+    "permissionError": "Yetki Hatası",
+    "noPermissionToAddCompany": "Yeni şirket ekleme yetkiniz bulunmuyor",
+    "noPermissionToEditCompany": "Şirket düzenleme yetkiniz bulunmuyor",
+    "noPermissionToAddPartner": "Yeni iş ortağı ekleme yetkiniz bulunmuyor",
+    "noPermissionToEditPartner": "İş ortağı düzenleme yetkiniz bulunmuyor",
+    "noPermissionToDeletePartner": "İş ortağı silme yetkiniz bulunmuyor",
+    "noPermissionToEditUser": "Kullanıcı düzenleme yetkiniz bulunmuyor",
+    "noPermissionToManagePermissions": "Yetki yönetimi için yetkiniz bulunmuyor",
+    "noPermissionToViewUsers": "Kullanıcıları görüntüleme yetkiniz bulunmuyor",
+    "checkingPermissions": "Yetkiler kontrol ediliyor...",
+    "permissionCheckError": "Yetki kontrolünde hata"
   },
   "profile": {
     "myProfile": "Profilim",
@@ -150,5 +240,37 @@
     "errorUpdatingProfile": "Profil güncellenirken hata oluştu",
     "errorChangingPassword": "Şifre değiştirilirken hata oluştu",
     "noProfileData": "Profil verisi bulunamadı"
+  },
+  "claim": {
+    "FullControl.group": "Tam Kontrol",
+    "FullControl": "Tam Kontrol",
+    "FullControl.Description": "Tüm sistemi eksiksiz kullanabilirsiniz. Bu yetki sadece Prime şirketi için geçerlidir.",
+    "Company.group": "Şirket Yönetimi",
+    "Companies.Admin": "Şirket Yöneticisi",
+    "Companies.Admin.Description": "Şirket ile ilgili tüm işlemleri yapabilir",
+    "Companies.Read": "Şirket Görüntüleme",
+    "Companies.Read.Description": "Şirket bilgilerini görüntüleyebilir",
+    "Companies.Create": "Şirket Oluşturma",
+    "Companies.Create.Description": "Yeni şirket oluşturabilir",
+    "Companies.Update": "Şirket Güncelleme",
+    "Companies.Update.Description": "Şirket bilgilerini güncelleyebilir",
+    "User.group": "Kullanıcı Yönetimi",
+    "Users.Admin": "Kullanıcı Yöneticisi",
+    "Users.Admin.Description": "Kullanıcılar ile ilgili tüm işlemleri yapabilir",
+    "Users.Read": "Kullanıcı Görüntüleme",
+    "Users.Read.Description": "Kullanıcı bilgilerini görüntüleyebilir",
+    "Users.Create": "Kullanıcı Oluşturma",
+    "Users.Create.Description": "Yeni kullanıcı oluşturabilir",
+    "Users.Update": "Kullanıcı Güncelleme",
+    "Users.Update.Description": "Kullanıcı bilgilerini güncelleyebilir",
+    "Partner.group": "İş Ortağı Yönetimi",
+    "Partners.Admin": "İş Ortağı Yöneticisi",
+    "Partners.Admin.Description": "İş ortakları ile ilgili tüm işlemleri yapabilir",
+    "Partners.Read": "İş Ortağı Görüntüleme",
+    "Partners.Read.Description": "İş ortağı bilgilerini görüntüleyebilir",
+    "Partners.Create": "İş Ortağı Oluşturma",
+    "Partners.Create.Description": "Yeni iş ortağı oluşturabilir",
+    "Partners.Update": "İş Ortağı Güncelleme",
+    "Partners.Update.Description": "İş ortağı bilgilerini güncelleyebilir"
   }
 }

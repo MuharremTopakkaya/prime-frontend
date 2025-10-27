@@ -32,11 +32,19 @@ import { ChevronDownIcon, AddIcon } from '@chakra-ui/icons';
 import { companyService, Company, OperationalStatus, GetCompaniesResponse } from '../../services/companyService';
 import CompanyModal from '../../components/CompanyModal';
 import Pagination from '../../components/Pagination';
+import { ProtectedComponent } from '../../components/ProtectedComponent';
+import { useClaimCheck } from '../../hooks/useClaimCheck';
 
 const CompaniesPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useToast();
+  const { 
+    canViewCompanies, 
+    canCreateCompanies, 
+    canEditCompanies, 
+    canDeleteCompanies 
+  } = useClaimCheck();
   const { isOpen, onOpen, onClose } = useDisclosure();
   
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -82,12 +90,32 @@ const CompaniesPage: React.FC = () => {
   }, [currentPage]);
 
   const handleAddCompany = () => {
+    if (!canCreateCompanies) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToAddCompany'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setSelectedCompany(null);
     setIsEditMode(false);
     onOpen();
   };
 
   const handleEditCompany = (company: Company) => {
+    if (!canEditCompanies) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToEditCompany'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setSelectedCompany(company);
     setIsEditMode(true);
     onOpen();
@@ -160,14 +188,30 @@ const CompaniesPage: React.FC = () => {
       {/* Header Section */}
       <Box mb={12}>
         <Flex justify="flex-end" mb={10}>
-          <Button
-            leftIcon={<AddIcon />}
-            colorScheme="blue"
-            onClick={handleAddCompany}
-            size={{ base: "sm", md: "md" }}
+          <ProtectedComponent 
+            requiredClaims={['Companies.Create', 'Companies.Admin', 'FullControl']}
+            requireAny={true}
+            fallback={
+              <Button
+                leftIcon={<AddIcon />}
+                colorScheme="gray"
+                size={{ base: "sm", md: "md" }}
+                isDisabled
+                title={t('permissions.noPermissionForAction')}
+              >
+                {t('companies.addCompany')}
+              </Button>
+            }
           >
-            {t('companies.addCompany')}
-          </Button>
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="blue"
+              onClick={handleAddCompany}
+              size={{ base: "sm", md: "md" }}
+            >
+              {t('companies.addCompany')}
+            </Button>
+          </ProtectedComponent>
         </Flex>
       </Box>
 
@@ -333,11 +377,62 @@ const CompaniesPage: React.FC = () => {
                                 color: "gray.300"
                               }}
                             />
-                            <MenuList>
-                              <MenuItem onClick={() => handleEditCompany(company)}>
-                                {t('common.edit')}
-                              </MenuItem>
-                              <MenuItem onClick={() => handleDetails(company)}>
+                            <MenuList
+                              bg="white"
+                              border="1px solid"
+                              borderColor="gray.200"
+                              boxShadow="lg"
+                              _dark={{
+                                bg: "navy.800",
+                                borderColor: "blue.600",
+                                color: "white"
+                              }}
+                            >
+                              <ProtectedComponent 
+                                requiredClaims={['Companies.Update', 'Companies.Admin', 'FullControl']}
+                                requireAny={true}
+                                fallback={
+                                  <MenuItem 
+                                    isDisabled
+                                    _hover={{
+                                      bg: "gray.100",
+                                      _dark: {
+                                        bg: "gray.600"
+                                      }
+                                    }}
+                                    color="gray.500"
+                                    _dark={{ color: "gray.500" }}
+                                  >
+                                    {t('common.edit')} ({t('permissions.noPermission')})
+                                  </MenuItem>
+                                }
+                              >
+                                <MenuItem 
+                                  onClick={() => handleEditCompany(company)}
+                                  _hover={{
+                                    bg: "gray.100",
+                                    _dark: {
+                                      bg: "gray.600"
+                                    }
+                                  }}
+                                  color="gray.700"
+                                  _dark={{ color: "gray.300" }}
+                                >
+                                  {t('common.edit')}
+                                </MenuItem>
+                              </ProtectedComponent>
+                              
+                              <MenuItem 
+                                onClick={() => handleDetails(company)}
+                                _hover={{
+                                  bg: "gray.100",
+                                  _dark: {
+                                    bg: "gray.600"
+                                  }
+                                }}
+                                color="gray.700"
+                                _dark={{ color: "gray.300" }}
+                              >
                                 {t('common.details')}
                               </MenuItem>
                             </MenuList>

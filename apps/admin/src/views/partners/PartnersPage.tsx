@@ -29,14 +29,22 @@ import {
   AlertDialogOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
-import { ChevronDownIcon, AddIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, AddIcon, ViewIcon, ViewOffIcon, CopyIcon } from '@chakra-ui/icons';
 import { partnerService, Partner } from '../../services/partnerService';
 import PartnerModal from '../../components/PartnerModal';
 import Pagination from '../../components/Pagination';
+import { ProtectedComponent } from '../../components/ProtectedComponent';
+import { useClaimCheck } from '../../hooks/useClaimCheck';
 
 const PartnersPage: React.FC = () => {
   const { t } = useTranslation();
   const toast = useToast();
+  const { 
+    canViewPartners, 
+    canCreatePartners, 
+    canEditPartners, 
+    canDeletePartners 
+  } = useClaimCheck();
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -110,6 +118,27 @@ const PartnersPage: React.FC = () => {
     return maskApiKey(partner.apiKey);
   };
 
+  // Copy to clipboard functions
+  const copyToClipboard = async (text: string, type: 'key' | 'token') => {
+    try {
+      await navigator.clipboard.writeText(text);
+      const typeKey = type === 'key' ? 'partners.apiKeyCopied' : 'partners.apiTokenCopied';
+      toast({
+        title: t(typeKey),
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        title: t('errors.somethingWentWrong'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   // Fetch partners
   const fetchPartners = async () => {
     setLoading(true);
@@ -134,12 +163,32 @@ const PartnersPage: React.FC = () => {
   }, [currentPage]);
 
   const handleAddPartner = () => {
+    if (!canCreatePartners) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToAddPartner'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setIsEditMode(false);
     setEditingPartner(null);
     setIsModalOpen(true);
   };
 
   const handleEditPartner = (partner: Partner) => {
+    if (!canEditPartners) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToEditPartner'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setIsEditMode(true);
     setEditingPartner(partner);
     setIsModalOpen(true);
@@ -196,6 +245,16 @@ const PartnersPage: React.FC = () => {
   };
 
   const handleDeletePartner = (partner: Partner) => {
+    if (!canDeletePartners) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToDeletePartner'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setDeletingPartner(partner);
     onDeleteOpen();
   };
@@ -241,14 +300,30 @@ const PartnersPage: React.FC = () => {
       {/* Header Section */}
       <Box mb={12}>
         <Flex justify="flex-end" mb={10}>
-          <Button
-            leftIcon={<AddIcon />}
-            colorScheme="blue"
-            onClick={handleAddPartner}
-            size={{ base: "sm", md: "md" }}
+          <ProtectedComponent 
+            requiredClaims={['Partners.Create', 'Partners.Admin', 'FullControl']}
+            requireAny={true}
+            fallback={
+              <Button
+                leftIcon={<AddIcon />}
+                colorScheme="gray"
+                size={{ base: "sm", md: "md" }}
+                isDisabled
+                title={t('permissions.noPermissionForAction')}
+              >
+                {t('partners.addPartner')}
+              </Button>
+            }
           >
-            {t('partners.addPartner')}
-          </Button>
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="blue"
+              onClick={handleAddPartner}
+              size={{ base: "sm", md: "md" }}
+            >
+              {t('partners.addPartner')}
+            </Button>
+          </ProtectedComponent>
         </Flex>
       </Box>
 
@@ -320,7 +395,7 @@ const PartnersPage: React.FC = () => {
                           </Text>
                         </Td>
                         <Td>
-                          <Flex align="center" gap={2} maxW="160px">
+                          <Flex align="center" gap={1} maxW="160px">
                             <Text 
                               color="gray.700" 
                               _dark={{ color: "gray.300" }} 
@@ -329,6 +404,7 @@ const PartnersPage: React.FC = () => {
                               overflow="hidden"
                               textOverflow="ellipsis"
                               whiteSpace="nowrap"
+                              title={visibleApiKeys.has(partner.id) ? partner.apiKey : undefined}
                             >
                               {getApiKeyDisplay(partner)}
                             </Text>
@@ -340,10 +416,18 @@ const PartnersPage: React.FC = () => {
                               variant="ghost"
                               flexShrink={0}
                             />
+                            <IconButton
+                              aria-label={t('partners.copyApiKey')}
+                              icon={<CopyIcon />}
+                              onClick={() => copyToClipboard(partner.apiKey, 'key')}
+                              size="xs"
+                              variant="ghost"
+                              flexShrink={0}
+                            />
                           </Flex>
                         </Td>
                         <Td>
-                          <Flex align="center" gap={2} maxW="160px">
+                          <Flex align="center" gap={1} maxW="160px">
                             <Text 
                               color="gray.700" 
                               _dark={{ color: "gray.300" }} 
@@ -352,6 +436,7 @@ const PartnersPage: React.FC = () => {
                               overflow="hidden"
                               textOverflow="ellipsis"
                               whiteSpace="nowrap"
+                              title={visibleApiTokens.has(partner.id) ? partner.apiToken : undefined}
                             >
                               {getApiTokenDisplay(partner)}
                             </Text>
@@ -359,6 +444,14 @@ const PartnersPage: React.FC = () => {
                               aria-label={visibleApiTokens.has(partner.id) ? t('partners.hideApiToken') : t('partners.showApiToken')}
                               icon={visibleApiTokens.has(partner.id) ? <ViewOffIcon /> : <ViewIcon />}
                               onClick={() => toggleApiTokenVisibility(partner.id)}
+                              size="xs"
+                              variant="ghost"
+                              flexShrink={0}
+                            />
+                            <IconButton
+                              aria-label={t('partners.copyApiToken')}
+                              icon={<CopyIcon />}
+                              onClick={() => copyToClipboard(partner.apiToken, 'token')}
                               size="xs"
                               variant="ghost"
                               flexShrink={0}
@@ -395,23 +488,115 @@ const PartnersPage: React.FC = () => {
                         </Td>
                         <Td>
                           <Menu>
-                            <MenuButton
-                              as={IconButton}
-                              icon={<ChevronDownIcon />}
-                              variant="ghost"
-                              size="sm"
-                            />
-                            <MenuList>
-                              <MenuItem onClick={() => handleEditPartner(partner)}>
+                          <MenuButton
+                            as={IconButton}
+                            icon={<ChevronDownIcon />}
+                            variant="ghost"
+                            size="sm"
+                            color="gray.600"
+                            _dark={{ color: "gray.300" }}
+                            _hover={{
+                              bg: "gray.100",
+                              _dark: {
+                                bg: "navy.700"
+                              }
+                            }}
+                          />
+                          <MenuList
+                            bg="white"
+                            border="1px solid"
+                            borderColor="gray.200"
+                            boxShadow="lg"
+                            _dark={{
+                              bg: "navy.800",
+                              borderColor: "blue.600",
+                              color: "white"
+                            }}
+                          >
+                            <ProtectedComponent 
+                              requiredClaims={['Partners.Update', 'Partners.Admin', 'FullControl']}
+                              requireAny={true}
+                              fallback={
+                                <MenuItem 
+                                  isDisabled
+                                  _hover={{
+                                    bg: "gray.100",
+                                    _dark: {
+                                      bg: "gray.600"
+                                    }
+                                  }}
+                                  color="gray.500"
+                                  _dark={{ color: "gray.500" }}
+                                >
+                                  {t('common.update')} ({t('permissions.noPermission')})
+                                </MenuItem>
+                              }
+                            >
+                              <MenuItem 
+                                onClick={() => handleEditPartner(partner)}
+                                _hover={{
+                                  bg: "gray.100",
+                                  _dark: {
+                                    bg: "gray.600"
+                                  }
+                                }}
+                                color="gray.700"
+                                _dark={{ color: "gray.300" }}
+                              >
                                 {t('common.update')}
                               </MenuItem>
-                              <MenuItem onClick={handleDetails} isDisabled>
-                                {t('common.details')}
-                              </MenuItem>
-                              <MenuItem onClick={() => handleDeletePartner(partner)} color="red.500">
+                            </ProtectedComponent>
+                            
+                            <MenuItem 
+                              onClick={handleDetails} 
+                              isDisabled
+                              _hover={{
+                                bg: "gray.100",
+                                _dark: {
+                                  bg: "gray.600"
+                                }
+                              }}
+                              color="gray.700"
+                              _dark={{ color: "gray.300" }}
+                            >
+                              {t('common.details')}
+                            </MenuItem>
+                            
+                            <ProtectedComponent 
+                              requiredClaims={['Partners.Delete', 'Partners.Admin', 'FullControl']}
+                              requireAny={true}
+                              fallback={
+                                <MenuItem 
+                                  isDisabled
+                                  _hover={{
+                                    bg: "gray.100",
+                                    _dark: {
+                                      bg: "gray.600"
+                                    }
+                                  }}
+                                  color="gray.500"
+                                  _dark={{ color: "gray.500" }}
+                                >
+                                  {t('common.delete')} ({t('permissions.noPermission')})
+                                </MenuItem>
+                              }
+                            >
+                              <MenuItem 
+                                onClick={() => handleDeletePartner(partner)} 
+                                color="red.500"
+                                _hover={{
+                                  bg: "gray.100",
+                                  _dark: {
+                                    bg: "gray.600",
+                                    color: "red.400"
+                                  }
+                                }}
+                                _dark={{ color: "red.400" }}
+                              >
                                 {t('common.delete')}
                               </MenuItem>
-                            </MenuList>
+                            </ProtectedComponent>
+                          </MenuList>
                           </Menu>
                         </Td>
                       </Tr>

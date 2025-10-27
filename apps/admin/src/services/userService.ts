@@ -26,12 +26,30 @@ export interface GetUsersResponse {
   pagination: PaginationResponse;
 }
 
+export interface UserClaim {
+  id: number;
+  name: string;
+  description: string;
+  isRequired: boolean;
+  isAssigned: boolean;
+}
+
+export interface UserClaimsGroup {
+  group: string;
+  claims: UserClaim[];
+}
+
 export interface UpdateUserRequest {
   id: string;
   name: string;
   surname: string;
   email: string;
   password?: string;
+}
+
+export interface UpdateUserClaimsRequest {
+  userId: string;
+  claimIds: number[];
 }
 
 class UserService {
@@ -179,26 +197,237 @@ class UserService {
   }
 
   /**
-   * Get user by ID
+   * Get user claims by user ID
    */
-  async getUserById(id: string): Promise<User> {
+  async getUserClaims(userId: string): Promise<UserClaimsGroup[]> {
     try {
-      const response = await fetch(`${this.API_BASE_URL}/Users/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getToken()}`,
-        },
+      // MOCK DATA - Different profiles for testing
+      const mockProfiles = {
+        'admin-user': [
+          {
+            group: 'FullControl',
+            claims: [
+              {
+                id: 1,
+                name: 'FullControl',
+                description: 'Tüm sistemi eksiksiz kullanabilirsiniz. Bu yetki sadece Prime şirketi için geçerlidir.',
+                isRequired: false,
+                isAssigned: true,
+              },
+            ],
+          },
+        ],
+        'customer-user': [
+          {
+            group: 'Company',
+            claims: [
+              {
+                id: 5,
+                name: 'Companies.Read',
+                description: 'Şirket bilgilerini görüntüleyebilir',
+                isRequired: true,
+                isAssigned: true,
+              },
+            ],
+          },
+          {
+            group: 'Partner',
+            claims: [
+              {
+                id: 13,
+                name: 'Partners.Read',
+                description: 'İş ortağı bilgilerini görüntüleyebilir',
+                isRequired: true,
+                isAssigned: true,
+              },
+            ],
+          },
+        ],
+        'mock-user-id': [
+          {
+            group: 'FullControl',
+            claims: [
+              {
+                id: 1,
+                name: 'FullControl',
+                description: 'Tüm sistemi eksiksiz kullanabilirsiniz. Bu yetki sadece Prime şirketi için geçerlidir.',
+                isRequired: false,
+                isAssigned: false,
+              },
+            ],
+          },
+          {
+            group: 'Company',
+            claims: [
+              {
+                id: 4,
+                name: 'Companies.Admin',
+                description: 'Şirket ile ilgili tüm işlemleri yapabilir',
+                isRequired: false,
+                isAssigned: true,
+              },
+              {
+                id: 5,
+                name: 'Companies.Read',
+                description: 'Şirket bilgilerini görüntüleyebilir',
+                isRequired: true,
+                isAssigned: true,
+              },
+              {
+                id: 6,
+                name: 'Companies.Create',
+                description: 'Yeni şirket oluşturabilir',
+                isRequired: false,
+                isAssigned: false,
+              },
+              {
+                id: 7,
+                name: 'Companies.Update',
+                description: 'Şirket bilgilerini güncelleyebilir',
+                isRequired: false,
+                isAssigned: true,
+              },
+            ],
+          },
+          {
+            group: 'User',
+            claims: [
+              {
+                id: 8,
+                name: 'Users.Admin',
+                description: 'Kullanıcılar ile ilgili tüm işlemleri yapabilir',
+                isRequired: false,
+                isAssigned: false,
+              },
+              {
+                id: 9,
+                name: 'Users.Read',
+                description: 'Kullanıcı bilgilerini görüntüleyebilir',
+                isRequired: true,
+                isAssigned: true,
+              },
+              {
+                id: 10,
+                name: 'Users.Create',
+                description: 'Yeni kullanıcı oluşturabilir',
+                isRequired: false,
+                isAssigned: false,
+              },
+              {
+                id: 11,
+                name: 'Users.Update',
+                description: 'Kullanıcı bilgilerini güncelleyebilir',
+                isRequired: false,
+                isAssigned: true,
+              },
+            ],
+          },
+          {
+            group: 'Partner',
+            claims: [ 
+              {
+                id: 12,
+                name: 'Partners.Admin',
+                description: 'İş ortakları ile ilgili tüm işlemleri yapabilir',
+                isRequired: false,
+                isAssigned: false,
+              },
+              {
+                id: 13,
+                name: 'Partners.Read',
+                description: 'İş ortağı bilgilerini görüntüleyebilir',
+                isRequired: true,
+                isAssigned: true,
+              },
+              {
+                id: 14,
+                name: 'Partners.Create',
+                description: 'Yeni iş ortağı oluşturabilir',
+                isRequired: false,
+                isAssigned: false,
+              },
+              {
+                id: 15,
+                name: 'Partners.Update',
+                description: 'İş ortağı bilgilerini güncelleyebilir',
+                isRequired: false,
+                isAssigned: false,
+              },
+            ],
+          },
+        ],
+      };
+
+      // Get profile based on userId or default to mock-user-id
+      const profileKey = userId in mockProfiles ? userId : 'mock-user-id';
+      const mockUserClaims = mockProfiles[profileKey as keyof typeof mockProfiles];
+
+      // Sort groups - FullControl first if exists
+      const sortedGroups = mockUserClaims.sort((a, b) => {
+        if (a.group === 'FullControl') return -1;
+        if (b.group === 'FullControl') return 1;
+        return a.group.localeCompare(b.group);
       });
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch user: ${response.statusText}`);
-      }
+      console.log(`🔐 Loading claims for user: ${profileKey}`, sortedGroups);
+      return sortedGroups;
 
-      const data = await response.json();
-      return data;
+      // Gerçek API çağrısı (backend çalıştığında)
+      // const response = await fetch(`${this.API_BASE_URL}/UserOperationClaims/${userId}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${this.getToken()}`,
+      //   },
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error(`Failed to fetch user claims: ${response.statusText}`);
+      // }
+
+      // const data: UserClaimsGroup[] = await response.json();
+      
+      // // Sort groups - FullControl first if exists
+      // const sortedGroups = data.sort((a, b) => {
+      //   if (a.group === 'FullControl') return -1;
+      //   if (b.group === 'FullControl') return 1;
+      //   return a.group.localeCompare(b.group);
+      // });
+
+      // return sortedGroups;
     } catch (error) {
-      console.error('Get user by ID error:', error);
+      console.error('Get user claims error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update user claims
+   */
+  async updateUserClaims(request: UpdateUserClaimsRequest): Promise<void> {
+    try {
+      // NOTE: Backend'de Update endpoint şu an comment edilmiş durumda
+      // UserOperationClaimsController.cs dosyasında PUT endpoint'i aktif edilmeli
+      
+      // MOCK DATA - Backend Update endpoint hazır olana kadar
+      console.log('✅ Mock update user claims:', request);
+      return;
+
+      // Gerçek API çağrısı (backend endpoint hazır olduğunda)
+      // const response = await fetch(`${this.API_BASE_URL}/UserOperationClaims`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${this.getToken()}`,
+      //   },
+      //   body: JSON.stringify(request),
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error(`Failed to update user claims: ${response.statusText}`);
+      // }
+    } catch (error) {
+      console.error('Update user claims error:', error);
       throw error;
     }
   }

@@ -36,8 +36,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const modalBg = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const modalBg = useColorModeValue('white', 'navy.800');
+  const borderColor = useColorModeValue('gray.200', 'blue.600');
 
   useEffect(() => {
     if (initialData) {
@@ -84,39 +84,82 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="md">
-      <ModalOverlay />
-      <ModalContent bg={modalBg} borderColor={borderColor}>
+      <ModalOverlay
+        bg="blackAlpha.600"
+        _dark={{
+          bg: "blackAlpha.700"
+        }}
+      />
+      <ModalContent 
+        bg={modalBg} 
+        borderColor={borderColor}
+        border="1px solid"
+        _dark={{
+          bg: "navy.800",
+          borderColor: "blue.600"
+        }}
+      >
         <ModalHeader>{t('profile.editProfile')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={4}>
             <FormControl isInvalid={!!errors.name}>
-              <FormLabel>{t('profile.name')}</FormLabel>
+              <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.name')}</FormLabel>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t('profile.namePlaceholder')}
+                _dark={{
+                  bg: 'navy.700',
+                  borderColor: 'blue.500',
+                  color: 'white',
+                  _placeholder: { color: 'gray.300' },
+                  _focus: {
+                    borderColor: 'blue.400',
+                    bg: 'navy.700'
+                  }
+                }}
               />
               {errors.name && <Text color="red.500" fontSize="sm">{errors.name}</Text>}
             </FormControl>
 
             <FormControl isInvalid={!!errors.surname}>
-              <FormLabel>{t('profile.surname')}</FormLabel>
+              <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.surname')}</FormLabel>
               <Input
                 value={surname}
                 onChange={(e) => setSurname(e.target.value)}
                 placeholder={t('profile.surnamePlaceholder')}
+                _dark={{
+                  bg: 'navy.700',
+                  borderColor: 'blue.500',
+                  color: 'white',
+                  _placeholder: { color: 'gray.300' },
+                  _focus: {
+                    borderColor: 'blue.400',
+                    bg: 'navy.700'
+                  }
+                }}
               />
               {errors.surname && <Text color="red.500" fontSize="sm">{errors.surname}</Text>}
             </FormControl>
 
             <FormControl isInvalid={!!errors.email}>
-              <FormLabel>{t('profile.email')}</FormLabel>
+              <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.email')}</FormLabel>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('profile.emailPlaceholder')}
+                _dark={{
+                  bg: 'navy.700',
+                  borderColor: 'blue.500',
+                  color: 'white',
+                  _placeholder: { color: 'gray.300' },
+                  _focus: {
+                    borderColor: 'blue.400',
+                    bg: 'navy.700'
+                  }
+                }}
               />
               {errors.email && <Text color="red.500" fontSize="sm">{errors.email}</Text>}
             </FormControl>

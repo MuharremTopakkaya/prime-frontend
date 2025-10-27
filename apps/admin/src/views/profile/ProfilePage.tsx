@@ -30,9 +30,9 @@ const ProfilePage: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const textColor = useColorModeValue('gray.600', 'gray.300');
+  const cardBg = useColorModeValue('white', 'navy.800');
+  const borderColor = useColorModeValue('gray.200', 'blue.600');
+  const textColor = useColorModeValue('gray.600', 'white');
 
   useEffect(() => {
     fetchUserProfile();
@@ -144,16 +144,37 @@ const ProfilePage: React.FC = () => {
   return (
     <Box p={6} pt={20}>
       <VStack spacing={6} align="stretch">
-        <Card bg={cardBg} borderColor={borderColor}>
+        <Card 
+          bg={cardBg} 
+          borderColor={borderColor}
+          border="1px solid"
+          _dark={{
+            bg: "navy.800",
+            borderColor: "blue.600"
+          }}
+        >
           <CardBody>
             <HStack justify="space-between" mb={4}>
-              <Heading size="lg">{t('profile.myProfile')}</Heading>
+              <Heading 
+                size="lg"
+                color={useColorModeValue('gray.800', 'white')}
+              >
+                {t('profile.myProfile')}
+              </Heading>
               <HStack>
                 <Button
                   leftIcon={<EditIcon />}
                   colorScheme="blue"
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
+                  _dark={{
+                    borderColor: "blue.400",
+                    color: "blue.300",
+                    _hover: {
+                      bg: "blue.900",
+                      borderColor: "blue.300"
+                    }
+                  }}
                 >
                   {t('profile.editProfile')}
                 </Button>
@@ -162,6 +183,14 @@ const ProfilePage: React.FC = () => {
                   colorScheme="orange"
                   variant="outline"
                   onClick={() => setIsPasswordModalOpen(true)}
+                  _dark={{
+                    borderColor: "orange.400",
+                    color: "orange.300",
+                    _hover: {
+                      bg: "orange.900",
+                      borderColor: "orange.300"
+                    }
+                  }}
                 >
                   {t('profile.changePassword')}
                 </Button>
@@ -172,27 +201,52 @@ const ProfilePage: React.FC = () => {
             
             <VStack spacing={4} align="stretch">
               <HStack justify="space-between">
-                <Text fontWeight="semibold">{t('profile.name')}:</Text>
+                <Text 
+                  fontWeight="semibold"
+                  color={useColorModeValue('gray.800', 'white')}
+                >
+                  {t('profile.name')}:
+                </Text>
                 <Text color={textColor}>{userProfile.name}</Text>
               </HStack>
               
               <HStack justify="space-between">
-                <Text fontWeight="semibold">{t('profile.surname')}:</Text>
+                <Text 
+                  fontWeight="semibold"
+                  color={useColorModeValue('gray.800', 'white')}
+                >
+                  {t('profile.surname')}:
+                </Text>
                 <Text color={textColor}>{userProfile.surname}</Text>
               </HStack>
               
               <HStack justify="space-between">
-                <Text fontWeight="semibold">{t('profile.email')}:</Text>
+                <Text 
+                  fontWeight="semibold"
+                  color={useColorModeValue('gray.800', 'white')}
+                >
+                  {t('profile.email')}:
+                </Text>
                 <Text color={textColor}>{userProfile.email}</Text>
               </HStack>
               
               <HStack justify="space-between">
-                <Text fontWeight="semibold">{t('profile.company')}:</Text>
+                <Text 
+                  fontWeight="semibold"
+                  color={useColorModeValue('gray.800', 'white')}
+                >
+                  {t('profile.company')}:
+                </Text>
                 <Text color={textColor}>{userProfile.company.name}</Text>
               </HStack>
               
               <HStack justify="space-between">
-                <Text fontWeight="semibold">{t('profile.memberSince')}:</Text>
+                <Text 
+                  fontWeight="semibold"
+                  color={useColorModeValue('gray.800', 'white')}
+                >
+                  {t('profile.memberSince')}:
+                </Text>
                 <Text color={textColor}>
                   {new Date(userProfile.createdDate).toLocaleDateString()}
                 </Text>

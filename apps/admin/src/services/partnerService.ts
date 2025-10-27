@@ -61,88 +61,88 @@ class PartnerService {
   async getPartners(pageIndex: number = 0, pageSize: number = 12): Promise<GetPartnersResponse> {
     try {
       // MOCK DATA - Temporary test while backend is not running
-      // const mockPartners: Partner[] = [
-      //   {
-      //     id: '1',
-      //     name: 'TechCorp Solutions',
-      //     apiKey: 'tc_sk_1234567890abcdef1234567890abcdef',
-      //     apiToken: 'tc_tk_1234567890abcdef1234567890abcdef',
-      //     contactEmail: 'contact@techcorp.com',
-      //     isActive: true,
-      //     createdDate: '2024-01-15T10:30:00Z',
-      //     updatedDate: '2024-01-20T14:45:00Z'
-      //   },
-      //   {
-      //     id: '2',
-      //     name: 'Digital Innovations Ltd',
-      //     apiKey: 'di_live_abcdef1234567890abcdef1234567890',
-      //     apiToken: 'di_tk_abcdef1234567890abcdef1234567890',
-      //     contactEmail: 'info@digitalinnovations.com',
-      //     isActive: true,
-      //     createdDate: '2024-02-01T09:15:00Z',
-      //     updatedDate: '2024-02-05T16:20:00Z'
-      //   },
-      //   {
-      //     id: '3',
-      //     name: 'Cloud Services Inc',
-      //     apiKey: 'cs_prod_9876543210fedcba9876543210fedcba',
-      //     apiToken: 'cs_tk_9876543210fedcba9876543210fedcba',
-      //     contactEmail: 'support@cloudservices.com',
-      //     isActive: false,
-      //     createdDate: '2024-01-10T08:00:00Z',
-      //     updatedDate: '2024-01-25T11:30:00Z'
-      //   },
-      //   {
-      //     id: '4',
-      //     name: 'API Gateway Corp',
-      //     apiKey: 'ag_test_5555555555aaaaaa5555555555aaaaaa',
-      //     apiToken: 'ag_tk_5555555555aaaaaa5555555555aaaaaa',
-      //     contactEmail: 'dev@apigateway.com',
-      //     isActive: true,
-      //     createdDate: '2024-02-10T13:45:00Z',
-      //     updatedDate: '2024-02-15T10:15:00Z'
-      //   },
-      //   {
-      //     id: '5',
-      //     name: 'Data Analytics Pro',
-      //     apiKey: 'da_demo_1111111111bbbbbb1111111111bbbbbb',
-      //     apiToken: 'da_tk_1111111111bbbbbb1111111111bbbbbb',
-      //     contactEmail: 'analytics@datapro.com',
-      //     isActive: true,
-      //     createdDate: '2024-01-05T12:00:00Z',
-      //     updatedDate: '2024-01-30T15:45:00Z'
-      //   },
-      //   {
-      //     id: '6',
-      //     name: 'Mobile Apps Co',
-      //     apiKey: 'ma_dev_2222222222cccccc2222222222cccccc',
-      //     apiToken: 'ma_tk_2222222222cccccc2222222222cccccc',
-      //     contactEmail: 'mobile@appsco.com',
-      //     isActive: false,
-      //     createdDate: '2024-02-20T11:20:00Z',
-      //     updatedDate: '2024-02-25T09:10:00Z'
-      //   }
-      // ];
+      const mockPartners: Partner[] = [
+        {
+          id: '1',
+          name: 'TechCorp Solutions',
+          apiKey: 'tc_sk_1234567890abcdef1234567890abcdef',
+          apiToken: 'tc_tk_1234567890abcdef1234567890abcdef',
+          contactEmail: 'contact@techcorp.com',
+          isActive: true,
+          createdDate: '2024-01-15T10:30:00Z',
+          updatedDate: '2024-01-20T14:45:00Z'
+        },
+        {
+          id: '2',
+          name: 'Digital Innovations Ltd',
+          apiKey: 'di_live_abcdef1234567890abcdef1234567890',
+          apiToken: 'di_tk_abcdef1234567890abcdef1234567890',
+          contactEmail: 'info@digitalinnovations.com',
+          isActive: true,
+          createdDate: '2024-02-01T09:15:00Z',
+          updatedDate: '2024-02-05T16:20:00Z'
+        },
+        {
+          id: '3',
+          name: 'Cloud Services Inc',
+          apiKey: 'cs_prod_9876543210fedcba9876543210fedcba',
+          apiToken: 'cs_tk_9876543210fedcba9876543210fedcba',
+          contactEmail: 'support@cloudservices.com',
+          isActive: false,
+          createdDate: '2024-01-10T08:00:00Z',
+          updatedDate: '2024-01-25T11:30:00Z'
+        },
+        {
+          id: '4',
+          name: 'API Gateway Corp',
+          apiKey: 'ag_test_5555555555aaaaaa5555555555aaaaaa',
+          apiToken: 'ag_tk_5555555555aaaaaa5555555555aaaaaa',
+          contactEmail: 'dev@apigateway.com',
+          isActive: true,
+          createdDate: '2024-02-10T13:45:00Z',
+          updatedDate: '2024-02-15T10:15:00Z'
+        },
+        {
+          id: '5',
+          name: 'Data Analytics Pro',
+          apiKey: 'da_demo_1111111111bbbbbb1111111111bbbbbb',
+          apiToken: 'da_tk_1111111111bbbbbb1111111111bbbbbb',
+          contactEmail: 'analytics@datapro.com',
+          isActive: true,
+          createdDate: '2024-01-05T12:00:00Z',
+          updatedDate: '2024-01-30T15:45:00Z'
+        },
+        {
+          id: '6',
+          name: 'Mobile Apps Co',
+          apiKey: 'ma_dev_2222222222cccccc2222222222cccccc',
+          apiToken: 'ma_tk_2222222222cccccc2222222222cccccc',
+          contactEmail: 'mobile@appsco.com',
+          isActive: false,
+          createdDate: '2024-02-20T11:20:00Z',
+          updatedDate: '2024-02-25T09:10:00Z'
+        }
+      ];
 
-      // // Pagination simulation
-      // const startIndex = pageIndex * pageSize;
-      // const endIndex = startIndex + pageSize;
-      // const paginatedPartners = mockPartners.slice(startIndex, endIndex);
-      // 
-      // const totalRecords = mockPartners.length;
-      // const totalPages = Math.ceil(totalRecords / pageSize);
-      // 
-      // return {
-      //   items: paginatedPartners,
-      //   pagination: {
-      //     index: pageIndex,
-      //     size: pageSize,
-      //     count: totalRecords,
-      //     pages: totalPages,
-      //     hasPrevious: pageIndex > 0,
-      //     hasNext: pageIndex < totalPages - 1
-      //   }
-      // };
+      // Pagination simulation
+      const startIndex = pageIndex * pageSize;
+      const endIndex = startIndex + pageSize;
+      const paginatedPartners = mockPartners.slice(startIndex, endIndex);
+      
+      const totalRecords = mockPartners.length;
+      const totalPages = Math.ceil(totalRecords / pageSize);
+      
+      return {
+        items: paginatedPartners,
+        pagination: {
+          index: pageIndex,
+          size: pageSize,
+          count: totalRecords,
+          pages: totalPages,
+          hasPrevious: pageIndex > 0,
+          hasNext: pageIndex < totalPages - 1
+        }
+      };
 
       // Gerçek API çağrısı (backend çalıştığında)
       const response = await fetch(

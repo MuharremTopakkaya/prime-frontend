@@ -32,6 +32,7 @@ const routes = [
     path: '/default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <MainDashboard />,
+    requiredClaims: ['Companies.Read', 'Partners.Read', 'FullControl'], // Dashboard için en az bir okuma yetkisi
   },
   {
     name: 'Companies',
@@ -39,6 +40,7 @@ const routes = [
     path: '/companies',
     icon: <Icon as={MdBusiness} width="20px" height="20px" color="inherit" />,
     component: <CompaniesPage />,
+    requiredClaims: ['Companies.Read', 'Companies.Admin', 'FullControl'],
   },
   {
     name: 'Company Detail',
@@ -47,6 +49,7 @@ const routes = [
     icon: <Icon as={MdBusiness} width="20px" height="20px" color="inherit" />,
     component: <CompanyDetailPage />,
     secondary: true,
+    requiredClaims: ['Companies.Read', 'Companies.Admin', 'FullControl'],
   },
   {
     name: 'Partners',
@@ -54,6 +57,7 @@ const routes = [
     path: '/partners',
     icon: <Icon as={MdHandshake} width="20px" height="20px" color="inherit" />,
     component: <PartnersPage />,
+    requiredClaims: ['Partners.Read', 'Partners.Admin', 'FullControl'],
   },
   {
     name: 'NFT Marketplace',
@@ -69,6 +73,7 @@ const routes = [
     ),
     component: <NFTMarketplace />,
     secondary: true,
+    requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
   },
   {
     name: 'Data Tables',
@@ -76,6 +81,7 @@ const routes = [
     icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
     path: '/data-tables',
     component: <DataTables />,
+    requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
   },
   {
     name: 'Profile',
@@ -83,6 +89,7 @@ const routes = [
     path: '/profile',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <ProfilePage />,
+    requiredClaims: [], // Herkes kendi profilini görebilir
   },
   {
     name: 'Sign In',
@@ -90,6 +97,7 @@ const routes = [
     path: '/sign-in',
     icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
     component: <SignInCentered />,
+    requiredClaims: [], // Auth sayfası için claim gerekmez
   },
   {
     name: 'RTL Admin',
@@ -97,6 +105,7 @@ const routes = [
     path: '/rtl-default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <RTL />,
+    requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
   },
 ];
 

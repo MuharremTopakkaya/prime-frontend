@@ -1,43 +1,37 @@
 import {
-  Button,
   Flex,
   Image,
-  Link,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
-import logoWhite from "assets/img/layout/logoWhite.png";
+import tesviklendirLogo from "../../../tesviklendir-byz.png";
+import qrCode from "../../../qrtes.jpg";
 import React from "react";
 
 export default function SidebarDocs() {
-  const bgColor = "linear-gradient(135deg, #868CFF 0%, #4318FF 100%)";
-  const borderColor = useColorModeValue("white", "navy.800");
-
   return (
     <Flex
       justify='center'
       direction='column'
       align='center'
-      bg={bgColor}
-      borderRadius='30px'
-      position='relative'>
+      borderRadius='30px'>
+      {/* QR Code */}
       <Flex
-        border='5px solid'
-        borderColor={borderColor}
-        bg='linear-gradient(135deg, #868CFF 0%, #4318FF 100%)'
-        borderRadius='50%'
-        w='94px'
-        h='94px'
+        direction='column'
         align='center'
         justify='center'
-        mx='auto'
-        position='absolute'
-        left='50%'
-        top='-47px'
-        transform='translate(-50%, 0%)'>
-        <Image src={logoWhite} w='40px' h='40px' />
+        px='15px'
+        pb='15px'>
+        <Image 
+          src={qrCode} 
+          w='150px' 
+          h='150px'
+          borderRadius='20px'
+          boxShadow='xl'
+        />
       </Flex>
-      <Flex
+
+      {/* Hidden: Upgrade to PRO section */}
+      {/* <Flex
         direction='column'
         mb='12px'
         align='center'
@@ -79,7 +73,7 @@ export default function SidebarDocs() {
           mx='auto'>
           Upgrade to PRO
         </Button>
-      </Link>
+      </Link> */}
     </Flex>
   );
 }

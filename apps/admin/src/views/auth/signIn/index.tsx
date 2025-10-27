@@ -23,6 +23,7 @@
 
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 // Chakra imports
 import {
   Box,
@@ -39,15 +40,21 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
 } from "@chakra-ui/react";
 // Custom components
 import { HSeparator } from "components/separator/Separator";
 import AuthIllustration from "layouts/auth/Default";
 // Assets
-import illustration from "../../../assets/img/auth/auth.png";
+import illustration from "../../../assets/img/auth/authnew.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 // Auth
 import { useAuth } from "../../../contexts/AuthContext";
 
@@ -56,6 +63,7 @@ function SignIn() {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
+  const { t, i18n } = useTranslation();
 
   // Form state
   const [email, setEmail] = useState("");
@@ -81,14 +89,20 @@ function SignIn() {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
+  // Language change handler
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('language', lng);
+  };
+
   // Handle login
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !password) {
       toast({
-        title: "Hata",
-        description: "Email ve şifre alanları zorunludur.",
+        title: t('auth.error'),
+        description: t('auth.emailPasswordRequired'),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -102,8 +116,8 @@ function SignIn() {
       
       if (success) {
         toast({
-          title: "Başarılı",
-          description: "Giriş yapıldı! Yönlendiriliyorsunuz...",
+          title: t('auth.success'),
+          description: t('auth.loginSuccessful'),
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -117,8 +131,8 @@ function SignIn() {
         }, 1000);
       } else {
         toast({
-          title: "Hata",
-          description: "Giriş bilgileri hatalı. Lütfen kontrol edin.",
+          title: t('auth.error'),
+          description: t('auth.invalidCredentials'),
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -126,8 +140,8 @@ function SignIn() {
       }
     } catch (error) {
       toast({
-        title: "Hata",
-        description: "Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+        title: t('auth.error'),
+        description: t('auth.loginError'),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -150,9 +164,110 @@ function SignIn() {
         px={{ base: "25px", md: "0px" }}
         mt={{ base: "40px", md: "14vh" }}
         flexDirection='column'>
-        <Box me='auto'>
+        <Box me='auto' position='relative'>
+          {/* Language Switcher */}
+          <Box position='absolute' top='-10px' right='-10px' zIndex={10}>
+            <Menu placement='bottom-end' offset={[0, 5]}>
+              <MenuButton
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+                variant='outline'
+                size='xs'
+                color={textColor}
+                borderColor='gray.300'
+                bg='white'
+                _hover={{ 
+                  bg: 'gray.50', 
+                  borderColor: 'blue.400',
+                  transform: 'translateY(-1px)',
+                  boxShadow: 'md'
+                }}
+                _dark={{ 
+                  color: 'gray.300', 
+                  borderColor: 'gray.600',
+                  bg: 'navy.800',
+                  _hover: { 
+                    bg: 'whiteAlpha.200', 
+                    borderColor: 'blue.400',
+                    transform: 'translateY(-1px)',
+                    boxShadow: 'md'
+                  } 
+                }}
+                fontWeight='500'
+                fontSize='xs'
+                transition='all 0.2s'
+                boxShadow='sm'
+                px={2}
+                py={1}
+                h='auto'
+              >
+                {i18n.language === 'tr' ? '🇹🇷 TR' : '🇺🇸 EN'}
+              </MenuButton>
+              <MenuList
+                bg='white'
+                border='1px solid'
+                borderColor='gray.200'
+                boxShadow='xl'
+                borderRadius='md'
+                py={1}
+                minW='120px'
+                maxW='120px'
+                _dark={{
+                  bg: 'navy.800',
+                  borderColor: 'blue.600',
+                  color: 'white'
+                }}
+              >
+                <MenuItem
+                  onClick={() => changeLanguage('tr')}
+                  bg={i18n.language === 'tr' ? 'blue.50' : 'transparent'}
+                  _hover={{
+                    bg: 'gray.100',
+                    _dark: { bg: 'gray.600' }
+                  }}
+                  borderRadius='sm'
+                  mx={1}
+                  py={1}
+                  px={2}
+                  fontSize='xs'
+                  fontWeight={i18n.language === 'tr' ? '600' : '400'}
+                  color={i18n.language === 'tr' ? 'blue.600' : 'gray.700'}
+                  _dark={{ 
+                    color: i18n.language === 'tr' ? 'blue.300' : 'gray.300',
+                    bg: i18n.language === 'tr' ? 'blue.900' : 'transparent'
+                  }}
+                  transition='all 0.2s'
+                >
+                  🇹🇷 TR
+                </MenuItem>
+                <MenuItem
+                  onClick={() => changeLanguage('en')}
+                  bg={i18n.language === 'en' ? 'blue.50' : 'transparent'}
+                  _hover={{
+                    bg: 'gray.100',
+                    _dark: { bg: 'gray.600' }
+                  }}
+                  borderRadius='sm'
+                  mx={1}
+                  py={1}
+                  px={2}
+                  fontSize='xs'
+                  fontWeight={i18n.language === 'en' ? '600' : '400'}
+                  color={i18n.language === 'en' ? 'blue.600' : 'gray.700'}
+                  _dark={{ 
+                    color: i18n.language === 'en' ? 'blue.300' : 'gray.300',
+                    bg: i18n.language === 'en' ? 'blue.900' : 'transparent'
+                  }}
+                  transition='all 0.2s'
+                >
+                  🇺🇸 EN
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Box>
+          
           <Heading color={textColor} fontSize='36px' mb='10px'>
-            Sign In
+            {t('auth.signIn')}
           </Heading>
           <Text
             mb='36px'
@@ -160,7 +275,7 @@ function SignIn() {
             color={textColorSecondary}
             fontWeight='400'
             fontSize='md'>
-            Enter your email and password to sign in!
+            {t('auth.signInDescription')}
           </Text>
         </Box>
         <Flex
@@ -187,12 +302,12 @@ function SignIn() {
             _active={googleActive}
             _focus={googleActive}>
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
-            Sign in with Google
+            {t('auth.signInWithGoogle')}
           </Button>
           <Flex align='center' mb='25px'>
             <HSeparator />
             <Text color='gray.400' mx='14px'>
-              or
+              {t('auth.or')}
             </Text>
             <HSeparator />
           </Flex>
@@ -205,7 +320,7 @@ function SignIn() {
                 fontWeight='500'
                 color={textColor}
                 mb='8px'>
-                Email<Text color={brandStars}>*</Text>
+                {t('auth.email')}<Text color={brandStars}>*</Text>
               </FormLabel>
               <Input
                 isRequired={true}
@@ -213,7 +328,7 @@ function SignIn() {
                 fontSize='sm'
                 ms={{ base: "0px", md: "0px" }}
                 type='email'
-                placeholder='mail@example.com'
+                placeholder={t('auth.emailPlaceholder')}
                 mb='24px'
                 fontWeight='500'
                 size='lg'
@@ -227,13 +342,13 @@ function SignIn() {
                 fontWeight='500'
                 color={textColor}
                 display='flex'>
-                Password<Text color={brandStars}>*</Text>
+                {t('auth.password')}<Text color={brandStars}>*</Text>
               </FormLabel>
               <InputGroup size='md'>
                 <Input
                   isRequired={true}
                   fontSize='sm'
-                  placeholder='Min. 8 characters'
+                  placeholder={t('auth.passwordPlaceholder')}
                   mb='24px'
                   size='lg'
                   type={show ? "text" : "password"}
@@ -265,7 +380,7 @@ function SignIn() {
                     fontWeight='normal'
                     color={textColor}
                     fontSize='sm'>
-                    Keep me logged in
+                    {t('auth.keepMeLoggedIn')}
                   </FormLabel>
                 </FormControl>
                 <NavLink to='/auth/forgot-password'>
@@ -274,7 +389,7 @@ function SignIn() {
                     fontSize='sm'
                     w='124px'
                     fontWeight='500'>
-                    Forgot password?
+                    {t('auth.forgotPassword')}
                   </Text>
                 </NavLink>
               </Flex>
@@ -287,9 +402,9 @@ function SignIn() {
                 h='50'
                 mb='24px'
                 isLoading={isLoading}
-                loadingText='Giriş yapılıyor...'
+                loadingText={t('auth.signingIn')}
                 disabled={isLoading}>
-                Sign In
+                {t('auth.signIn')}
               </Button>
             </FormControl>
           </form>
@@ -300,14 +415,14 @@ function SignIn() {
             maxW='100%'
             mt='0px'>
             <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              Not registered yet?
+              {t('auth.notRegisteredYet')}
               <NavLink to='/auth/sign-up'>
                 <Text
                   color={textColorBrand}
                   as='span'
                   ms='5px'
                   fontWeight='500'>
-                  Create an Account
+                  {t('auth.createAnAccount')}
                 </Text>
               </NavLink>
             </Text>

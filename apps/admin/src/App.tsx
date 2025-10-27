@@ -1,5 +1,6 @@
 import './assets/css/App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import RTLLayout from './layouts/rtl';
@@ -9,8 +10,98 @@ import {
 import initialTheme from './theme/theme';
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ClaimsProvider, useClaims } from './contexts/ClaimsContext';
 import { AuthenticationMethod } from './services/authService';
 import CustomerDashboard from './views/customer/CustomerDashboard';
+import routes from './routes';
+
+// Claims-based Protected Route Component
+const ClaimsProtectedRoute: React.FC<{ 
+  children: React.ReactNode; 
+  requiredClaims?: string[];
+  requireAny?: boolean;
+}> = ({ 
+  children, 
+  requiredClaims = [],
+  requireAny = false
+}) => {
+  const { hasClaim, hasAnyClaim, hasAllClaims, loading, error } = useClaims();
+  const { t } = useTranslation();
+
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '400px',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Yetkiler kontrol ediliyor...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ 
+        padding: '20px', 
+        textAlign: 'center',
+        backgroundColor: '#fee',
+        border: '1px solid #fcc',
+        borderRadius: '8px',
+        margin: '20px'
+      }}>
+        <h2 style={{ color: '#c33' }}>Yetki Kontrolünde Hata</h2>
+        <p style={{ color: '#666' }}>{error}</p>
+      </div>
+    );
+  }
+
+  // If no claims required, show component
+  if (requiredClaims.length === 0) {
+    return <>{children}</>;
+  }
+
+  // Check if user has required claims
+  const hasRequiredClaims = requireAny 
+    ? hasAnyClaim(requiredClaims)
+    : hasAllClaims(requiredClaims);
+
+  if (!hasRequiredClaims) {
+    return (
+      <div style={{ 
+        padding: '40px', 
+        textAlign: 'center',
+        backgroundColor: '#f8f9fa',
+        border: '1px solid #dee2e6',
+        borderRadius: '8px',
+        margin: '20px'
+      }}>
+        <h2 style={{ color: '#495057', marginBottom: '16px' }}>{t('permissions.unauthorizedAccess')}</h2>
+        <p style={{ color: '#6c757d', marginBottom: '20px' }}>
+          {t('permissions.noAccessToPage')}
+        </p>
+        <button 
+          onClick={() => window.history.back()}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Geri Dön
+        </button>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+};
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode; requiredAuthMethod?: AuthenticationMethod }> = ({ 
@@ -57,7 +148,9 @@ function AppContent() {
           path="admin/*"
           element={
             <ProtectedRoute requiredAuthMethod="Owner">
-              <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+              <ClaimsProtectedRoute requiredClaims={['Companies.Read', 'Partners.Read', 'FullControl']} requireAny={true}>
+                <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+              </ClaimsProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -67,7 +160,9 @@ function AppContent() {
           path="customer/*"
           element={
             <ProtectedRoute requiredAuthMethod="Customer">
-              <CustomerDashboard />
+              <ClaimsProtectedRoute requiredClaims={['Companies.Read', 'Partners.Read']} requireAny={true}>
+                <CustomerDashboard />
+              </ClaimsProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -77,7 +172,9 @@ function AppContent() {
           path="rtl/*"
           element={
             <ProtectedRoute>
-              <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
+              <ClaimsProtectedRoute requiredClaims={['FullControl']}>
+                <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
+              </ClaimsProtectedRoute>
             </ProtectedRoute>
           }
         />
@@ -119,7 +216,9 @@ function AppContent() {
 export default function Main() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ClaimsProvider>
+        <AppContent />
+      </ClaimsProvider>
     </AuthProvider>
   );
 }

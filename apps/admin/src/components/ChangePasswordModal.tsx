@@ -41,8 +41,8 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const modalBg = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const modalBg = useColorModeValue('white', 'navy.800');
+  const borderColor = useColorModeValue('gray.200', 'blue.600');
 
   const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -85,20 +85,43 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="md">
-      <ModalOverlay />
-      <ModalContent bg={modalBg} borderColor={borderColor}>
+      <ModalOverlay
+        bg="blackAlpha.600"
+        _dark={{
+          bg: "blackAlpha.700"
+        }}
+      />
+      <ModalContent 
+        bg={modalBg} 
+        borderColor={borderColor}
+        border="1px solid"
+        _dark={{
+          bg: "navy.800",
+          borderColor: "blue.600"
+        }}
+      >
         <ModalHeader>{t('profile.changePassword')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={4}>
             <FormControl isInvalid={!!errors.password}>
-              <FormLabel>{t('profile.currentPassword')}</FormLabel>
+              <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.currentPassword')}</FormLabel>
               <InputGroup>
                 <Input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={t('profile.currentPasswordPlaceholder')}
+                  _dark={{
+                    bg: 'navy.700',
+                    borderColor: 'blue.500',
+                    color: 'white',
+                    _placeholder: { color: 'gray.300' },
+                    _focus: {
+                      borderColor: 'blue.400',
+                      bg: 'navy.700'
+                    }
+                  }}
                 />
                 <InputRightElement>
                   <IconButton
@@ -107,6 +130,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowPassword(!showPassword)}
+                    _dark={{ color: 'gray.300' }}
                   />
                 </InputRightElement>
               </InputGroup>
@@ -114,13 +138,23 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
             </FormControl>
 
             <FormControl isInvalid={!!errors.newPassword}>
-              <FormLabel>{t('profile.newPassword')}</FormLabel>
+              <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.newPassword')}</FormLabel>
               <InputGroup>
                 <Input
                   type={showNewPassword ? 'text' : 'password'}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder={t('profile.newPasswordPlaceholder')}
+                  _dark={{
+                    bg: 'navy.700',
+                    borderColor: 'blue.500',
+                    color: 'white',
+                    _placeholder: { color: 'gray.300' },
+                    _focus: {
+                      borderColor: 'blue.400',
+                      bg: 'navy.700'
+                    }
+                  }}
                 />
                 <InputRightElement>
                   <IconButton
@@ -129,6 +163,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowNewPassword(!showNewPassword)}
+                    _dark={{ color: 'gray.300' }}
                   />
                 </InputRightElement>
               </InputGroup>
@@ -136,13 +171,23 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
             </FormControl>
 
             <FormControl isInvalid={!!errors.confirmPassword}>
-              <FormLabel>{t('profile.confirmPassword')}</FormLabel>
+              <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.confirmPassword')}</FormLabel>
               <InputGroup>
                 <Input
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder={t('profile.confirmPasswordPlaceholder')}
+                  _dark={{
+                    bg: 'navy.700',
+                    borderColor: 'blue.500',
+                    color: 'white',
+                    _placeholder: { color: 'gray.300' },
+                    _focus: {
+                      borderColor: 'blue.400',
+                      bg: 'navy.700'
+                    }
+                  }}
                 />
                 <InputRightElement>
                   <IconButton
@@ -151,13 +196,18 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    _dark={{ color: 'gray.300' }}
                   />
                 </InputRightElement>
               </InputGroup>
               {errors.confirmPassword && <Text color="red.500" fontSize="sm">{errors.confirmPassword}</Text>}
             </FormControl>
 
-            <Text fontSize="sm" color="gray.500" textAlign="center">
+            <Text 
+              fontSize="sm" 
+              color={useColorModeValue('gray.500', 'gray.300')} 
+              textAlign="center"
+            >
               {t('profile.passwordRequirements')}
             </Text>
           </VStack>

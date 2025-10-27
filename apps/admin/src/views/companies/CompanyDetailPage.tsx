@@ -33,12 +33,20 @@ import { ChevronDownIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import { companyService, Company } from '../../services/companyService';
 import { userService, User } from '../../services/userService';
 import UserUpdateModal from '../../components/UserUpdateModal';
+import UserClaimsSidebar from '../../components/UserClaimsSidebar';
+import { ProtectedComponent } from '../../components/ProtectedComponent';
+import { useClaimCheck } from '../../hooks/useClaimCheck';
 
 const CompanyDetailPage: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const toast = useToast();
+  const { 
+    canViewUsers, 
+    canEditUsers, 
+    canManagePermissions 
+  } = useClaimCheck();
   
   const [company, setCompany] = useState<Company | null>(null);
   const [users, setUsers] = useState<User[]>([]);
@@ -48,6 +56,8 @@ const CompanyDetailPage: React.FC = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [saving, setSaving] = useState(false);
+  const [isClaimsSidebarOpen, setIsClaimsSidebarOpen] = useState(false);
+  const [selectedUserForClaims, setSelectedUserForClaims] = useState<User | null>(null);
 
   // Fetch company details
   const fetchCompany = async () => {
@@ -95,6 +105,16 @@ const CompanyDetailPage: React.FC = () => {
   };
 
   const handleEditUser = (user: User) => {
+    if (!canEditUsers) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToEditUser'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     setEditingUser(user);
     setIsUserModalOpen(true);
   };
@@ -135,14 +155,19 @@ const CompanyDetailPage: React.FC = () => {
     }
   };
 
-  const handlePermissionManagement = () => {
-    // Permission management is disabled for this task
-    toast({
-      title: t('users.permissionManagementDisabled'),
-      status: 'info',
-      duration: 3000,
-      isClosable: true,
-    });
+  const handlePermissionManagement = (user: User) => {
+    if (!canManagePermissions) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToManagePermissions'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    setSelectedUserForClaims(user);
+    setIsClaimsSidebarOpen(true);
   };
 
   const getStatusBadge = (status: any) => {
@@ -261,20 +286,48 @@ const CompanyDetailPage: React.FC = () => {
       </Card>
 
       {/* Users Section */}
-      <Card
-        boxShadow="lg"
-        border="1px solid"
-        borderColor="gray.200"
-        _dark={{
-          borderColor: "blue.600",
-          bg: "navy.800"
-        }}
+      <ProtectedComponent 
+        requiredClaims={['Users.Read', 'Users.Admin', 'FullControl']}
+        requireAny={true}
+        fallback={
+          <Card
+            boxShadow="lg"
+            border="1px solid"
+            borderColor="gray.200"
+            _dark={{
+              borderColor: "blue.600",
+              bg: "navy.800"
+            }}
+          >
+            <CardHeader>
+              <Text fontSize="lg" fontWeight="bold">
+                {t('users.users')}
+              </Text>
+            </CardHeader>
+            <CardBody>
+              <Box textAlign="center" py={10}>
+                <Text color="gray.500" fontSize="md">
+                  {t('permissions.noPermissionToViewUsers')}
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+        }
       >
-        <CardHeader>
-          <Text fontSize="lg" fontWeight="bold">
-            {t('users.users')}
-          </Text>
-        </CardHeader>
+        <Card
+          boxShadow="lg"
+          border="1px solid"
+          borderColor="gray.200"
+          _dark={{
+            borderColor: "blue.600",
+            bg: "navy.800"
+          }}
+        >
+          <CardHeader>
+            <Text fontSize="lg" fontWeight="bold">
+              {t('users.users')}
+            </Text>
+          </CardHeader>
         <CardBody p={0}>
           {usersLoading ? (
             <Flex justify="center" align="center" minH="200px">
@@ -332,13 +385,84 @@ const CompanyDetailPage: React.FC = () => {
                             variant="ghost"
                             size="sm"
                           />
-                          <MenuList>
-                            <MenuItem onClick={() => handleEditUser(user)}>
-                              {t('common.update')}
-                            </MenuItem>
-                            <MenuItem onClick={handlePermissionManagement} isDisabled>
-                              {t('users.permissionManagement')}
-                            </MenuItem>
+                          <MenuList
+                            bg="white"
+                            border="1px solid"
+                            borderColor="gray.200"
+                            boxShadow="lg"
+                            _dark={{
+                              bg: "navy.800",
+                              borderColor: "blue.600",
+                              color: "white"
+                            }}
+                          >
+                            <ProtectedComponent 
+                              requiredClaims={['Users.Update', 'Users.Admin', 'FullControl']}
+                              requireAny={true}
+                              fallback={
+                                <MenuItem 
+                                  isDisabled
+                                  _hover={{
+                                    bg: "gray.100",
+                                    _dark: {
+                                      bg: "gray.600"
+                                    }
+                                  }}
+                                  color="gray.500"
+                                  _dark={{ color: "gray.500" }}
+                                >
+                                  {t('common.update')} ({t('permissions.noPermission')})
+                                </MenuItem>
+                              }
+                            >
+                              <MenuItem 
+                                onClick={() => handleEditUser(user)}
+                                _hover={{
+                                  bg: "gray.100",
+                                  _dark: {
+                                    bg: "gray.600"
+                                  }
+                                }}
+                                color="gray.700"
+                                _dark={{ color: "gray.300" }}
+                              >
+                                {t('common.update')}
+                              </MenuItem>
+                            </ProtectedComponent>
+                            
+                            <ProtectedComponent 
+                              requiredClaims={['Users.Admin', 'FullControl']}
+                              requireAny={true}
+                              fallback={
+                                <MenuItem 
+                                  isDisabled
+                                  _hover={{
+                                    bg: "gray.100",
+                                    _dark: {
+                                      bg: "gray.600"
+                                    }
+                                  }}
+                                  color="gray.500"
+                                  _dark={{ color: "gray.500" }}
+                                >
+                                  {t('users.permissionManagement')} ({t('permissions.noPermission')})
+                                </MenuItem>
+                              }
+                            >
+                              <MenuItem 
+                                onClick={() => handlePermissionManagement(user)}
+                                _hover={{
+                                  bg: "gray.100",
+                                  _dark: {
+                                    bg: "gray.600"
+                                  }
+                                }}
+                                color="gray.700"
+                                _dark={{ color: "gray.300" }}
+                              >
+                                {t('users.permissionManagement')}
+                              </MenuItem>
+                            </ProtectedComponent>
                           </MenuList>
                         </Menu>
                       </Td>
@@ -349,7 +473,8 @@ const CompanyDetailPage: React.FC = () => {
             </Box>
           )}
         </CardBody>
-      </Card>
+        </Card>
+      </ProtectedComponent>
 
       <UserUpdateModal
         isOpen={isUserModalOpen}
@@ -361,6 +486,16 @@ const CompanyDetailPage: React.FC = () => {
           email: editingUser.email 
         } : undefined}
         loading={saving}
+      />
+
+      <UserClaimsSidebar
+        isOpen={isClaimsSidebarOpen}
+        onClose={() => {
+          setIsClaimsSidebarOpen(false);
+          setSelectedUserForClaims(null);
+        }}
+        userId={selectedUserForClaims?.id || ''}
+        userName={`${selectedUserForClaims?.name} ${selectedUserForClaims?.surname}`}
       />
     </Box>
   );
