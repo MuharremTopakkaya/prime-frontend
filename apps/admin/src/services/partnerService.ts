@@ -2,6 +2,9 @@ export interface Partner {
   id: string;
   name: string;
   apiKey: string;
+  apiToken: string;
+  contactEmail: string;
+  isActive: boolean;
   createdDate: string;
   updatedDate: string;
 }
@@ -28,12 +31,18 @@ export interface GetPartnersResponse {
 export interface CreatePartnerRequest {
   name: string;
   apiKey: string;
+  apiToken: string;
+  contactEmail: string;
+  isActive: boolean;
 }
 
 export interface UpdatePartnerRequest {
   id: string;
   name: string;
   apiKey?: string;
+  apiToken?: string;
+  contactEmail?: string;
+  isActive?: boolean;
 }
 
 class PartnerService {
@@ -51,12 +60,15 @@ class PartnerService {
    */
   async getPartners(pageIndex: number = 0, pageSize: number = 12): Promise<GetPartnersResponse> {
     try {
-      // MOCK DATA - Backend çalışmadığı için geçici test
+      // MOCK DATA - Temporary test while backend is not running
       // const mockPartners: Partner[] = [
       //   {
       //     id: '1',
       //     name: 'TechCorp Solutions',
       //     apiKey: 'tc_sk_1234567890abcdef1234567890abcdef',
+      //     apiToken: 'tc_tk_1234567890abcdef1234567890abcdef',
+      //     contactEmail: 'contact@techcorp.com',
+      //     isActive: true,
       //     createdDate: '2024-01-15T10:30:00Z',
       //     updatedDate: '2024-01-20T14:45:00Z'
       //   },
@@ -64,6 +76,9 @@ class PartnerService {
       //     id: '2',
       //     name: 'Digital Innovations Ltd',
       //     apiKey: 'di_live_abcdef1234567890abcdef1234567890',
+      //     apiToken: 'di_tk_abcdef1234567890abcdef1234567890',
+      //     contactEmail: 'info@digitalinnovations.com',
+      //     isActive: true,
       //     createdDate: '2024-02-01T09:15:00Z',
       //     updatedDate: '2024-02-05T16:20:00Z'
       //   },
@@ -71,6 +86,9 @@ class PartnerService {
       //     id: '3',
       //     name: 'Cloud Services Inc',
       //     apiKey: 'cs_prod_9876543210fedcba9876543210fedcba',
+      //     apiToken: 'cs_tk_9876543210fedcba9876543210fedcba',
+      //     contactEmail: 'support@cloudservices.com',
+      //     isActive: false,
       //     createdDate: '2024-01-10T08:00:00Z',
       //     updatedDate: '2024-01-25T11:30:00Z'
       //   },
@@ -78,6 +96,9 @@ class PartnerService {
       //     id: '4',
       //     name: 'API Gateway Corp',
       //     apiKey: 'ag_test_5555555555aaaaaa5555555555aaaaaa',
+      //     apiToken: 'ag_tk_5555555555aaaaaa5555555555aaaaaa',
+      //     contactEmail: 'dev@apigateway.com',
+      //     isActive: true,
       //     createdDate: '2024-02-10T13:45:00Z',
       //     updatedDate: '2024-02-15T10:15:00Z'
       //   },
@@ -85,6 +106,9 @@ class PartnerService {
       //     id: '5',
       //     name: 'Data Analytics Pro',
       //     apiKey: 'da_demo_1111111111bbbbbb1111111111bbbbbb',
+      //     apiToken: 'da_tk_1111111111bbbbbb1111111111bbbbbb',
+      //     contactEmail: 'analytics@datapro.com',
+      //     isActive: true,
       //     createdDate: '2024-01-05T12:00:00Z',
       //     updatedDate: '2024-01-30T15:45:00Z'
       //   },
@@ -92,6 +116,9 @@ class PartnerService {
       //     id: '6',
       //     name: 'Mobile Apps Co',
       //     apiKey: 'ma_dev_2222222222cccccc2222222222cccccc',
+      //     apiToken: 'ma_tk_2222222222cccccc2222222222cccccc',
+      //     contactEmail: 'mobile@appsco.com',
+      //     isActive: false,
       //     createdDate: '2024-02-20T11:20:00Z',
       //     updatedDate: '2024-02-25T09:10:00Z'
       //   }
@@ -146,11 +173,14 @@ class PartnerService {
    */
   async createPartner(partnerData: CreatePartnerRequest): Promise<Partner> {
     try {
-      // MOCK DATA - Backend çalışmadığı için geçici test
+      // MOCK DATA - Temporary test while backend is not running
       // const newPartner: Partner = {
       //   id: Date.now().toString(),
       //   name: partnerData.name,
       //   apiKey: partnerData.apiKey,
+      //   apiToken: partnerData.apiToken,
+      //   contactEmail: partnerData.contactEmail,
+      //   isActive: partnerData.isActive,
       //   createdDate: new Date().toISOString(),
       //   updatedDate: new Date().toISOString()
       // };
@@ -184,11 +214,14 @@ class PartnerService {
    */
   async updatePartner(partnerData: UpdatePartnerRequest): Promise<Partner> {
     try {
-      // MOCK DATA - Backend çalışmadığı için geçici test
+      // MOCK DATA - Temporary test while backend is not running
       // const updatedPartner: Partner = {
       //   id: partnerData.id,
       //   name: partnerData.name,
       //   apiKey: partnerData.apiKey || 'updated_api_key',
+      //   apiToken: partnerData.apiToken || 'updated_api_token',
+      //   contactEmail: partnerData.contactEmail || 'updated@email.com',
+      //   isActive: partnerData.isActive !== undefined ? partnerData.isActive : true,
       //   createdDate: '2024-01-01T00:00:00Z', // Mock created date
       //   updatedDate: new Date().toISOString()
       // };

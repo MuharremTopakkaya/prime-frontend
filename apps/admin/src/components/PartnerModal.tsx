@@ -17,15 +17,17 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
+  Switch,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 interface PartnerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (partnerData: { name: string; apiKey: string }) => void;
+  onSave: (partnerData: { name: string; apiKey: string; apiToken: string; contactEmail: string; isActive: boolean }) => void;
   isEditMode?: boolean;
-  initialData?: { name: string; apiKey: string };
+  initialData?: { name: string; apiKey: string; apiToken: string; contactEmail: string; isActive: boolean };
   loading?: boolean;
 }
 
@@ -41,20 +43,30 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
   const toast = useToast();
   const [name, setName] = useState('');
   const [apiKey, setApiKey] = useState('');
+  const [apiToken, setApiToken] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [isActive, setIsActive] = useState(true);
   const [showApiKey, setShowApiKey] = useState(false);
+  const [showApiToken, setShowApiToken] = useState(false);
 
   useEffect(() => {
     if (initialData) {
       setName(initialData.name);
       setApiKey(initialData.apiKey);
+      setApiToken(initialData.apiToken);
+      setContactEmail(initialData.contactEmail);
+      setIsActive(initialData.isActive);
     } else {
       setName('');
       setApiKey('');
+      setApiToken('');
+      setContactEmail('');
+      setIsActive(true);
     }
   }, [initialData, isOpen]);
 
   const handleSubmit = () => {
-    if (!name.trim() || !apiKey.trim()) {
+    if (!name.trim() || !apiKey.trim() || !apiToken.trim() || !contactEmail.trim()) {
       toast({
         title: t('errors.validationError'),
         description: t('errors.required'),
@@ -65,11 +77,11 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
       return;
     }
 
-    onSave({ name, apiKey });
+    onSave({ name, apiKey, apiToken, contactEmail, isActive });
   };
 
   const isFormValid = () => {
-    return name.trim() !== '' && apiKey.trim() !== '';
+    return name.trim() !== '' && apiKey.trim() !== '' && apiToken.trim() !== '' && contactEmail.trim() !== '';
   };
 
   return (
@@ -157,6 +169,89 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
                 />
               </InputRightElement>
             </InputGroup>
+          </FormControl>
+
+          <FormControl isRequired mb={4}>
+            <FormLabel
+              color="gray.600"
+              _dark={{
+                color: "gray.300"
+              }}
+            >
+              {t('partners.apiToken')}
+            </FormLabel>
+            <InputGroup>
+              <Input
+                type={showApiToken ? 'text' : 'password'}
+                placeholder={t('partners.apiToken')}
+                value={apiToken}
+                onChange={(e) => setApiToken(e.target.value)}
+                _dark={{
+                  bg: "navy.700",
+                  borderColor: "blue.500",
+                  color: "white",
+                  _placeholder: {
+                    color: "gray.400"
+                  }
+                }}
+              />
+              <InputRightElement>
+                <IconButton
+                  aria-label={showApiToken ? t('partners.hideApiToken') : t('partners.showApiToken')}
+                  icon={showApiToken ? <ViewOffIcon /> : <ViewIcon />}
+                  onClick={() => setShowApiToken(!showApiToken)}
+                  variant="ghost"
+                  size="sm"
+                />
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+
+          <FormControl isRequired mb={4}>
+            <FormLabel
+              color="gray.600"
+              _dark={{
+                color: "gray.300"
+              }}
+            >
+              {t('partners.contactEmail')}
+            </FormLabel>
+            <Input
+              type="email"
+              placeholder={t('partners.contactEmail')}
+              value={contactEmail}
+              onChange={(e) => setContactEmail(e.target.value)}
+              _dark={{
+                bg: "navy.700",
+                borderColor: "blue.500",
+                color: "white",
+                _placeholder: {
+                  color: "gray.400"
+                }
+              }}
+            />
+          </FormControl>
+
+          <FormControl mb={4}>
+            <FormLabel
+              color="gray.600"
+              _dark={{
+                color: "gray.300"
+              }}
+            >
+              {t('partners.status')}
+            </FormLabel>
+            <Switch
+              isChecked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              colorScheme="green"
+            />
+            <FormHelperText
+              color="gray.500"
+              _dark={{ color: "gray.400" }}
+            >
+              {isActive ? t('partners.active') : t('partners.inactive')}
+            </FormHelperText>
           </FormControl>
         </ModalBody>
 

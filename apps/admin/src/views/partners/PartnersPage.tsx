@@ -50,6 +50,7 @@ const PartnersPage: React.FC = () => {
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [saving, setSaving] = useState(false);
   const [visibleApiKeys, setVisibleApiKeys] = useState<Set<string>>(new Set());
+  const [visibleApiTokens, setVisibleApiTokens] = useState<Set<string>>(new Set());
   const [deletingPartner, setDeletingPartner] = useState<Partner | null>(null);
   const [deleting, setDeleting] = useState(false);
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
@@ -59,6 +60,33 @@ const PartnersPage: React.FC = () => {
   const maskApiKey = (apiKey: string): string => {
     if (apiKey.length <= 4) return '****';
     return `${apiKey.substring(0, 2)}${'*'.repeat(apiKey.length - 4)}${apiKey.substring(apiKey.length - 2)}`;
+  };
+
+  // Mask API token: show first 2 and last 2 characters
+  const maskApiToken = (apiToken: string): string => {
+    if (apiToken.length <= 4) return '****';
+    return `${apiToken.substring(0, 2)}${'*'.repeat(apiToken.length - 4)}${apiToken.substring(apiToken.length - 2)}`;
+  };
+
+  // Toggle API token visibility
+  const toggleApiTokenVisibility = (partnerId: string) => {
+    setVisibleApiTokens((prev) => {
+      const next = new Set(prev);
+      if (next.has(partnerId)) {
+        next.delete(partnerId);
+      } else {
+        next.add(partnerId);
+      }
+      return next;
+    });
+  };
+
+  // Get API token display value
+  const getApiTokenDisplay = (partner: Partner): string => {
+    if (visibleApiTokens.has(partner.id)) {
+      return partner.apiToken;
+    }
+    return maskApiToken(partner.apiToken);
   };
 
   // Toggle API key visibility
@@ -117,7 +145,7 @@ const PartnersPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSavePartner = async (partnerData: { name: string; apiKey: string }) => {
+  const handleSavePartner = async (partnerData: { name: string; apiKey: string; apiToken: string; contactEmail: string; isActive: boolean }) => {
     setSaving(true);
     try {
       if (isEditMode && editingPartner) {
@@ -125,6 +153,9 @@ const PartnersPage: React.FC = () => {
           id: editingPartner.id,
           name: partnerData.name,
           apiKey: partnerData.apiKey,
+          apiToken: partnerData.apiToken,
+          contactEmail: partnerData.contactEmail,
+          isActive: partnerData.isActive,
         });
         toast({
           title: t('partners.partnerUpdatedSuccessfully'),
@@ -241,8 +272,8 @@ const PartnersPage: React.FC = () => {
           ) : (
             <>
               {/* Table Container */}
-              <Box overflowX="auto">
-                <Table variant="simple" size="md">
+              <Box overflowX="auto" maxW="100%">
+                <Table variant="simple" size="md" minW="1200px">
                   <Thead
                     bg="gray.100"
                     _dark={{
@@ -250,11 +281,14 @@ const PartnersPage: React.FC = () => {
                     }}
                   >
                     <Tr>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }}>{t('common.name')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }}>{t('partners.apiKey')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }}>{t('common.createdDate')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }}>{t('common.updatedDate')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }}>{t('common.actions')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="200px">{t('common.name')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="180px">{t('partners.apiKey')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="180px">{t('partners.apiToken')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="200px">{t('partners.contactEmail')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="100px">{t('partners.status')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="120px">{t('common.createdDate')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="120px">{t('common.updatedDate')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="80px">{t('common.actions')}</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -272,10 +306,30 @@ const PartnersPage: React.FC = () => {
                           bg: index % 2 === 0 ? "navy.800" : "navy.700"
                         }}
                       >
-                        <Td color="gray.700" _dark={{ color: "gray.300" }}>{partner.name}</Td>
                         <Td>
-                          <Flex align="center" gap={2}>
-                            <Text color="gray.700" _dark={{ color: "gray.300" }} fontFamily="mono">
+                          <Text 
+                            color="gray.700" 
+                            _dark={{ color: "gray.300" }}
+                            fontSize="sm"
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                            whiteSpace="nowrap"
+                            maxW="180px"
+                          >
+                            {partner.name}
+                          </Text>
+                        </Td>
+                        <Td>
+                          <Flex align="center" gap={2} maxW="160px">
+                            <Text 
+                              color="gray.700" 
+                              _dark={{ color: "gray.300" }} 
+                              fontFamily="mono"
+                              fontSize="sm"
+                              overflow="hidden"
+                              textOverflow="ellipsis"
+                              whiteSpace="nowrap"
+                            >
                               {getApiKeyDisplay(partner)}
                             </Text>
                             <IconButton
@@ -284,8 +338,54 @@ const PartnersPage: React.FC = () => {
                               onClick={() => toggleApiKeyVisibility(partner.id)}
                               size="xs"
                               variant="ghost"
+                              flexShrink={0}
                             />
                           </Flex>
+                        </Td>
+                        <Td>
+                          <Flex align="center" gap={2} maxW="160px">
+                            <Text 
+                              color="gray.700" 
+                              _dark={{ color: "gray.300" }} 
+                              fontFamily="mono"
+                              fontSize="sm"
+                              overflow="hidden"
+                              textOverflow="ellipsis"
+                              whiteSpace="nowrap"
+                            >
+                              {getApiTokenDisplay(partner)}
+                            </Text>
+                            <IconButton
+                              aria-label={visibleApiTokens.has(partner.id) ? t('partners.hideApiToken') : t('partners.showApiToken')}
+                              icon={visibleApiTokens.has(partner.id) ? <ViewOffIcon /> : <ViewIcon />}
+                              onClick={() => toggleApiTokenVisibility(partner.id)}
+                              size="xs"
+                              variant="ghost"
+                              flexShrink={0}
+                            />
+                          </Flex>
+                        </Td>
+                        <Td>
+                          <Text 
+                            color="gray.700" 
+                            _dark={{ color: "gray.300" }}
+                            fontSize="sm"
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                            whiteSpace="nowrap"
+                            maxW="180px"
+                          >
+                            {partner.contactEmail}
+                          </Text>
+                        </Td>
+                        <Td>
+                          <Text 
+                            color={partner.isActive ? "green.500" : "red.500"} 
+                            fontWeight="semibold"
+                            _dark={{ color: partner.isActive ? "green.400" : "red.400" }}
+                          >
+                            {partner.isActive ? t('partners.active') : t('partners.inactive')}
+                          </Text>
                         </Td>
                         <Td color="gray.700" _dark={{ color: "gray.300" }}>
                           {new Date(partner.createdDate).toLocaleDateString()}
@@ -341,7 +441,13 @@ const PartnersPage: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         onSave={handleSavePartner}
         isEditMode={isEditMode}
-        initialData={editingPartner ? { name: editingPartner.name, apiKey: editingPartner.apiKey } : undefined}
+        initialData={editingPartner ? { 
+          name: editingPartner.name, 
+          apiKey: editingPartner.apiKey,
+          apiToken: editingPartner.apiToken,
+          contactEmail: editingPartner.contactEmail,
+          isActive: editingPartner.isActive
+        } : undefined}
         loading={saving}
       />
 
