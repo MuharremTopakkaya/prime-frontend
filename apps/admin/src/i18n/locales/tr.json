@@ -1,0 +1,83 @@
+{
+  "common": {
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "details": "Detaylar",
+    "add": "Ekle",
+    "update": "Güncelle",
+    "loading": "Yükleniyor...",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "actions": "İşlemler",
+    "status": "Durum",
+    "name": "Ad",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "address": "Adres",
+    "createdDate": "Oluşturma Tarihi",
+    "updatedDate": "Güncelleme Tarihi",
+    "pages": "Sayfalar"
+  },
+  "companies": {
+    "title": "Şirketler",
+    "companyList": "Şirket Listesi",
+    "addCompany": "Yeni Şirket Ekle",
+    "editCompany": "Şirket Düzenle",
+    "companyDetails": "Şirket Detayları",
+    "companyName": "Şirket Adı",
+    "taxNumber": "Vergi Numarası",
+    "industry": "Sektör",
+    "companyAddress": "Şirket Adresi",
+    "companyStatus": "Şirket Durumu",
+    "companyType": "Şirket Tipi",
+    "noCompaniesFound": "Şirket bulunamadı",
+    "companyAddedSuccessfully": "Şirket başarıyla eklendi",
+    "companyUpdatedSuccessfully": "Şirket başarıyla güncellendi",
+    "companyDeletedSuccessfully": "Şirket başarıyla silindi",
+    "confirmDeleteCompany": "Bu şirketi silmek istediğinizden emin misiniz?",
+    "status": {
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "suspended": "Askıya Alınmış",
+      "pending": "Beklemede"
+    },
+    "type": {
+      "owner": "Sahip",
+      "customer": "Müşteri"
+    }
+  },
+  "navigation": {
+    "dashboard": "Ana Sayfa",
+    "companies": "Şirketler",
+    "nftMarketplace": "NFT Pazarı",
+    "dataTables": "Veri Tabloları",
+    "profile": "Profil",
+    "signIn": "Giriş Yap",
+    "rtlAdmin": "RTL Admin",
+    "logout": "Çıkış Yap"
+  },
+  "pagination": {
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "page": "Sayfa",
+    "of": "/",
+    "totalRecords": "Toplam Kayıt",
+    "showing": "Gösterilen",
+    "to": "-",
+    "entries": "kayıt"
+  },
+  "errors": {
+    "somethingWentWrong": "Bir şeyler ters gitti",
+    "networkError": "Ağ hatası oluştu",
+    "unauthorized": "Yetkisiz erişim",
+    "forbidden": "Erişim engellendi",
+    "notFound": "Kaynak bulunamadı",
+    "validationError": "Doğrulama hatası",
+    "required": "Bu alan zorunludur",
+    "invalidEmail": "Geçersiz e-posta formatı",
+    "minLength": "Minimum uzunluk {{min}} karakter olmalıdır",
+    "maxLength": "Maksimum uzunluk {{max}} karakter olmalıdır"
+  }
+}

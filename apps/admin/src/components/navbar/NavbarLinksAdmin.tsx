@@ -18,6 +18,7 @@ import {
 import { ItemContent } from '../menu/ItemContent';
 import { SearchBar } from './searchBar/SearchBar';
 import { SidebarResponsive } from '../sidebar/Sidebar';
+import LanguageSwitcher from '../LanguageSwitcher';
 import PropTypes from 'prop-types';
 import React from 'react';
 // Auth
@@ -102,6 +103,7 @@ export default function HeaderLinks(props) {
         </Text>
       </Flex>
       <SidebarResponsive routes={routes} />
+      <LanguageSwitcher />
       <Menu>
         <MenuButton p="0px">
           <Icon

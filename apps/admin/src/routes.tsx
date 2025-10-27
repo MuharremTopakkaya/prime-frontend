@@ -7,6 +7,7 @@ import {
   MdHome,
   MdLock,
   MdOutlineShoppingCart,
+  MdBusiness,
 } from 'react-icons/md';
 
 // Admin Imports
@@ -15,6 +16,7 @@ import NFTMarketplace from './views/admin/marketplace';
 import Profile from './views/admin/profile';
 import DataTables from './views/admin/dataTables';
 import RTL from './views/admin/rtl';
+import CompaniesPage from './views/companies/CompaniesPage';
 
 // Auth Imports
 import SignInCentered from './views/auth/signIn';
@@ -26,6 +28,13 @@ const routes = [
     path: '/default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <MainDashboard />,
+  },
+  {
+    name: 'Companies',
+    layout: '/admin',
+    path: '/companies',
+    icon: <Icon as={MdBusiness} width="20px" height="20px" color="inherit" />,
+    component: <CompaniesPage />,
   },
   {
     name: 'NFT Marketplace',

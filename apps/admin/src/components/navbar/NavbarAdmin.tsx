@@ -2,9 +2,13 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 
 export default function AdminNavbar(props) {
+	const { t } = useTranslation();
+	const location = useLocation();
 	const [ scrolled, setScrolled ] = useState(false);
 
 	useEffect(() => {
@@ -16,6 +20,46 @@ export default function AdminNavbar(props) {
 	});
 
 	const { secondary, message, brandText } = props;
+
+	// Dynamic breadcrumb and page title based on current route
+	const getPageInfo = () => {
+		const path = location.pathname;
+		
+		if (path.includes('/companies')) {
+			return {
+				breadcrumb: t('navigation.companies'),
+				title: t('navigation.companies')
+			};
+		} else if (path.includes('/default')) {
+			return {
+				breadcrumb: t('navigation.dashboard'),
+				title: t('navigation.dashboard')
+			};
+		} else if (path.includes('/nft-marketplace')) {
+			return {
+				breadcrumb: t('navigation.nftMarketplace'),
+				title: t('navigation.nftMarketplace')
+			};
+		} else if (path.includes('/data-tables')) {
+			return {
+				breadcrumb: t('navigation.dataTables'),
+				title: t('navigation.dataTables')
+			};
+		} else if (path.includes('/profile')) {
+			return {
+				breadcrumb: t('navigation.profile'),
+				title: t('navigation.profile')
+			};
+		}
+		
+		// Default fallback
+		return {
+			breadcrumb: brandText || t('navigation.dashboard'),
+			title: brandText || t('navigation.dashboard')
+		};
+	};
+
+	const pageInfo = getPageInfo();
 
 	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
 	let mainText = useColorModeValue('navy.700', 'white');
@@ -91,35 +135,17 @@ export default function AdminNavbar(props) {
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
 							<BreadcrumbLink href='#' color={secondaryText}>
-								Pages
+								{t('common.pages')}
 							</BreadcrumbLink>
 						</BreadcrumbItem>
 
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
 							<BreadcrumbLink href='#' color={secondaryText}>
-								{brandText}
+								{pageInfo.breadcrumb}
 							</BreadcrumbLink>
 						</BreadcrumbItem>
 					</Breadcrumb>
-					{/* Here we create navbar brand, based on route name */}
-					<Link
-						color={mainText}
-						href='#'
-						bg='inherit'
-						borderRadius='inherit'
-						fontWeight='bold'
-						fontSize='34px'
-						_hover={{ color: { mainText } }}
-						_active={{
-							bg: 'inherit',
-							transform: 'none',
-							borderColor: 'transparent'
-						}}
-						_focus={{
-							boxShadow: 'none'
-						}}>
-						{brandText}
-					</Link>
+					{/* Brand text hidden to avoid duplication */}
 				</Box>
 				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
 					<AdminNavbarLinks

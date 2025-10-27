@@ -1,10 +1,12 @@
 /* eslint-disable */
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from "@chakra-ui/react";
 
 export function SidebarLinks(props) {
+  const { t } = useTranslation();
   //   Chakra color mode
   let location = useLocation();
   let activeColor = useColorModeValue("gray.700", "white");
@@ -17,6 +19,20 @@ export function SidebarLinks(props) {
   let brandColor = useColorModeValue("brand.500", "brand.400");
 
   const { routes } = props;
+
+  // Route name translation mapping
+  const getTranslatedRouteName = (routeName) => {
+    const translationMap = {
+      'Main Dashboard': t('navigation.dashboard'),
+      'Companies': t('navigation.companies'),
+      'NFT Marketplace': t('navigation.nftMarketplace'),
+      'Data Tables': t('navigation.dataTables'),
+      'Profile': t('navigation.profile'),
+      'Sign In': t('navigation.signIn'),
+      'RTL Admin': t('navigation.rtlAdmin')
+    };
+    return translationMap[routeName] || routeName;
+  };
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -41,7 +57,7 @@ export function SidebarLinks(props) {
               pt='18px'
               pb='12px'
               key={index}>
-              {route.name}
+              {getTranslatedRouteName(route.name)}
             </Text>
             {createLinks(route.items)}
           </>
@@ -83,7 +99,7 @@ export function SidebarLinks(props) {
                           ? "bold"
                           : "normal"
                       }>
-                      {route.name}
+                      {getTranslatedRouteName(route.name)}
                     </Text>
                   </Flex>
                   <Box
@@ -116,7 +132,7 @@ export function SidebarLinks(props) {
                     fontWeight={
                       activeRoute(route.path.toLowerCase()) ? "bold" : "normal"
                     }>
-                    {route.name}
+                    {getTranslatedRouteName(route.name)}
                   </Text>
                   <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
                 </HStack>
