@@ -20,6 +20,7 @@ import RTL from './views/admin/rtl';
 import CompaniesPage from './views/companies/CompaniesPage';
 import CompanyDetailPage from './views/companies/CompanyDetailPage';
 import PartnersPage from './views/partners/PartnersPage';
+import ProfilePage from './views/profile/ProfilePage';
 
 // Auth Imports
 import SignInCentered from './views/auth/signIn';
@@ -81,7 +82,7 @@ const routes = [
     layout: '/admin',
     path: '/profile',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-    component: <Profile />,
+    component: <ProfilePage />,
   },
   {
     name: 'Sign In',

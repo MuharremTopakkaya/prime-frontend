@@ -23,6 +23,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 // Auth
 import { useAuth } from '../../contexts/AuthContext';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { userProfileService, UserProfile } from '../../services/userProfileService';
 // Assets
 // import navImage from '../../assets/img/layout/Navbar.png'; // Disabled: asset missing or invalid type decls
 import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
@@ -33,6 +36,8 @@ export default function HeaderLinks(props) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
   const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   // Chakra Color Mode
   const navbarIcon = useColorModeValue('gray.400', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -47,6 +52,32 @@ export default function HeaderLinks(props) {
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   );
   const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const profile = await userProfileService.getUserProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+
+  const getInitials = (name: string, surname: string) => {
+    return `${name.charAt(0).toUpperCase()}${surname.charAt(0).toUpperCase()}`;
+  };
+
+  const handleProfileClick = () => {
+    navigate('/admin/profile');
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/admin/auth/sign-in');
+  };
   return (
     <Flex
       w={{ sm: '100%', md: 'auto' }}
@@ -248,7 +279,7 @@ export default function HeaderLinks(props) {
           <Avatar
             _hover={{ cursor: 'pointer' }}
             color="white"
-            name="Adela Parkson"
+            name={userProfile ? getInitials(userProfile.name, userProfile.surname) : 'User'}
             bg="#11047A"
             size="sm"
             w="40px"
@@ -275,7 +306,7 @@ export default function HeaderLinks(props) {
               fontWeight="700"
               color={textColor}
             >
-              👋&nbsp; Hey, Adela
+              👋&nbsp; Hey, {userProfile ? userProfile.name : 'User'}
             </Text>
           </Flex>
           <Flex flexDirection="column" p="10px">
@@ -284,16 +315,9 @@ export default function HeaderLinks(props) {
               _focus={{ bg: 'none' }}
               borderRadius="8px"
               px="14px"
+              onClick={handleProfileClick}
             >
               <Text fontSize="sm">Profile Settings</Text>
-            </MenuItem>
-            <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              borderRadius="8px"
-              px="14px"
-            >
-              <Text fontSize="sm">Newsletter Settings</Text>
             </MenuItem>
             <MenuItem
               _hover={{ bg: 'none' }}
@@ -301,7 +325,7 @@ export default function HeaderLinks(props) {
               color="red.400"
               borderRadius="8px"
               px="14px"
-              onClick={logout}
+              onClick={handleLogout}
             >
               <Text fontSize="sm">Log out</Text>
             </MenuItem>
