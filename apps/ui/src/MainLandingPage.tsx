@@ -12,6 +12,7 @@ import { LogoLink } from "components/headers/light";
 import { SectionHeading as HeadingBase } from "components/misc/Headings";
 import { SectionDescription as DescriptionBase } from "components/misc/Typography";
 import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons";
+import { useAuth } from "./contexts/AuthContext";
 
 import CheckboxIcon from "feather-icons/dist/icons/check-circle.svg?react";
 import RadioIcon from "feather-icons/dist/icons/radio.svg?react";
@@ -29,6 +30,7 @@ const NavLink = tw.a`mt-4 lg:mt-0 transition duration-300 font-medium pb-1 borde
 const PrimaryNavLink = tw(
   NavLink
 )`text-gray-100 bg-primary-500 px-6 py-3 border-none rounded hocus:bg-primary-900 focus:shadow-outline mt-6 md:mt-4 lg:mt-0`;
+const LogoutButton = tw.button`mt-4 lg:mt-0 transition duration-300 font-medium pb-1 border-b-2 mr-12 text-red-600 border-red-400 hocus:border-red-700 bg-transparent border-none`;
 const HeroRow = tw(Row)`flex-col lg:flex-row justify-between items-center pt-8 lg:pt-12 pb-16 max-w-screen-2xl mx-auto flex-wrap`;
 
 const Column = tw.div`flex-1`;
@@ -130,6 +132,7 @@ export default ({
   heading = "Free Modern React Templates for every need.",
   description = "Easily customizable modern React UI Templates and Components built using TailwindCSS which are also lightweight and simple to setup. All components are modular and fully responsive for great mobile experience as well as big desktop screens.  Brand Colors are also fully customizable. Free for personal as well as commercial use."
 }: MainLandingPageProps): JSX.Element => {
+  const { logout, authenticationMethod } = useAuth();
   /*
    * Using gtag like this because we only want to use Google Analytics when Main Landing Page is rendered
    * Remove this part and the the gtag script inside public/index.html if you dont need google analytics
@@ -187,9 +190,9 @@ export default ({
                 Hire Me!
               </NavLink>
               <div tw="md:hidden flex-100 h-0"></div>
-              <PrimaryNavLink href="/auth/sign-in">
-                Sign In
-              </PrimaryNavLink>
+              <LogoutButton onClick={logout}>
+                Logout
+              </LogoutButton>
             </div>
           </NavRow>
           <HeroRow>

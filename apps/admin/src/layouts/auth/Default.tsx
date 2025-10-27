@@ -80,6 +80,7 @@ function AuthIllustration(props) {
 // PROPS
 
 AuthIllustration.propTypes = {
+  children: PropTypes.node,
   illustrationBackground: PropTypes.string,
   image: PropTypes.any,
 };

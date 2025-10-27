@@ -21,8 +21,8 @@
 
 */
 
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 // Chakra imports
 import {
   Box,
@@ -38,17 +38,30 @@ import {
   InputRightElement,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 // Custom components
 import { HSeparator } from "components/separator/Separator";
-import DefaultAuth from "layouts/auth/Default";
+import AuthIllustration from "layouts/auth/Default";
 // Assets
-import illustration from "assets/img/auth/auth.png";
+import illustration from "../../../assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+// Auth
+import { useAuth } from "../../../contexts/AuthContext";
 
 function SignIn() {
+  // Auth context
+  const { login, loading } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  // Form state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
@@ -67,8 +80,64 @@ function SignIn() {
   );
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
+
+  // Handle login
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Hata",
+        description: "Email ve şifre alanları zorunludur.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const success = await login(email, password);
+      
+      if (success) {
+        toast({
+          title: "Başarılı",
+          description: "Giriş yapıldı! Yönlendiriliyorsunuz...",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        
+        // Authentication method'a göre yönlendirme
+        setTimeout(() => {
+          // AuthContext'ten authentication method'u al
+          // Burada navigate işlemi App.tsx'teki root redirect ile otomatik olarak yapılacak
+          navigate("/");
+        }, 1000);
+      } else {
+        toast({
+          title: "Hata",
+          description: "Giriş bilgileri hatalı. Lütfen kontrol edin.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
-    <DefaultAuth illustrationBackground={illustration} image={illustration}>
+    <AuthIllustration illustrationBackground={illustration}>
       <Flex
         maxW={{ base: "100%", md: "max-content" }}
         w='100%'
@@ -127,90 +196,103 @@ function SignIn() {
             </Text>
             <HSeparator />
           </Flex>
-          <FormControl>
-            <FormLabel
-              display='flex'
-              ms='4px'
-              fontSize='sm'
-              fontWeight='500'
-              color={textColor}
-              mb='8px'>
-              Email<Text color={brandStars}>*</Text>
-            </FormLabel>
-            <Input
-              isRequired={true}
-              variant='auth'
-              fontSize='sm'
-              ms={{ base: "0px", md: "0px" }}
-              type='email'
-              placeholder='mail@simmmple.com'
-              mb='24px'
-              fontWeight='500'
-              size='lg'
-            />
-            <FormLabel
-              ms='4px'
-              fontSize='sm'
-              fontWeight='500'
-              color={textColor}
-              display='flex'>
-              Password<Text color={brandStars}>*</Text>
-            </FormLabel>
-            <InputGroup size='md'>
+          <form onSubmit={handleLogin}>
+            <FormControl>
+              <FormLabel
+                display='flex'
+                ms='4px'
+                fontSize='sm'
+                fontWeight='500'
+                color={textColor}
+                mb='8px'>
+                Email<Text color={brandStars}>*</Text>
+              </FormLabel>
               <Input
                 isRequired={true}
-                fontSize='sm'
-                placeholder='Min. 8 characters'
-                mb='24px'
-                size='lg'
-                type={show ? "text" : "password"}
                 variant='auth'
+                fontSize='sm'
+                ms={{ base: "0px", md: "0px" }}
+                type='email'
+                placeholder='mail@example.com'
+                mb='24px'
+                fontWeight='500'
+                size='lg'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
               />
-              <InputRightElement display='flex' alignItems='center' mt='4px'>
-                <Icon
-                  color={textColorSecondary}
-                  _hover={{ cursor: "pointer" }}
-                  as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                  onClick={handleClick}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <Flex justifyContent='space-between' align='center' mb='24px'>
-              <FormControl display='flex' alignItems='center'>
-                <Checkbox
-                  id='remember-login'
-                  colorScheme='brandScheme'
-                  me='10px'
-                />
-                <FormLabel
-                  htmlFor='remember-login'
-                  mb='0'
-                  fontWeight='normal'
-                  color={textColor}
-                  fontSize='sm'>
-                  Keep me logged in
-                </FormLabel>
-              </FormControl>
-              <NavLink to='/auth/forgot-password'>
-                <Text
-                  color={textColorBrand}
+              <FormLabel
+                ms='4px'
+                fontSize='sm'
+                fontWeight='500'
+                color={textColor}
+                display='flex'>
+                Password<Text color={brandStars}>*</Text>
+              </FormLabel>
+              <InputGroup size='md'>
+                <Input
+                  isRequired={true}
                   fontSize='sm'
-                  w='124px'
-                  fontWeight='500'>
-                  Forgot password?
-                </Text>
-              </NavLink>
-            </Flex>
-            <Button
-              fontSize='sm'
-              variant='brand'
-              fontWeight='500'
-              w='100%'
-              h='50'
-              mb='24px'>
-              Sign In
-            </Button>
-          </FormControl>
+                  placeholder='Min. 8 characters'
+                  mb='24px'
+                  size='lg'
+                  type={show ? "text" : "password"}
+                  variant='auth'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
+                />
+                <InputRightElement display='flex' alignItems='center' mt='4px'>
+                  <Icon
+                    color={textColorSecondary}
+                    _hover={{ cursor: "pointer" }}
+                    as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                    onClick={handleClick}
+                  />
+                </InputRightElement>
+              </InputGroup>
+              <Flex justifyContent='space-between' align='center' mb='24px'>
+                <FormControl display='flex' alignItems='center'>
+                  <Checkbox
+                    id='remember-login'
+                    colorScheme='brandScheme'
+                    me='10px'
+                    disabled={isLoading}
+                  />
+                  <FormLabel
+                    htmlFor='remember-login'
+                    mb='0'
+                    fontWeight='normal'
+                    color={textColor}
+                    fontSize='sm'>
+                    Keep me logged in
+                  </FormLabel>
+                </FormControl>
+                <NavLink to='/auth/forgot-password'>
+                  <Text
+                    color={textColorBrand}
+                    fontSize='sm'
+                    w='124px'
+                    fontWeight='500'>
+                    Forgot password?
+                  </Text>
+                </NavLink>
+              </Flex>
+              <Button
+                type='submit'
+                fontSize='sm'
+                variant='brand'
+                fontWeight='500'
+                w='100%'
+                h='50'
+                mb='24px'
+                isLoading={isLoading}
+                loadingText='Giriş yapılıyor...'
+                disabled={isLoading}>
+                Sign In
+              </Button>
+            </FormControl>
+          </form>
           <Flex
             flexDirection='column'
             justifyContent='center'
@@ -232,7 +314,7 @@ function SignIn() {
           </Flex>
         </Flex>
       </Flex>
-    </DefaultAuth>
+    </AuthIllustration>
   );
 }
 

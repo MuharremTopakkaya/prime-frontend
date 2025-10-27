@@ -20,6 +20,8 @@ import { SearchBar } from './searchBar/SearchBar';
 import { SidebarResponsive } from '../sidebar/Sidebar';
 import PropTypes from 'prop-types';
 import React from 'react';
+// Auth
+import { useAuth } from '../../contexts/AuthContext';
 // Assets
 // import navImage from '../../assets/img/layout/Navbar.png'; // Disabled: asset missing or invalid type decls
 import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
@@ -29,6 +31,7 @@ import routes from '../../routes';
 export default function HeaderLinks(props) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
+  const { logout } = useAuth();
   // Chakra Color Mode
   const navbarIcon = useColorModeValue('gray.400', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -296,6 +299,7 @@ export default function HeaderLinks(props) {
               color="red.400"
               borderRadius="8px"
               px="14px"
+              onClick={logout}
             >
               <Text fontSize="sm">Log out</Text>
             </MenuItem>
