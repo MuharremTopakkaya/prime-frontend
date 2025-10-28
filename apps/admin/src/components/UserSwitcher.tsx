@@ -1,13 +1,26 @@
 import React from 'react';
 import { Box, Button, VStack, Text, HStack, Badge } from '@chakra-ui/react';
 import { useClaims } from '../contexts/ClaimsContext';
+import { useNavigate } from 'react-router-dom';
 
 const UserSwitcher: React.FC = () => {
   const { userClaims, isAdmin, isCustomer } = useClaims();
+  const navigate = useNavigate();
 
   const switchUser = (userId: string) => {
     localStorage.setItem('testUserId', userId);
-    window.location.reload(); // Refresh to reload claims
+    
+    // Otomatik yönlendirme
+    if (userId === 'customer-user') {
+      navigate('/customer/dashboard');
+    } else {
+      navigate('/admin/default');
+    }
+    
+    // Sayfayı yenile
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
   const getAssignedClaims = () => {
@@ -28,6 +41,7 @@ const UserSwitcher: React.FC = () => {
       border="1px solid"
       borderColor="gray.200"
       zIndex={1000}
+      display={{ base: "none", lg: "block" }}
       _dark={{
         bg: "navy.800",
         borderColor: "blue.600"

@@ -115,7 +115,7 @@ const CompanyModal: React.FC<CompanyModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "lg" }}>
       <ModalOverlay />
       <ModalContent
         bg="white"
@@ -140,7 +140,7 @@ const CompanyModal: React.FC<CompanyModalProps> = ({
           }}
         />
         
-        <ModalBody pb={6}>
+        <ModalBody pb={{ base: 4, md: 6 }}>
           <FormControl isRequired mb={4}>
             <FormLabel
               color="gray.600"

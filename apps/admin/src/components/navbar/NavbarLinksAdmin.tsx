@@ -85,8 +85,8 @@ export default function HeaderLinks(props) {
       flexDirection="row"
       bg={menuBg}
       flexWrap={secondary ? { base: 'wrap', md: 'nowrap' } : 'unset'}
-      p="10px"
-      borderRadius="30px"
+      p={{ base: "8px", md: "10px" }}
+      borderRadius={{ base: "20px", md: "30px" }}
       boxShadow={shadow}
     >
       <SearchBar
@@ -96,8 +96,9 @@ export default function HeaderLinks(props) {
           }
           return 'unset';
         }}
-        me="10px"
-        borderRadius="30px"
+        me={{ base: "8px", md: "10px" }}
+        borderRadius={{ base: "20px", md: "30px" }}
+        display={{ base: "none", md: "block" }}
       />
       <Flex
         bg={ethBg}
@@ -148,11 +149,11 @@ export default function HeaderLinks(props) {
         </MenuButton>
         <MenuList
           boxShadow={shadow}
-          p="20px"
-          borderRadius="20px"
+          p={{ base: "16px", md: "20px" }}
+          borderRadius={{ base: "16px", md: "20px" }}
           bg={menuBg}
           border="none"
-          mt="22px"
+          mt={{ base: "16px", md: "22px" }}
           me={{ base: '30px', md: 'unset' }}
           minW={{ base: 'unset', md: '400px', xl: '450px' }}
           maxW={{ base: '360px', md: 'unset' }}
@@ -281,18 +282,19 @@ export default function HeaderLinks(props) {
             color="white"
             name={userProfile ? getInitials(userProfile.name, userProfile.surname) : 'User'}
             bg="#11047A"
-            size="sm"
-            w="40px"
-            h="40px"
+            size={{ base: "xs", md: "sm" }}
+            w={{ base: "32px", md: "40px" }}
+            h={{ base: "32px", md: "40px" }}
           />
         </MenuButton>
         <MenuList
           boxShadow={shadow}
           p="0px"
-          mt="10px"
-          borderRadius="20px"
+          mt={{ base: "8px", md: "10px" }}
+          borderRadius={{ base: "16px", md: "20px" }}
           bg={menuBg}
           border="none"
+          minW={{ base: "200px", md: "unset" }}
         >
           <Flex w="100%" mb="0px">
             <Text

@@ -83,7 +83,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="md">
+    <Modal isOpen={isOpen} onClose={handleClose} size={{ base: "full", md: "md" }}>
       <ModalOverlay
         bg="blackAlpha.600"
         _dark={{
@@ -101,8 +101,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
       >
         <ModalHeader>{t('profile.editProfile')}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <VStack spacing={4}>
+        <ModalBody pb={{ base: 4, md: 6 }}>
+          <VStack spacing={{ base: 3, md: 4 }}>
             <FormControl isInvalid={!!errors.name}>
               <FormLabel color={useColorModeValue('gray.700', 'white')}>{t('profile.name')}</FormLabel>
               <Input

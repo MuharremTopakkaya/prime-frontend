@@ -41,24 +41,32 @@ import React from "react";
 export default function Settings() {
   // Chakra Color Mode
   return (
-    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+    <Box pt={{ base: "100px", md: "80px", xl: "80px" }}>
       <SimpleGrid
-        mb='20px'
-        columns={{ sm: 1, md: 2 }}
-        spacing={{ base: "20px", xl: "20px" }}>
-        <DevelopmentTable
-          columnsData={columnsDataDevelopment}
-          tableData={tableDataDevelopment}
-        />
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <ColumnsTable
-          columnsData={columnsDataColumns}
-          tableData={tableDataColumns}
-        />
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
-        />
+        mb={{ base: '16px', md: '20px' }}
+        columns={{ base: 1, md: 2 }}
+        spacing={{ base: "12px", md: "20px" }}>
+        <Box overflowX="auto">
+          <DevelopmentTable
+            columnsData={columnsDataDevelopment}
+            tableData={tableDataDevelopment}
+          />
+        </Box>
+        <Box overflowX="auto">
+          <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
+        </Box>
+        <Box overflowX="auto">
+          <ColumnsTable
+            columnsData={columnsDataColumns}
+            tableData={tableDataColumns}
+          />
+        </Box>
+        <Box overflowX="auto">
+          <ComplexTable
+            columnsData={columnsDataComplex}
+            tableData={tableDataComplex}
+          />
+        </Box>
       </SimpleGrid>
     </Box>
   );

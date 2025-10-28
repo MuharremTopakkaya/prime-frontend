@@ -238,8 +238,9 @@ const CompaniesPage: React.FC = () => {
               <Box overflowX="auto">
                 <Table 
                   variant="simple" 
-                  size="md"
+                  size={{ base: "sm", md: "md" }}
                   colorScheme="gray"
+                  minW={{ base: "800px", md: "auto" }}
                 >
                   <Thead
                     bg="gray.100"
@@ -347,7 +348,7 @@ const CompaniesPage: React.FC = () => {
                           {company.industry}
                         </Td>
                         <Td 
-                          maxW="200px" 
+                          maxW={{ base: "150px", md: "200px" }} 
                           isTruncated
                           color="gray.600"
                           _dark={{

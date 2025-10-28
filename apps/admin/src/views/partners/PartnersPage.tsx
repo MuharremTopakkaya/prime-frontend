@@ -348,7 +348,11 @@ const PartnersPage: React.FC = () => {
             <>
               {/* Table Container */}
               <Box overflowX="auto" maxW="100%">
-                <Table variant="simple" size="md" minW="1200px">
+                <Table 
+                  variant="simple" 
+                  size={{ base: "sm", md: "md" }} 
+                  minW={{ base: "1000px", md: "1200px" }}
+                >
                   <Thead
                     bg="gray.100"
                     _dark={{
@@ -356,14 +360,14 @@ const PartnersPage: React.FC = () => {
                     }}
                   >
                     <Tr>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="200px">{t('common.name')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="180px">{t('partners.apiKey')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="180px">{t('partners.apiToken')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="200px">{t('partners.contactEmail')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="100px">{t('partners.status')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="120px">{t('common.createdDate')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="120px">{t('common.updatedDate')}</Th>
-                      <Th color="gray.700" _dark={{ color: "gray.300" }} w="80px">{t('common.actions')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "150px", md: "200px" }}>{t('common.name')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "140px", md: "180px" }}>{t('partners.apiKey')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "140px", md: "180px" }}>{t('partners.apiToken')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "150px", md: "200px" }}>{t('partners.contactEmail')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "80px", md: "100px" }}>{t('partners.status')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "100px", md: "120px" }}>{t('common.createdDate')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "100px", md: "120px" }}>{t('common.updatedDate')}</Th>
+                      <Th color="gray.700" _dark={{ color: "gray.300" }} w={{ base: "60px", md: "80px" }}>{t('common.actions')}</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -389,13 +393,13 @@ const PartnersPage: React.FC = () => {
                             overflow="hidden"
                             textOverflow="ellipsis"
                             whiteSpace="nowrap"
-                            maxW="180px"
+                            maxW={{ base: "120px", md: "180px" }}
                           >
                             {partner.name}
                           </Text>
                         </Td>
                         <Td>
-                          <Flex align="center" gap={1} maxW="160px">
+                          <Flex align="center" gap={1} maxW={{ base: "120px", md: "160px" }}>
                             <Text 
                               color="gray.700" 
                               _dark={{ color: "gray.300" }} 
@@ -427,7 +431,7 @@ const PartnersPage: React.FC = () => {
                           </Flex>
                         </Td>
                         <Td>
-                          <Flex align="center" gap={1} maxW="160px">
+                          <Flex align="center" gap={1} maxW={{ base: "120px", md: "160px" }}>
                             <Text 
                               color="gray.700" 
                               _dark={{ color: "gray.300" }} 
@@ -466,7 +470,7 @@ const PartnersPage: React.FC = () => {
                             overflow="hidden"
                             textOverflow="ellipsis"
                             whiteSpace="nowrap"
-                            maxW="180px"
+                            maxW={{ base: "120px", md: "180px" }}
                           >
                             {partner.contactEmail}
                           </Text>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
+  Flex,
   VStack,
   HStack,
   Text,
@@ -142,8 +143,8 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <Box p={6} pt={20}>
-      <VStack spacing={6} align="stretch">
+    <Box p={{ base: 4, md: 6, lg: 8 }} pt={{ base: 16, md: 20 }}>
+      <VStack spacing={{ base: 4, md: 6 }} align="stretch">
         <Card 
           bg={cardBg} 
           borderColor={borderColor}
@@ -154,18 +155,24 @@ const ProfilePage: React.FC = () => {
           }}
         >
           <CardBody>
-            <HStack justify="space-between" mb={4}>
+            <Flex 
+              justify="space-between" 
+              mb={4} 
+              direction={{ base: "column", md: "row" }}
+              gap={{ base: 4, md: 0 }}
+            >
               <Heading 
-                size="lg"
+                size={{ base: "md", md: "lg" }}
                 color={useColorModeValue('gray.800', 'white')}
               >
                 {t('profile.myProfile')}
               </Heading>
-              <HStack>
+              <HStack spacing={{ base: 2, md: 3 }}>
                 <Button
                   leftIcon={<EditIcon />}
                   colorScheme="blue"
                   variant="outline"
+                  fontSize={{ base: "xs", md: "md" }}
                   onClick={() => setIsEditModalOpen(true)}
                   _dark={{
                     borderColor: "blue.400",
@@ -182,6 +189,7 @@ const ProfilePage: React.FC = () => {
                   leftIcon={<LockIcon />}
                   colorScheme="orange"
                   variant="outline"
+                  fontSize={{ base: "xs", md: "md" }}
                   onClick={() => setIsPasswordModalOpen(true)}
                   _dark={{
                     borderColor: "orange.400",
@@ -195,62 +203,87 @@ const ProfilePage: React.FC = () => {
                   {t('profile.changePassword')}
                 </Button>
               </HStack>
-            </HStack>
+            </Flex>
             
             <Divider mb={4} />
             
-            <VStack spacing={4} align="stretch">
-              <HStack justify="space-between">
+            <VStack spacing={{ base: 3, md: 4 }} align="stretch">
+              <Flex 
+                justify="space-between" 
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 1, md: 0 }}
+              >
                 <Text 
                   fontWeight="semibold"
                   color={useColorModeValue('gray.800', 'white')}
+                  fontSize={{ base: "xs", md: "md" }}
                 >
                   {t('profile.name')}:
                 </Text>
-                <Text color={textColor}>{userProfile.name}</Text>
-              </HStack>
+                <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>{userProfile.name}</Text>
+              </Flex>
               
-              <HStack justify="space-between">
+              <Flex 
+                justify="space-between" 
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 1, md: 0 }}
+              >
                 <Text 
                   fontWeight="semibold"
                   color={useColorModeValue('gray.800', 'white')}
+                  fontSize={{ base: "xs", md: "md" }}
                 >
                   {t('profile.surname')}:
                 </Text>
-                <Text color={textColor}>{userProfile.surname}</Text>
-              </HStack>
+                <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>{userProfile.surname}</Text>
+              </Flex>
               
-              <HStack justify="space-between">
+              <Flex 
+                justify="space-between" 
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 1, md: 0 }}
+              >
                 <Text 
                   fontWeight="semibold"
                   color={useColorModeValue('gray.800', 'white')}
+                  fontSize={{ base: "xs", md: "md" }}
                 >
                   {t('profile.email')}:
                 </Text>
-                <Text color={textColor}>{userProfile.email}</Text>
-              </HStack>
+                <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>{userProfile.email}</Text>
+              </Flex>
               
-              <HStack justify="space-between">
+              <Flex 
+                justify="space-between" 
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 1, md: 0 }}
+              >
                 <Text 
                   fontWeight="semibold"
                   color={useColorModeValue('gray.800', 'white')}
+                  fontSize={{ base: "xs", md: "md" }}
                 >
                   {t('profile.company')}:
                 </Text>
-                <Text color={textColor}>{userProfile.company.name}</Text>
-              </HStack>
+                <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>{userProfile.company.name}</Text>
+              </Flex>
               
-              <HStack justify="space-between">
+              <Flex 
+                justify="space-between" 
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 1, md: 0 }}
+              >
                 <Text 
                   fontWeight="semibold"
                   color={useColorModeValue('gray.800', 'white')}
+                  fontSize={{ base: "xs", md: "md" }}
                 >
                   {t('profile.memberSince')}:
                 </Text>
-                <Text color={textColor}>
+                <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>
                   {new Date(userProfile.createdDate).toLocaleDateString()}
                 </Text>
-              </HStack>
+              </Flex>
             </VStack>
           </CardBody>
         </Card>

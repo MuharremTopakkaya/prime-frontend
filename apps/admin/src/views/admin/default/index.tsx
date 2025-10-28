@@ -63,11 +63,11 @@ export default function UserReports() {
   const brandColor = useColorModeValue("brand.500", "white");
   const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
   return (
-    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+    <Box pt={{ base: "100px", md: "80px", xl: "80px" }}>
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3, "2xl": 6 }}
-        gap='20px'
-        mb='20px'>
+        columns={{ base: 1, sm: 2, md: 3, lg: 3, "2xl": 6 }}
+        gap={{ base: '12px', md: '20px' }}
+        mb={{ base: '16px', md: '20px' }}>
         <MiniStatistics
           startContent={
             <IconBox
@@ -146,23 +146,27 @@ export default function UserReports() {
         />
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
+      <SimpleGrid columns={{ base: 1, xl: 2 }} gap={{ base: '12px', md: '20px' }} mb={{ base: '16px', md: '20px' }}>
         <TotalSpent />
         <WeeklyRevenue />
       </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
+      <SimpleGrid columns={{ base: 1, xl: 2 }} gap={{ base: '12px', md: '20px' }} mb={{ base: '16px', md: '20px' }}>
+        <Box overflowX="auto">
+          <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
+        </Box>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: '12px', md: '20px' }}>
           <DailyTraffic />
           <PieCard />
         </SimpleGrid>
       </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
-        />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
+      <SimpleGrid columns={{ base: 1, xl: 2 }} gap={{ base: '12px', md: '20px' }} mb={{ base: '16px', md: '20px' }}>
+        <Box overflowX="auto">
+          <ComplexTable
+            columnsData={columnsDataComplex}
+            tableData={tableDataComplex}
+          />
+        </Box>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: '12px', md: '20px' }}>
           <Tasks />
           <MiniCalendar h='100%' minW='100%' selectRange={false} />
         </SimpleGrid>

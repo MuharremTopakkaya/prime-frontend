@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Flex,
@@ -27,6 +27,18 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
 }) => {
   const { t } = useTranslation();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handlePrevious = () => {
     if (hasPrevious) {
@@ -42,7 +54,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const getPageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 5;
+    const maxVisiblePages = isMobile ? 3 : 5; // Mobilde daha az sayfa göster
     
     let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
@@ -69,16 +81,22 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <Flex justify="space-between" align="center" mt={6}>
-      <Text color="gray.500" fontSize="sm">
+    <Flex 
+      justify="space-between" 
+      align="center" 
+      mt={6}
+      direction={{ base: "column", md: "row" }}
+      gap={{ base: 3, md: 0 }}
+    >
+      <Text color="gray.500" fontSize={{ base: "xs", md: "sm" }}>
         {t('pagination.showing')} {(currentPage * 10) + 1} {t('pagination.to')} {Math.min((currentPage + 1) * 10, totalRecords)} {t('pagination.of')} {totalRecords} {t('pagination.entries')}
       </Text>
       
-      <HStack spacing={2}>
+      <HStack spacing={{ base: 1, md: 2 }}>
         <IconButton
           aria-label={t('pagination.previous')}
           icon={<ChevronLeftIcon />}
-          size="sm"
+          size={{ base: "xs", md: "sm" }}
           variant="outline"
           isDisabled={!hasPrevious}
           onClick={handlePrevious}
@@ -87,10 +105,11 @@ const Pagination: React.FC<PaginationProps> = ({
         {getPageNumbers().map((page) => (
           <Button
             key={page}
-            size="sm"
+            size={{ base: "xs", md: "sm" }}
             variant={page === currentPage ? 'solid' : 'outline'}
             colorScheme={page === currentPage ? 'blue' : 'gray'}
             onClick={() => onPageChange(page)}
+            minW={{ base: "32px", md: "40px" }}
           >
             {page + 1}
           </Button>
@@ -99,7 +118,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <IconButton
           aria-label={t('pagination.next')}
           icon={<ChevronRightIcon />}
-          size="sm"
+          size={{ base: "xs", md: "sm" }}
           variant="outline"
           isDisabled={!hasNext}
           onClick={handleNext}

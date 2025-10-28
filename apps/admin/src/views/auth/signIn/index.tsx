@@ -284,17 +284,17 @@ function SignIn() {
           w={{ base: "100%", md: "420px" }}
           maxW='100%'
           background='transparent'
-          borderRadius='15px'
+          borderRadius={{ base: '12px', md: '15px' }}
           mx={{ base: "auto", lg: "unset" }}
           me='auto'
           mb={{ base: "20px", md: "auto" }}>
           <Button
-            fontSize='sm'
+            fontSize={{ base: 'xs', md: 'sm' }}
             me='0px'
-            mb='26px'
-            py='15px'
-            h='50px'
-            borderRadius='16px'
+            mb={{ base: '20px', md: '26px' }}
+            py={{ base: '12px', md: '15px' }}
+            h={{ base: '44px', md: '50px' }}
+            borderRadius={{ base: '12px', md: '16px' }}
             bg={googleBg}
             color={googleText}
             fontWeight='500'
@@ -304,9 +304,9 @@ function SignIn() {
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
             {t('auth.signInWithGoogle')}
           </Button>
-          <Flex align='center' mb='25px'>
+          <Flex align='center' mb={{ base: '20px', md: '25px' }}>
             <HSeparator />
-            <Text color='gray.400' mx='14px'>
+            <Text color='gray.400' mx={{ base: '10px', md: '14px' }} fontSize={{ base: 'xs', md: 'sm' }}>
               {t('auth.or')}
             </Text>
             <HSeparator />
@@ -395,12 +395,12 @@ function SignIn() {
               </Flex>
               <Button
                 type='submit'
-                fontSize='sm'
+                fontSize={{ base: 'xs', md: 'sm' }}
                 variant='brand'
                 fontWeight='500'
                 w='100%'
-                h='50'
-                mb='24px'
+                h={{ base: '44px', md: '50px' }}
+                mb={{ base: '20px', md: '24px' }}
                 isLoading={isLoading}
                 loadingText={t('auth.signingIn')}
                 disabled={isLoading}>

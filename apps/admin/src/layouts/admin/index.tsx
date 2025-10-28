@@ -114,8 +114,8 @@ export default function Dashboard(props: Record<string, unknown>) {
             overflow="auto"
             position="relative"
             maxHeight="100%"
-            w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-            maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
+            w={{ base: '100%', xl: 'calc( 100% - 300px )' }}
+            maxWidth={{ base: '100%', xl: 'calc( 100% - 300px )' }}
             transition="all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)"
             transitionDuration=".2s, .2s, .35s"
             transitionProperty="top, bottom, width"
@@ -135,7 +135,7 @@ export default function Dashboard(props: Record<string, unknown>) {
               </Box>
             </Portal>
             {getRoute() ? (
-              <Box mx="auto" p={{ base: '20px', md: '30px' }} pe="20px" minH="100vh" pt="50px">
+              <Box mx="auto" p={{ base: '16px', md: '20px', lg: '30px' }} pe={{ base: '16px', md: '20px' }} minH="100vh" pt={{ base: '80px', md: '50px' }}>
                 <Routes>
                   {getRoutes(routes as any)}
                   <Route path="/" element={<Navigate to="/admin/default" replace />} />

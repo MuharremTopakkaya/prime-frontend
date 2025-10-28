@@ -101,7 +101,7 @@ export default function AdminNavbar(props) {
 			backdropFilter={navbarBackdrop}
 			backgroundPosition='center'
 			backgroundSize='cover'
-			borderRadius='16px'
+			borderRadius={{ base: '12px', md: '16px' }}
 			borderWidth='1.5px'
 			borderStyle='solid'
 			transitionDelay='0s, 0s, 0s, 0s'
@@ -110,12 +110,12 @@ export default function AdminNavbar(props) {
 			transitionTimingFunction='linear, linear, linear, linear'
 			alignItems={{ xl: 'center' }}
 			display={secondary ? 'block' : 'flex'}
-			minH='75px'
+			minH={{ base: '60px', md: '75px' }}
 			justifyContent={{ xl: 'center' }}
 			lineHeight='25.6px'
 			mx='auto'
 			mt={secondaryMargin}
-			pb='8px'
+			pb={{ base: '6px', md: '8px' }}
 			right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
 			px={{
 				sm: paddingX,
@@ -124,7 +124,7 @@ export default function AdminNavbar(props) {
 			ps={{
 				xl: '12px'
 			}}
-			pt='8px'
+			pt={{ base: '6px', md: '8px' }}
 			top={{ base: '12px', md: '16px', lg: '20px', xl: '20px' }}
 			w={{
 				base: 'calc(100vw - 6%)',
@@ -143,13 +143,13 @@ export default function AdminNavbar(props) {
 				mb={gap}>
 				<Box mb={{ sm: '8px', md: '0px' }}>
 					<Breadcrumb>
-						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
+						<BreadcrumbItem color={secondaryText} fontSize={{ base: 'xs', md: 'sm' }} mb='5px'>
 							<BreadcrumbLink href='#' color={secondaryText}>
 								{t('common.pages')}
 							</BreadcrumbLink>
 						</BreadcrumbItem>
 
-						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
+						<BreadcrumbItem color={secondaryText} fontSize={{ base: 'xs', md: 'sm' }} mb='5px'>
 							<BreadcrumbLink href='#' color={secondaryText}>
 								{pageInfo.breadcrumb}
 							</BreadcrumbLink>

@@ -39,11 +39,11 @@ function Sidebar(props) {
 
   // SIDEBAR
   return (
-    <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
+    <Box display={{ base: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
       <Box
         bg={sidebarBg}
         transition={variantChange}
-        w='300px'
+        w={{ base: '280px', xl: '300px' }}
         h='100vh'
         m={sidebarMargins}
         minH='100%'
@@ -74,7 +74,7 @@ export function SidebarResponsive(props) {
   //  BRAND
 
   return (
-    <Flex display={{ sm: "flex", xl: "none" }} alignItems='center'>
+    <Flex display={{ base: "flex", xl: "none" }} alignItems='center'>
       <Flex ref={btnRef} w='max-content' h='max-content' onClick={onOpen}>
         <Icon
           as={IoMenuOutline}
@@ -90,22 +90,30 @@ export function SidebarResponsive(props) {
         isOpen={isOpen}
         onClose={onClose}
         placement={document.documentElement.dir === "rtl" ? "right" : "left"}
-        finalFocusRef={btnRef}>
+        finalFocusRef={btnRef}
+        size={{ base: "full", sm: "xs" }}>
         <DrawerOverlay />
-        <DrawerContent w='285px' maxW='285px' bg={sidebarBackgroundColor}>
+        <DrawerContent 
+          w={{ base: '100%', sm: '285px' }} 
+          maxW={{ base: '100%', sm: '285px' }} 
+          bg={sidebarBackgroundColor}>
           <DrawerCloseButton
             zIndex='3'
+            size="lg"
             onClick={onClose}
             _focus={{ boxShadow: "none" }}
             _hover={{ boxShadow: "none" }}
           />
-          <DrawerBody maxW='285px' px='0rem' pb='0'>
+          <DrawerBody 
+            maxW={{ base: '100%', sm: '285px' }} 
+            px={{ base: '20px', sm: '0rem' }} 
+            pb='0'>
             <Scrollbars
               autoHide
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
               renderView={renderView}>
-              <Content routes={routes} />
+              <Content routes={routes} onClose={onClose} />
             </Scrollbars>
           </DrawerBody>
         </DrawerContent>

@@ -274,17 +274,8 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
             <Text fontSize="2xl" fontWeight="bold" color={textColor} mb={6}>
               {t('products.benefits.title')}
             </Text>
-            <Grid templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={4}>
-              {[
-                "Integrated SaaS Solution",
-                "80% Revenue Increase", 
-                "Automatic Document Generation",
-                "API Integration",
-                "Real-time Data Processing",
-                "Cross-selling Opportunities",
-                "Analysis and Reporting",
-                "Global Branding"
-              ].map((benefit: string, index: number) => (
+             <Grid templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }} gap={4}>
+               {t('products.benefits.items', { returnObjects: true }).map((benefit: string, index: number) => (
                 <GridItem key={index}>
                   <Box
                     bg={useColorModeValue('gray.50', 'gray.700')}

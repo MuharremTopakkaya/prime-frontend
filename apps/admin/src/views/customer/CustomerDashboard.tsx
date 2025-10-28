@@ -8,25 +8,25 @@ const CustomerDashboard: React.FC = () => {
   const bgColor = useColorModeValue("white", "navy.800");
 
   return (
-    <Box minH="100vh" bg={bgColor} p={8}>
-      <VStack spacing={6} align="center" maxW="800px" mx="auto">
-        <Heading color={textColor} size="xl">
+    <Box minH="100vh" bg={bgColor} p={{ base: 4, md: 8 }}>
+      <VStack spacing={{ base: 4, md: 6 }} align="center" maxW="800px" mx="auto">
+        <Heading color={textColor} size={{ base: "lg", md: "xl" }}>
           Müşteri Paneli
         </Heading>
         
-        <Text color={textColor} fontSize="lg" textAlign="center">
+        <Text color={textColor} fontSize={{ base: "md", md: "lg" }} textAlign="center">
           Hoş geldiniz! Bu müşteri paneline erişim yetkiniz bulunmaktadır.
         </Text>
         
-        <Box p={6} bg={useColorModeValue("gray.50", "gray.700")} borderRadius="lg" w="100%">
-          <VStack spacing={4}>
-            <Text color={textColor} fontWeight="bold">
+        <Box p={{ base: 4, md: 6 }} bg={useColorModeValue("gray.50", "gray.700")} borderRadius="lg" w="100%">
+          <VStack spacing={{ base: 3, md: 4 }}>
+            <Text color={textColor} fontWeight="bold" fontSize={{ base: "sm", md: "md" }}>
               Kullanıcı Bilgileri:
             </Text>
-            <Text color={textColor}>
+            <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>
               Authentication Method: {authenticationMethod}
             </Text>
-            <Text color={textColor}>
+            <Text color={textColor} fontSize={{ base: "sm", md: "md" }}>
               Bu panel Customer authentication method'u olan kullanıcılar içindir.
             </Text>
           </VStack>
@@ -35,13 +35,14 @@ const CustomerDashboard: React.FC = () => {
         <Button
           colorScheme="red"
           onClick={logout}
-          size="lg"
+          size={{ base: "md", md: "lg" }}
+          w={{ base: "100%", md: "auto" }}
         >
           Çıkış Yap
         </Button>
         
-        <Box p={4} bg={useColorModeValue("blue.50", "blue.900")} borderRadius="md" w="100%">
-          <Text color={textColor} fontSize="sm" textAlign="center">
+        <Box p={{ base: 3, md: 4 }} bg={useColorModeValue("blue.50", "blue.900")} borderRadius="md" w="100%">
+          <Text color={textColor} fontSize={{ base: "xs", md: "sm" }} textAlign="center">
             Bu panel geliştirme aşamasındadır. İstediğiniz özellikleri buraya ekleyebilirsiniz.
           </Text>
         </Box>

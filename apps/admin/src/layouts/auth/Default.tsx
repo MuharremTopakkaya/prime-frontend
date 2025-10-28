@@ -55,33 +55,74 @@ function AuthIllustration(props) {
         {/* TOS Products Section */}
         <Box
           position="absolute"
-          bottom="120px"
-          right="20px"
+          bottom={{ base: "-67px", md: "120px" }}
+          left={{ base: "16px", md: "20px" }}
           zIndex={10}
         >
           <Button
             onClick={onOpen}
             bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
             color="white"
-            size="lg"
-            borderRadius="full"
-            px={16}
-            py={8}
-            fontSize="lg"
+            size={{ base: "md", md: "lg" }}
+            borderRadius="20px"
+            px={{ base: 8, md: 16 }}
+            py={{ base: 6, md: 8 }}
+            fontSize={{ base: "xs", md: "lg" }}
             fontWeight="bold"
-            boxShadow="xl"
+            boxShadow="0 10px 25px rgba(102, 126, 234, 0.3)"
             _hover={{
-              transform: "translateY(-2px)",
-              boxShadow: "2xl",
+              transform: "translateY(-3px) scale(1.02)",
+              boxShadow: "0 15px 35px rgba(102, 126, 234, 0.4)",
               bg: "linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)",
             }}
             _active={{
-              transform: "translateY(0px)",
+              transform: "translateY(-1px) scale(0.98)",
             }}
-            transition="all 0.3s ease"
+            transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             leftIcon={
-              <Image src={TOSIcon} w="80px" h="40px" alt="TOS" />
+              <Box
+                position="relative"
+                w={{ base: "50px", md: "80px" }}
+                h={{ base: "25px", md: "40px" }}
+                borderRadius="8px"
+                bg="rgba(255, 255, 255, 0.2)"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                backdropFilter="blur(10px)"
+              >
+                <Image 
+                  src={TOSIcon} 
+                  w={{ base: "45px", md: "70px" }} 
+                  h={{ base: "22px", md: "35px" }} 
+                  alt="TOS" 
+                  filter="brightness(1.2)"
+                />
+              </Box>
             }
+            rightIcon={
+              <Icon
+                as={FaChevronLeft}
+                w={{ base: "12px", md: "16px" }}
+                h={{ base: "12px", md: "16px" }}
+                transform="rotate(180deg)"
+                opacity={0.8}
+              />
+            }
+            _before={{
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderRadius: "20px",
+              padding: "2px",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1))",
+              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              maskComposite: "xor",
+              WebkitMaskComposite: "xor",
+            }}
           >
             TOS Ürünleri
           </Button>
