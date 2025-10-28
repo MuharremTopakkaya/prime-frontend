@@ -14,6 +14,10 @@ import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg";
 import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "../../images/dot-pattern.svg";
 import DesignIllustration from "../../images/design-illustration.svg";
+import tosTicket from "../../images/tosticket.jpg";
+import tosSports from "../../images/tossports.jpg";
+import tosHealth from "../../images/toshealth.jpg";
+import tosTermal from "../../images/tostermal.png";
 
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col lg:flex-row md:items-center max-w-screen-xl mx-auto py-20 md:py-24`;
@@ -57,6 +61,11 @@ const StyledModal = styled(ReactModalAdapter)`
   }
 `;
 const CloseModalButton = tw.button`absolute top-0 right-0 mt-8 mr-8 hocus:text-primary-500`;
+
+const ProductsGrid = tw.div`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6`;
+const ProductCard = tw.div`rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3 shadow-sm`;
+const ProductThumb = tw.img`w-12 h-12 rounded object-cover flex-shrink-0`;
+const ProductLabel = tw.div`font-semibold`;
 
 export default ({
   heading = "Modern React Templates, Just For You",
@@ -114,7 +123,24 @@ export default ({
             <CloseIcon tw="w-6 h-6" />
           </CloseModalButton>
           <div className="content">
-            <ResponsiveVideoEmbed url={watchVideoYoutubeUrl} tw="w-full" />
+            <ProductsGrid>
+              <ProductCard>
+                <ProductThumb src={tosHealth} alt="TOS Health" />
+                <ProductLabel>TosHealth</ProductLabel>
+              </ProductCard>
+              <ProductCard>
+                <ProductThumb src={tosTicket} alt="TOS Ticket" />
+                <ProductLabel>TosTicket</ProductLabel>
+              </ProductCard>
+              <ProductCard>
+                <ProductThumb src={tosTermal} alt="TOS Termal" />
+                <ProductLabel>TosTermal</ProductLabel>
+              </ProductCard>
+              <ProductCard>
+                <ProductThumb src={tosSports} alt="TOS Sports" />
+                <ProductLabel>TosSports</ProductLabel>
+              </ProductCard>
+            </ProductsGrid>
           </div>
         </StyledModal>
       </Container>

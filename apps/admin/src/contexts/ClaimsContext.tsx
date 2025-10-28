@@ -77,7 +77,7 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
       setError(null);
       
       // Get current user ID from localStorage or token
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('accessToken');
       if (!token) {
         throw new Error('No authentication token found');
       }

@@ -25,7 +25,7 @@ const ClaimsProtectedRoute: React.FC<{
   requiredClaims = [],
   requireAny = false
 }) => {
-  const { hasClaim, hasAnyClaim, hasAllClaims, loading, error } = useClaims();
+  const { hasClaim, hasAnyClaim, hasAllClaims, loading, error, isCustomer } = useClaims();
   const { t } = useTranslation();
 
   if (loading) {
@@ -70,6 +70,10 @@ const ClaimsProtectedRoute: React.FC<{
     : hasAllClaims(requiredClaims);
 
   if (!hasRequiredClaims) {
+    // Customer kullanıcı admin sayfalarına girerse, müşteri paneline yönlendir
+    if (isCustomer) {
+      return <Navigate to="/customer/dashboard" replace />;
+    }
     return (
       <div style={{ 
         padding: '40px', 
@@ -148,7 +152,8 @@ function AppContent() {
           path="admin/*"
           element={
             <ProtectedRoute requiredAuthMethod="Owner">
-              <ClaimsProtectedRoute requiredClaims={['Companies.Read', 'Partners.Read', 'FullControl']} requireAny={true}>
+              {/* Admin layout: giriş yapmış Owner herkes girebilir; sayfa bazında kısıtlama routes.tsx ile */}
+              <ClaimsProtectedRoute requiredClaims={[]} requireAny={true}>
                 <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
               </ClaimsProtectedRoute>
             </ProtectedRoute>
@@ -160,7 +165,8 @@ function AppContent() {
           path="customer/*"
           element={
             <ProtectedRoute requiredAuthMethod="Customer">
-              <ClaimsProtectedRoute requiredClaims={['Companies.Read', 'Partners.Read']} requireAny={true}>
+              {/* Customer panel sadece müşteri claimleriyle çalışır; admin ekranlarına erişemez */}
+              <ClaimsProtectedRoute requiredClaims={[]} requireAny={true}>
                 <CustomerDashboard />
               </ClaimsProtectedRoute>
             </ProtectedRoute>

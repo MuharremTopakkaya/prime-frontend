@@ -5,11 +5,13 @@ export const useClaimCheck = () => {
   const { hasClaim, hasAnyClaim, hasAllClaims, isAdmin, isCustomer, userClaims } = useClaims();
 
   // Common claim checks
+  // Şirket izinleri: ilgili claim'i olan müşteri de görebilir
   const canViewCompanies = hasAnyClaim(['Companies.Read', 'Companies.Admin', 'FullControl']);
   const canEditCompanies = hasAnyClaim(['Companies.Update', 'Companies.Admin', 'FullControl']);
   const canCreateCompanies = hasAnyClaim(['Companies.Create', 'Companies.Admin', 'FullControl']);
   const canDeleteCompanies = hasAnyClaim(['Companies.Delete', 'Companies.Admin', 'FullControl']);
 
+  // Partner izinleri: ilgili claim'i olan müşteri de görebilir
   const canViewPartners = hasAnyClaim(['Partners.Read', 'Partners.Admin', 'FullControl']);
   const canEditPartners = hasAnyClaim(['Partners.Update', 'Partners.Admin', 'FullControl']);
   const canCreatePartners = hasAnyClaim(['Partners.Create', 'Partners.Admin', 'FullControl']);

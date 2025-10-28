@@ -32,7 +32,7 @@ const routes = [
     path: '/default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <MainDashboard />,
-    requiredClaims: ['Companies.Read', 'Partners.Read', 'FullControl'], // Dashboard için en az bir okuma yetkisi
+    requiredClaims: [], // Dashboard herkes için açık
   },
   {
     name: 'Companies',

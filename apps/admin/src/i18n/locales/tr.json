@@ -241,6 +241,9 @@
     "errorChangingPassword": "Şifre değiştirilirken hata oluştu",
     "noProfileData": "Profil verisi bulunamadı"
   },
+  "footer": {
+    "copyright": "Teşviklendir. Tüm Hakları Saklıdır."
+  },
   "claim": {
     "FullControl.group": "Tam Kontrol",
     "FullControl": "Tam Kontrol",

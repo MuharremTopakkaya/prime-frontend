@@ -218,30 +218,15 @@ class UserService {
           },
         ],
         'customer-user': [
+          // Düz müşteri: Companies/Partners için hiçbir claim verilmez
           {
             group: 'Company',
-            claims: [
-              {
-                id: 5,
-                name: 'Companies.Read',
-                description: 'Şirket bilgilerini görüntüleyebilir',
-                isRequired: true,
-                isAssigned: true,
-              },
-            ],
+            claims: []
           },
           {
             group: 'Partner',
-            claims: [
-              {
-                id: 13,
-                name: 'Partners.Read',
-                description: 'İş ortağı bilgilerini görüntüleyebilir',
-                isRequired: true,
-                isAssigned: true,
-              },
-            ],
-          },
+            claims: []
+          }
         ],
         'mock-user-id': [
           {

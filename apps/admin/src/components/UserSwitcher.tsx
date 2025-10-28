@@ -63,7 +63,7 @@ const UserSwitcher: React.FC = () => {
             variant="outline"
             onClick={() => switchUser('customer-user')}
           >
-            Customer User (Read Only)
+            Customer User (No Read)
           </Button>
           
           <Button

@@ -17,8 +17,14 @@ import {
   Flex,
   Grid,
   GridItem,
+  Image,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import tosHealthImg from '../../../../src/images/toshealth.jpg';
+import tosTicketImg from '../../../../src/images/tosticket.jpg';
+import tosSportsImg from '../../../../src/images/tossports.jpg';
+import tosTermalImg from '../../../../src/images/tostermal.png';
+import appIcon from '../../../../src/images/web-app-manifest-192x192.png';
 
 interface TOSModalProps {
   isOpen: boolean;
@@ -42,27 +48,19 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
         overflow="hidden"
       >
         <ModalHeader
-          bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+          bg="linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)"
           color="white"
           textAlign="center"
           py={6}
           position="relative"
         >
-          <Box position="absolute" top={0} left={0} right={0} bottom={0} opacity={0.1}>
-            <Box
-              position="absolute"
-              top="50%"
-              left="50%"
-              transform="translate(-50%, -50%)"
-              fontSize="8xl"
-              fontWeight="bold"
-            >
-              T
-            </Box>
-          </Box>
-          <Text fontSize="3xl" fontWeight="bold" position="relative" zIndex={1}>
-            {t('products.title')}
-          </Text>
+          {/* Background watermark removed per request */}
+          <HStack spacing={3} justify="center" position="relative" zIndex={1}>
+            <Image src={appIcon} alt="Teşviklendir" boxSize={{ base: '44px', md: '56px' }} borderRadius="md" />
+            <Text fontSize="3xl" fontWeight="bold">
+              {t('products.title')}
+            </Text>
+          </HStack>
           <Text fontSize="md" opacity={0.9} mt={2} position="relative" zIndex={1}>
             {t('products.subtitle')}
           </Text>
@@ -73,55 +71,6 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
         <ModalBody p={8} overflowY="auto">
           <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
             {/* TosHealth */}
-            <GridItem>
-              <Box
-                bg={useColorModeValue('blue.50', 'blue.900')}
-                borderRadius="xl"
-                p={6}
-                border="2px solid"
-                borderColor={useColorModeValue('blue.200', 'blue.700')}
-                position="relative"
-                overflow="hidden"
-                _hover={{
-                  transform: 'translateY(-2px)',
-                  boxShadow: 'xl',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                <Box position="absolute" top={0} right={0} opacity={0.1}>
-                  <Text fontSize="6xl">🏥</Text>
-                </Box>
-                <VStack align="start" spacing={4} position="relative" zIndex={1}>
-                  <HStack>
-                    <Text fontSize="4xl">🏥</Text>
-                    <VStack align="start" spacing={1}>
-                      <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-                        {t('products.tosHealth.title')}
-                      </Text>
-                      <Badge colorScheme="blue" variant="subtle">
-                        Sağlık Turizmi
-                      </Badge>
-                    </VStack>
-                  </HStack>
-                  <Text fontSize="sm" color={textColor} lineHeight="1.6">
-                    {t('products.tosHealth.description')}
-                  </Text>
-                  <Box>
-                    <Text fontSize="xs" fontWeight="bold" color="blue.600" mb={2}>
-                      Ana Özellikler:
-                    </Text>
-                    <VStack align="start" spacing={1}>
-                      <Text fontSize="xs">• Tek panelde teşvik yönetimi</Text>
-                      <Text fontSize="xs">• %80 gelir artışı</Text>
-                      <Text fontSize="xs">• API entegrasyonu</Text>
-                      <Text fontSize="xs">• Otomatik belge üretimi</Text>
-                    </VStack>
-                  </Box>
-                </VStack>
-              </Box>
-            </GridItem>
-
-            {/* TosTicket */}
             <GridItem>
               <Box
                 bg={useColorModeValue('green.50', 'green.900')}
@@ -137,40 +86,89 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
                   transition: 'all 0.3s ease'
                 }}
               >
-                <Box position="absolute" top={0} right={0} opacity={0.1}>
-                  <Text fontSize="6xl">🎫</Text>
+                <Box position="absolute" top={0} right={0} opacity={0.08}>
+                  <Image src={tosHealthImg} alt="TosHealth" boxSize="120px" objectFit="cover" borderRadius="md" />
                 </Box>
                 <VStack align="start" spacing={4} position="relative" zIndex={1}>
                   <HStack>
-                    <Text fontSize="4xl">🎫</Text>
+                    <Image src={tosHealthImg} alt="TosHealth" boxSize="48px" objectFit="cover" borderRadius="md" borderWidth="2px" borderStyle="solid" borderColor={useColorModeValue('green.300','green.500')} />
                     <VStack align="start" spacing={1}>
                       <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-                        {t('products.tosTicket.title')}
+                        {t('products.tosHealth.title')}
                       </Text>
-                      <Badge colorScheme="green" variant="subtle">
-                        Bilet Entegrasyonu
+                      <Badge colorScheme="green" variant="subtle" fontSize="sm" px={2} py={1}>
+                        Sağlık Turizmi
                       </Badge>
                     </VStack>
                   </HStack>
                   <Text fontSize="sm" color={textColor} lineHeight="1.6">
-                    {t('products.tosTicket.description')}
+                    {t('products.tosHealth.description')}
                   </Text>
                   <Box>
                     <Text fontSize="xs" fontWeight="bold" color="green.600" mb={2}>
                       Ana Özellikler:
                     </Text>
                     <VStack align="start" spacing={1}>
-                      <Text fontSize="xs">• Uluslararası hasta biletleri</Text>
-                      <Text fontSize="xs">• Anında destek tablosu</Text>
-                      <Text fontSize="xs">• Otomatik belge dönüşümü</Text>
-                      <Text fontSize="xs">• Klinik alan adı entegrasyonu</Text>
+                      <Text fontSize="xs">• Tek panelde teşvik yönetimi</Text>
+                      <Text fontSize="xs">• %80 gelir artışı</Text>
+                      <Text fontSize="xs">• API entegrasyonu</Text>
+                      <Text fontSize="xs">• Otomatik belge üretimi</Text>
                     </VStack>
                   </Box>
                 </VStack>
               </Box>
             </GridItem>
 
-            {/* TosTermal */}
+            {/* TosTermal (sağ üst) */}
+            <GridItem>
+              <Box
+                bg={useColorModeValue('blue.50', 'blue.900')}
+                borderRadius="xl"
+                p={6}
+                border="2px solid"
+                borderColor={useColorModeValue('blue.200', 'blue.700')}
+                position="relative"
+                overflow="hidden"
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: 'xl',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <Box position="absolute" top={0} right={0} opacity={0.08}>
+                  <Image src={tosTermalImg} alt="TosTermal" boxSize="120px" objectFit="cover" borderRadius="md" />
+                </Box>
+                <VStack align="start" spacing={4} position="relative" zIndex={1}>
+                  <HStack>
+                    <Image src={tosTermalImg} alt="TosTermal" boxSize="48px" objectFit="cover" borderRadius="md" borderWidth="2px" borderStyle="solid" borderColor={useColorModeValue('blue.300','blue.500')} />
+                    <VStack align="start" spacing={1}>
+                      <Text fontSize="2xl" fontWeight="bold" color={textColor}>
+                        {t('products.tosTermal.title')}
+                      </Text>
+                      <Badge colorScheme="blue" variant="subtle" fontSize="sm" px={2} py={1}>
+                        Termal Turizm
+                      </Badge>
+                    </VStack>
+                  </HStack>
+                  <Text fontSize="sm" color={textColor} lineHeight="1.6">
+                    {t('products.tosTermal.description')}
+                  </Text>
+                  <Box>
+                    <Text fontSize="xs" fontWeight="bold" color="blue.600" mb={2}>
+                      Ana Özellikler:
+                    </Text>
+                    <VStack align="start" spacing={1}>
+                      <Text fontSize="xs">• Operasyonel entegrasyon</Text>
+                      <Text fontSize="xs">• Check-in'den tedavi bitimine</Text>
+                      <Text fontSize="xs">• Anbean veri işleme</Text>
+                      <Text fontSize="xs">• Teşvik ekonomisi dönüşümü</Text>
+                    </VStack>
+                  </Box>
+                </VStack>
+              </Box>
+            </GridItem>
+
+            {/* TosTicket (alta taşındı) */}
             <GridItem>
               <Box
                 bg={useColorModeValue('orange.50', 'orange.900')}
@@ -186,33 +184,33 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
                   transition: 'all 0.3s ease'
                 }}
               >
-                <Box position="absolute" top={0} right={0} opacity={0.1}>
-                  <Text fontSize="6xl">♨️</Text>
+                <Box position="absolute" top={0} right={0} opacity={0.08}>
+                  <Image src={tosTicketImg} alt="TosTicket" boxSize="120px" objectFit="cover" borderRadius="md" />
                 </Box>
                 <VStack align="start" spacing={4} position="relative" zIndex={1}>
                   <HStack>
-                    <Text fontSize="4xl">♨️</Text>
+                    <Image src={tosTicketImg} alt="TosTicket" boxSize="48px" objectFit="cover" borderRadius="md" borderWidth="2px" borderStyle="solid" borderColor={useColorModeValue('orange.300','orange.500')} />
                     <VStack align="start" spacing={1}>
                       <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-                        {t('products.tosTermal.title')}
+                        {t('products.tosTicket.title')}
                       </Text>
-                      <Badge colorScheme="orange" variant="subtle">
-                        Termal Turizm
+                      <Badge colorScheme="orange" variant="subtle" fontSize="sm" px={2} py={1}>
+                        Bilet Entegrasyonu
                       </Badge>
                     </VStack>
                   </HStack>
                   <Text fontSize="sm" color={textColor} lineHeight="1.6">
-                    {t('products.tosTermal.description')}
+                    {t('products.tosTicket.description')}
                   </Text>
                   <Box>
                     <Text fontSize="xs" fontWeight="bold" color="orange.600" mb={2}>
                       Ana Özellikler:
                     </Text>
                     <VStack align="start" spacing={1}>
-                      <Text fontSize="xs">• Operasyonel entegrasyon</Text>
-                      <Text fontSize="xs">• Check-in'den tedavi bitimine</Text>
-                      <Text fontSize="xs">• Anbean veri işleme</Text>
-                      <Text fontSize="xs">• Teşvik ekonomisi dönüşümü</Text>
+                      <Text fontSize="xs">• Uluslararası hasta biletleri</Text>
+                      <Text fontSize="xs">• Anında destek tablosu</Text>
+                      <Text fontSize="xs">• Otomatik belge dönüşümü</Text>
+                      <Text fontSize="xs">• Klinik alan adı entegrasyonu</Text>
                     </VStack>
                   </Box>
                 </VStack>
@@ -222,11 +220,11 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
             {/* TosSports */}
             <GridItem>
               <Box
-                bg={useColorModeValue('purple.50', 'purple.900')}
+                bg={useColorModeValue('gray.50', 'gray.900')}
                 borderRadius="xl"
                 p={6}
                 border="2px solid"
-                borderColor={useColorModeValue('purple.200', 'purple.700')}
+                borderColor={useColorModeValue('gray.300', 'gray.700')}
                 position="relative"
                 overflow="hidden"
                 _hover={{
@@ -235,17 +233,17 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
                   transition: 'all 0.3s ease'
                 }}
               >
-                <Box position="absolute" top={0} right={0} opacity={0.1}>
-                  <Text fontSize="6xl">⚽</Text>
+                <Box position="absolute" top={0} right={0} opacity={0.08}>
+                  <Image src={tosSportsImg} alt="TosSports" boxSize="120px" objectFit="cover" borderRadius="md" />
                 </Box>
                 <VStack align="start" spacing={4} position="relative" zIndex={1}>
                   <HStack>
-                    <Text fontSize="4xl">⚽</Text>
+                    <Image src={tosSportsImg} alt="TosSports" boxSize="48px" objectFit="cover" borderRadius="md" borderWidth="2px" borderStyle="solid" borderColor={useColorModeValue('gray.400','gray.500')} />
                     <VStack align="start" spacing={1}>
                       <Text fontSize="2xl" fontWeight="bold" color={textColor}>
                         {t('products.tosSports.title')}
                       </Text>
-                      <Badge colorScheme="purple" variant="subtle">
+                      <Badge colorScheme="gray" variant="subtle" fontSize="sm" px={2} py={1}>
                         Spor Turizmi
                       </Badge>
                     </VStack>
@@ -254,7 +252,7 @@ const TOSModal: React.FC<TOSModalProps> = ({ isOpen, onClose }) => {
                     {t('products.tosSports.description')}
                   </Text>
                   <Box>
-                    <Text fontSize="xs" fontWeight="bold" color="purple.600" mb={2}>
+                    <Text fontSize="xs" fontWeight="bold" color="gray.600" mb={2}>
                       Ana Özellikler:
                     </Text>
                     <VStack align="start" spacing={1}>

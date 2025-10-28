@@ -241,6 +241,9 @@
     "errorChangingPassword": "Error changing password",
     "noProfileData": "No profile data available"
   },
+  "footer": {
+    "copyright": "Teşviklendir. All Rights Reserved."
+  },
   "claim": {
     "FullControl.group": "Full Control",
     "FullControl": "Full Control",
