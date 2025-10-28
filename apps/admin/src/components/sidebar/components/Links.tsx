@@ -29,6 +29,7 @@ export function SidebarLinks(props) {
       'Companies': t('navigation.companies'),
       'Company Detail': t('navigation.companyDetail'),
       'Partners': t('navigation.partners'),
+      'Document Records': t('navigation.evrakKayit'),
       'NFT Marketplace': t('navigation.nftMarketplace'),
       'Data Tables': t('navigation.dataTables'),
       'Profile': t('navigation.profile'),

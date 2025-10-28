@@ -98,3 +98,6 @@ public
 # Temporary folders
 tmp/
 temp/
+
+# Data files
+apps/admin/src/assets/birlik_onay_20251028_225717.json

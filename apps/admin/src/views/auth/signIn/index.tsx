@@ -50,7 +50,7 @@ import {
 import { HSeparator } from "components/separator/Separator";
 import AuthIllustration from "layouts/auth/Default";
 // Assets
-import illustration from "../../../assets/img/auth/authnew.png";
+import illustration from "../../../assets/img/tesvikyeni.jpg";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";

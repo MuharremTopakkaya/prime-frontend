@@ -9,6 +9,7 @@ import {
   MdOutlineShoppingCart,
   MdBusiness,
   MdHandshake,
+  MdDescription,
 } from 'react-icons/md';
 
 // Admin Imports
@@ -21,6 +22,7 @@ import CompaniesPage from './views/companies/CompaniesPage';
 import CompanyDetailPage from './views/companies/CompanyDetailPage';
 import PartnersPage from './views/partners/PartnersPage';
 import ProfilePage from './views/profile/ProfilePage';
+import EvrakKayitPage from './views/immib/EvrakKayitPage';
 
 // Auth Imports
 import SignInCentered from './views/auth/signIn';
@@ -58,6 +60,14 @@ const routes = [
     icon: <Icon as={MdHandshake} width="20px" height="20px" color="inherit" />,
     component: <PartnersPage />,
     requiredClaims: ['Partners.Read', 'Partners.Admin', 'FullControl'],
+  },
+  {
+    name: 'Document Records',
+    layout: '/admin',
+    path: '/evrak-kayit',
+    icon: <Icon as={MdDescription} width="20px" height="20px" color="inherit" />,
+    component: <EvrakKayitPage />,
+    requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
   },
   {
     name: 'NFT Marketplace',

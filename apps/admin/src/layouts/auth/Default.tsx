@@ -82,8 +82,8 @@ function AuthIllustration(props) {
             leftIcon={
               <Box
                 position="relative"
-                w={{ base: "50px", md: "80px" }}
-                h={{ base: "25px", md: "40px" }}
+                w={{ base: "60px", md: "90px" }}
+                h={{ base: "30px", md: "45px" }}
                 borderRadius="8px"
                 bg="rgba(255, 255, 255, 0.2)"
                 display="flex"
@@ -93,8 +93,8 @@ function AuthIllustration(props) {
               >
                 <Image 
                   src={TOSIcon} 
-                  w={{ base: "45px", md: "70px" }} 
-                  h={{ base: "22px", md: "35px" }} 
+                  w={{ base: "55px", md: "80px" }} 
+                  h={{ base: "26px", md: "40px" }} 
                   alt="TOS" 
                   filter="brightness(1.2)"
                 />

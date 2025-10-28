@@ -143,7 +143,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <Box p={{ base: 4, md: 6, lg: 8 }} pt={{ base: 16, md: 20 }}>
+    <Box p={{ base: 4, md: 6, lg: 8 }} pt={{ base: 16, md: 24, lg: 32 }}>
       <VStack spacing={{ base: 4, md: 6 }} align="stretch">
         <Card 
           bg={cardBg} 

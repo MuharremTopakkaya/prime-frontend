@@ -60,6 +60,11 @@ export default function AdminNavbar(props) {
 				breadcrumb: t('navigation.profile'),
 				title: t('navigation.profile')
 			};
+		} else if (path.includes('/evrak-kayit')) {
+			return {
+				breadcrumb: t('navigation.evrakKayit'),
+				title: t('navigation.evrakKayit')
+			};
 		}
 		
 		// Default fallback
