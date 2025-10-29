@@ -22,6 +22,7 @@ import CompaniesPage from './views/companies/CompaniesPage';
 import CompanyDetailPage from './views/companies/CompanyDetailPage';
 import PartnersPage from './views/partners/PartnersPage';
 import ProfilePage from './views/profile/ProfilePage';
+import SupportRequestsPage from './views/customer/SupportRequestsPage';
 import EvrakKayitPage from './views/immib/EvrakKayitPage';
 
 // Auth Imports
@@ -35,6 +36,14 @@ const routes = [
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <MainDashboard />,
     requiredClaims: [], // Dashboard herkes için açık
+  },
+  {
+    name: 'Support Requests',
+    layout: '/customer',
+    path: '/support-requests',
+    icon: <Icon as={MdDescription} width="20px" height="20px" color="inherit" />,
+    component: <SupportRequestsPage />,
+    requiredClaims: ['SupportRequests.Read', 'FullControl'],
   },
   {
     name: 'Companies',
