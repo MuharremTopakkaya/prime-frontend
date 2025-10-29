@@ -1,11 +1,13 @@
 import React from 'react';
-import { Box, Button, VStack, Text, HStack, Badge } from '@chakra-ui/react';
+import { Box, Button, VStack, Text, HStack, Badge, IconButton } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useClaims } from '../contexts/ClaimsContext';
 import { useNavigate } from 'react-router-dom';
 
 const UserSwitcher: React.FC = () => {
   const { userClaims, isAdmin, isCustomer } = useClaims();
   const navigate = useNavigate();
+  const [collapsed, setCollapsed] = React.useState(false);
 
   const switchUser = (userId: string) => {
     localStorage.setItem('testUserId', userId);
@@ -29,6 +31,31 @@ const UserSwitcher: React.FC = () => {
     );
   };
 
+  if (collapsed) {
+    return (
+      <Box
+        position="fixed"
+        bottom="20px"
+        right="20px"
+        bg="white"
+        px={3}
+        py={2}
+        borderRadius="full"
+        boxShadow="lg"
+        border="1px solid"
+        borderColor="gray.200"
+        zIndex={1000}
+        display={{ base: "none", lg: "flex" }}
+        alignItems="center"
+        gap={2}
+        _dark={{ bg: "navy.800", borderColor: "blue.600" }}
+      >
+        <Text fontSize="xs" color="gray.700" _dark={{ color: "white" }}>Test User Switcher</Text>
+        <IconButton aria-label="Expand switcher" size="xs" icon={<ChevronUpIcon />} onClick={() => setCollapsed(false)} />
+      </Box>
+    );
+  }
+
   return (
     <Box 
       position="fixed" 
@@ -48,9 +75,12 @@ const UserSwitcher: React.FC = () => {
       }}
     >
       <VStack spacing={3} align="stretch">
-        <Text fontSize="sm" fontWeight="bold" color="gray.700" _dark={{ color: "white" }}>
-          🔐 Test User Switcher
-        </Text>
+        <HStack justify="space-between">
+          <Text fontSize="sm" fontWeight="bold" color="gray.700" _dark={{ color: "white" }}>
+            🔐 Test User Switcher
+          </Text>
+          <IconButton aria-label="Minimize switcher" size="xs" icon={<ChevronDownIcon />} onClick={() => setCollapsed(true)} />
+        </HStack>
         
         <HStack spacing={2}>
           <Badge colorScheme={isAdmin ? "red" : isCustomer ? "blue" : "gray"}>

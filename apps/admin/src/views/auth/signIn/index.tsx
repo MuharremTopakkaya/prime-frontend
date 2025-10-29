@@ -40,11 +40,19 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  useDisclosure,
+  Tooltip,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  AspectRatio,
 } from "@chakra-ui/react";
 // Custom components
 import { HSeparator } from "components/separator/Separator";
@@ -55,8 +63,11 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { FiPlay } from "react-icons/fi";
 // Auth
 import { useAuth } from "../../../contexts/AuthContext";
+// Video asset path (Vite will handle it)
+const videoSrc = new URL("../../../TosTicket_ Dönüşüm Başlıyor (1).mp4", import.meta.url).href;
 
 function SignIn() {
   // Auth context
@@ -88,6 +99,7 @@ function SignIn() {
   );
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
+  const { isOpen: isVideoOpen, onOpen: openVideo, onClose: closeVideo } = useDisclosure();
 
   // Language change handler
   const changeLanguage = (lng: string) => {
@@ -429,6 +441,39 @@ function SignIn() {
           </Flex>
         </Flex>
       </Flex>
+      {/* Video Play Floating Button */}
+      <Tooltip label='Tanıtım Videosu' openDelay={300} placement='left'>
+        <IconButton
+          aria-label='Tanıtım videosunu oynat'
+          icon={<FiPlay />}
+          position='fixed'
+          top={{ base: '52px', md: 'auto' }}
+          bottom={{ base: 'auto', md: '172px', xl: '205px' }}
+          right={{ base: '16px', md: '192px', xl: '198px' }}
+          zIndex={1000}
+          colorScheme='purple'
+          borderRadius='full'
+          size='lg'
+          onClick={openVideo}
+          boxShadow='xl'
+          opacity={isVideoOpen ? 0.25 : 1}
+          pointerEvents={isVideoOpen ? 'none' : 'auto'}
+          transition='opacity 0.2s ease'
+        />
+      </Tooltip>
+
+      {/* Video Modal */}
+      <Modal isOpen={isVideoOpen} onClose={closeVideo} size={{ base: 'md', md: 'xl' }} isCentered>
+        <ModalOverlay />
+        <ModalContent bg={useColorModeValue('white', 'navy.800')} w={{ base: '90vw', md: '420px' }} maxW='420px'>
+          <ModalCloseButton />
+          <ModalBody p={0}>
+            <AspectRatio ratio={9 / 16}>
+              <video src={videoSrc} controls autoPlay style={{ width: '100%', height: '100%' }} />
+            </AspectRatio>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </AuthIllustration>
   );
 }

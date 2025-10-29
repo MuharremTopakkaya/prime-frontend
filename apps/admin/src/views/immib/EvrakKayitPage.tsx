@@ -472,11 +472,11 @@ const EvrakKayitPage: React.FC = () => {
         {/* Detay Modal */}
         <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "xl" }}>
           <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
+          <ModalContent bg={bg} borderColor={borderColor} borderWidth="1px" color={textColor}>
+            <ModalHeader color={textColor}>
               {t('evrakKayit.documentDetails')} - {selectedRecord?.evrakNo}
             </ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton color={textColor} />
             <ModalBody>
               {selectedRecord && (
                 <VStack spacing={4} align="stretch">
@@ -545,7 +545,7 @@ const EvrakKayitPage: React.FC = () => {
                       </Box>
                       <Box>
                         <Text fontSize={{ base: "xs", md: "sm" }} color={textColor}>USD Tutarı:</Text>
-                        <Text fontSize={{ base: "sm", md: "md" }} fontWeight="bold" color="blue.500">
+                        <Text fontSize={{ base: "sm", md: "md" }} fontWeight="bold" color={useColorModeValue('blue.500', 'white')}>
                           {selectedRecord.abdDolari ? `${parseFloat(selectedRecord.abdDolari).toLocaleString('tr-TR')} USD` : '-'}
                         </Text>
                       </Box>

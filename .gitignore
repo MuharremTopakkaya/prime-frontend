@@ -1,3 +1,13 @@
+# Local development promo video (do not commit)
+apps/admin/src/TosTicket_ Dönüşüm Başlıyor (1).mp4
+
+# If other promo videos are added under admin src, ignore them as well
+# Ignore common local video assets under admin src
+apps/admin/src/**/*.mp4
+apps/admin/src/**/*.mov
+apps/admin/src/**/*.webm
+apps/admin/src/**/*.mkv
+apps/admin/src/**/*.avi
 # Dependencies
 node_modules/
 npm-debug.log*

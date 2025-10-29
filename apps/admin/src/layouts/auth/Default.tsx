@@ -57,7 +57,8 @@ function AuthIllustration(props) {
           position="absolute"
           bottom={{ base: "-67px", md: "120px" }}
           left={{ base: "16px", md: "20px" }}
-          zIndex={10}
+          zIndex={isOpen ? 0 : 1}
+          pointerEvents={isOpen ? 'none' : 'auto'}
         >
           <Button
             onClick={onOpen}
