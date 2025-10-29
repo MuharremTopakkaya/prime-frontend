@@ -1,4 +1,11 @@
 import { useClaims } from '../contexts/ClaimsContext';
+import {
+  CompaniesOperationClaims,
+  PartnersOperationClaims,
+  UsersOperationClaims,
+  SupportRequestsOperationClaims,
+  FullControlClaim,
+} from '../constants/OperationClaims';
 
 // Custom hook for easier claim checking
 export const useClaimCheck = () => {
@@ -6,23 +13,65 @@ export const useClaimCheck = () => {
 
   // Common claim checks
   // Şirket izinleri: ilgili claim'i olan müşteri de görebilir
-  const canViewCompanies = hasAnyClaim(['Companies.Read', 'Companies.Admin', 'FullControl']);
-  const canEditCompanies = hasAnyClaim(['Companies.Update', 'Companies.Admin', 'FullControl']);
-  const canCreateCompanies = hasAnyClaim(['Companies.Create', 'Companies.Admin', 'FullControl']);
-  const canDeleteCompanies = hasAnyClaim(['Companies.Delete', 'Companies.Admin', 'FullControl']);
+  const canViewCompanies = hasAnyClaim([CompaniesOperationClaims.Read, CompaniesOperationClaims.Admin, FullControlClaim]);
+  const canEditCompanies = hasAnyClaim([CompaniesOperationClaims.Update, CompaniesOperationClaims.Admin, FullControlClaim]);
+  const canCreateCompanies = hasAnyClaim([CompaniesOperationClaims.Create, CompaniesOperationClaims.Admin, FullControlClaim]);
+  const canDeleteCompanies = hasAnyClaim([CompaniesOperationClaims.Admin, FullControlClaim]); // Delete claim doesn't exist in backend, using Admin
 
   // Partner izinleri: ilgili claim'i olan müşteri de görebilir
-  const canViewPartners = hasAnyClaim(['Partners.Read', 'Partners.Admin', 'FullControl']);
-  const canEditPartners = hasAnyClaim(['Partners.Update', 'Partners.Admin', 'FullControl']);
-  const canCreatePartners = hasAnyClaim(['Partners.Create', 'Partners.Admin', 'FullControl']);
-  const canDeletePartners = hasAnyClaim(['Partners.Delete', 'Partners.Admin', 'FullControl']);
+  const canViewPartners = hasAnyClaim([PartnersOperationClaims.Read, PartnersOperationClaims.Admin, FullControlClaim]);
+  const canEditPartners = hasAnyClaim([PartnersOperationClaims.Update, PartnersOperationClaims.Admin, FullControlClaim]);
+  const canCreatePartners = hasAnyClaim([PartnersOperationClaims.Create, PartnersOperationClaims.Admin, FullControlClaim]);
+  const canDeletePartners = hasAnyClaim([PartnersOperationClaims.Admin, FullControlClaim]); // Delete claim doesn't exist in backend, using Admin
 
-  const canViewUsers = hasAnyClaim(['Users.Read', 'Users.Admin', 'FullControl']);
-  const canEditUsers = hasAnyClaim(['Users.Update', 'Users.Admin', 'FullControl']);
-  const canCreateUsers = hasAnyClaim(['Users.Create', 'Users.Admin', 'FullControl']);
-  const canDeleteUsers = hasAnyClaim(['Users.Delete', 'Users.Admin', 'FullControl']);
+  // User izinleri
+  const canViewUsers = hasAnyClaim([UsersOperationClaims.Read, UsersOperationClaims.Admin, FullControlClaim]);
+  const canEditUsers = hasAnyClaim([UsersOperationClaims.Update, UsersOperationClaims.Admin, FullControlClaim]);
+  const canCreateUsers = hasAnyClaim([UsersOperationClaims.Create, UsersOperationClaims.Admin, FullControlClaim]);
+  const canDeleteUsers = hasAnyClaim([UsersOperationClaims.Admin, FullControlClaim]); // Delete claim doesn't exist in backend, using Admin
+  const canUpdateProfile = hasAnyClaim([UsersOperationClaims.UpdateFromAuth, UsersOperationClaims.Admin, FullControlClaim]);
 
-  const canManagePermissions = hasAnyClaim(['Users.Admin', 'FullControl']);
+  // Permission management
+  const canManagePermissions = hasAnyClaim([UsersOperationClaims.Admin, FullControlClaim]);
+
+  // Evrak Kayıt (Document Records) - Only FullControl
+  const canViewEvrakKayit = hasClaim(FullControlClaim);
+  const canDownloadExcel = hasClaim(FullControlClaim); // EvrakKayitPage Excel download
+  const canViewEvrakDetails = hasClaim(FullControlClaim); // EvrakKayitPage view details
+
+  // Support Requests
+  const canViewSupportRequests = hasAnyClaim([SupportRequestsOperationClaims.Read, SupportRequestsOperationClaims.Admin, FullControlClaim]);
+  const canCreateSupportRequests = hasAnyClaim([SupportRequestsOperationClaims.Create, SupportRequestsOperationClaims.Admin, FullControlClaim]);
+  const canUpdateSupportRequests = hasAnyClaim([SupportRequestsOperationClaims.Update, SupportRequestsOperationClaims.Admin, FullControlClaim]);
+  const canDeleteSupportRequests = hasAnyClaim([SupportRequestsOperationClaims.Delete, SupportRequestsOperationClaims.Admin, FullControlClaim]);
+
+  // Generic helper: Check if user can access a feature by resource name
+  const canAccessFeature = (resource: 'Companies' | 'Partners' | 'Users' | 'SupportRequests', action: 'Read' | 'Create' | 'Update' | 'Delete' | 'Admin'): boolean => {
+    const claimMap: Record<string, string> = {
+      'Companies.Read': CompaniesOperationClaims.Read,
+      'Companies.Create': CompaniesOperationClaims.Create,
+      'Companies.Update': CompaniesOperationClaims.Update,
+      'Companies.Admin': CompaniesOperationClaims.Admin,
+      'Partners.Read': PartnersOperationClaims.Read,
+      'Partners.Create': PartnersOperationClaims.Create,
+      'Partners.Update': PartnersOperationClaims.Update,
+      'Partners.Admin': PartnersOperationClaims.Admin,
+      'Users.Read': UsersOperationClaims.Read,
+      'Users.Create': UsersOperationClaims.Create,
+      'Users.Update': UsersOperationClaims.Update,
+      'Users.Admin': UsersOperationClaims.Admin,
+      'SupportRequests.Read': SupportRequestsOperationClaims.Read,
+      'SupportRequests.Create': SupportRequestsOperationClaims.Create,
+      'SupportRequests.Update': SupportRequestsOperationClaims.Update,
+      'SupportRequests.Delete': SupportRequestsOperationClaims.Delete,
+      'SupportRequests.Admin': SupportRequestsOperationClaims.Admin,
+    };
+
+    const claim = claimMap[`${resource}.${action}`];
+    if (!claim) return false;
+
+    return hasAnyClaim([claim, FullControlClaim]);
+  };
 
   // Check if user can access specific routes
   const canAccessRoute = (routePath: string): boolean => {
@@ -80,7 +129,19 @@ export const useClaimCheck = () => {
     canEditUsers,
     canCreateUsers,
     canDeleteUsers,
+    canUpdateProfile,
     canManagePermissions,
+    
+    // Evrak Kayıt permissions
+    canViewEvrakKayit,
+    canDownloadExcel,
+    canViewEvrakDetails,
+    
+    // Support Requests permissions
+    canViewSupportRequests,
+    canCreateSupportRequests,
+    canUpdateSupportRequests,
+    canDeleteSupportRequests,
     
     // Route access
     canAccessRoute,
@@ -88,6 +149,7 @@ export const useClaimCheck = () => {
     // Utility functions
     getAssignedClaims,
     hasAdminClaims,
+    canAccessFeature,
   };
 };
 

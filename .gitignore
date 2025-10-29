@@ -8,6 +8,10 @@ apps/admin/src/**/*.mov
 apps/admin/src/**/*.webm
 apps/admin/src/**/*.mkv
 apps/admin/src/**/*.avi
+
+# Local architecture/docs (do not commit)
+apps/admin/src/components/CLAIMS_USAGE.md
+CLAIMS_ARCHITECTURE_ANALYSIS.md
 # Dependencies
 node_modules/
 npm-debug.log*
