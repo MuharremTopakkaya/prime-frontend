@@ -62,4 +62,76 @@ export interface CreateSupportRequestRequest {
   priority: SupportRequestPriority;
 }
 
+// Admin types
+export interface CompanyInformationDto {
+  id: string;
+  name: string;
+}
+
+export interface SupportRequestAdminListItemDto {
+  id: string;
+  subject: string;
+  description: string;
+  resolveDescription: string;
+  status: SupportRequestStatus;
+  priority: SupportRequestPriority;
+  company: CompanyInformationDto;
+  createdUser: UserInformationDto;
+  assignedTo?: UserInformationDto | null;
+  resolvedDate?: string | null;
+  closedDate?: string | null;
+  createdDate: string;
+  updatedDate?: string | null;
+}
+
+export interface SupportRequestCommentDto {
+  id: string;
+  sender: UserInformationDto;
+  content: string;
+}
+
+export interface SupportRequestAdminDetailDto {
+  id: string;
+  subject: string;
+  description: string;
+  resolveDescription: string;
+  status: SupportRequestStatus;
+  priority: SupportRequestPriority;
+  company: CompanyInformationDto;
+  createdUser: UserInformationDto;
+  assignedTo: UserInformationDto;
+  comments: SupportRequestCommentDto[];
+  resolvedDate?: string | null;
+  closedDate?: string | null;
+  createdDate: string;
+  updatedDate?: string | null;
+}
+
+export interface UpdateSupportRequestRequest {
+  id: string;
+  resolveDescription: string;
+  status: SupportRequestStatus;
+  priority: SupportRequestPriority;
+  assignedToId?: string | null;
+  resolvedDate?: string | null;
+  closedDate?: string | null;
+}
+
+export interface CreateSupportRequestCommentRequest {
+  supportRequestId: string;
+  content: string;
+}
+
+export interface UpdateSupportRequestCommentRequest {
+  id: string;
+  content: string;
+}
+
+export interface SupportRequestListFilters {
+  companyId?: string | null;
+  priority?: SupportRequestPriority | null;
+  status?: SupportRequestStatus | null;
+  assignedTo?: string | null;
+}
+
 

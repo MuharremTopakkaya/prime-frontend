@@ -24,6 +24,7 @@ import PartnersPage from './views/partners/PartnersPage';
 import ProfilePage from './views/profile/ProfilePage';
 import SupportRequestsPage from './views/customer/SupportRequestsPage';
 import EvrakKayitPage from './views/immib/EvrakKayitPage';
+import SupportRequestsAdminPage from './views/admin/SupportRequestsPage';
 
 // Auth Imports
 import SignInCentered from './views/auth/signIn';
@@ -101,6 +102,14 @@ const routes = [
     path: '/data-tables',
     component: <DataTables />,
     requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
+  },
+  {
+    name: 'Support Requests',
+    layout: '/admin',
+    path: '/support-requests',
+    icon: <Icon as={MdDescription} width="20px" height="20px" color="inherit" />,
+    component: <SupportRequestsAdminPage />,
+    requiredClaims: ['SupportRequests.Read', 'SupportRequests.Admin', 'FullControl'],
   },
   {
     name: 'Profile',
