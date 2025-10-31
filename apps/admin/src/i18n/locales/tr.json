@@ -316,5 +316,42 @@
     "Partners.Create.Description": "Yeni iş ortağı oluşturabilir",
     "Partners.Update": "İş Ortağı Güncelleme",
     "Partners.Update.Description": "İş ortağı bilgilerini güncelleyebilir"
+  },
+  "supportRequests": {
+    "title": "Destek Talepleri",
+    "filters": {
+      "company": "Şirket",
+      "priority": "Öncelik",
+      "status": "Durum",
+      "assignee": "Atanan Kişi",
+      "all": "Tümü"
+    },
+    "table": {
+      "id": "ID",
+      "title": "Konu",
+      "description": "Açıklama",
+      "company": "Şirket",
+      "priority": "Öncelik",
+      "status": "Durum",
+      "assignee": "Atanan",
+      "createdAt": "Oluşturulma",
+      "updatedAt": "Güncellenme",
+      "actions": "İşlemler",
+      "noData": "Destek talebi bulunamadı."
+    },
+    "priority": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek",
+      "urgent": "Acil"
+    },
+    "status": {
+      "new": "Yeni",
+      "assigned": "Atandı",
+      "inProgress": "Devam Ediyor",
+      "resolved": "Çözüldü",
+      "closed": "Kapandı",
+      "onHold": "Beklemede"
+    }
   }
 }

@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useColorModeValue } from '@chakra-ui/react';
 import {
   Box, Button, Card, CardBody, Flex, Heading, HStack, IconButton, Menu, MenuButton,
   MenuItem, MenuList, Spinner, Table, Tbody, Td, Th, Thead, Tr, Text, Badge, useDisclosure,
@@ -43,6 +45,9 @@ const priorityColor = (p: SupportRequestPriority) => {
 
 const SupportRequestsPage: React.FC = () => {
   const toast = useToast();
+  const { t } = useTranslation();
+  const cardBg = useColorModeValue('white', 'navy.800');
+  const cardBorder = useColorModeValue('gray.200', 'blue.600');
   const { isOpen: isCreateOpen, onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure();
   const { isOpen: isDetailOpen, onOpen: onDetailOpen, onClose: onDetailClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
@@ -104,9 +109,9 @@ const SupportRequestsPage: React.FC = () => {
   };
 
   return (
-    <Box p={{ base: 4, md: 6 }} pt={{ base: 10, md: 16 }}>
+    <Box p={{ base: 4, md: 6 }} pt={{ base: 12, md: 20 }}>
       <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="md">Destek Taleplerim</Heading>
+        <Heading size="md">{t('supportRequests.title')}</Heading>
         <ProtectedButton
           requiredClaims={[SupportRequestsOperationClaims.Create]}
           colorScheme="blue"
@@ -114,45 +119,45 @@ const SupportRequestsPage: React.FC = () => {
           onClick={onCreateOpen}
           showDisabled
         >
-          Yeni Talep Oluştur
+          {t('common.add')}
         </ProtectedButton>
       </Flex>
 
-      <Card>
+      <Card bg={cardBg} borderColor={cardBorder} boxShadow="lg">
         <CardBody>
           {loading ? (
             <Flex justify="center" align="center" minH="200px"><Spinner size="lg" /></Flex>
           ) : !data || data.items.length === 0 ? (
-            <Alert status="info"><AlertIcon />Henüz bir talep oluşturmadınız.</Alert>
+            <Alert status="info"><AlertIcon />{t('supportRequests.table.noData')}</Alert>
           ) : (
             <Box overflowX="auto">
-              <Table size={{ base: 'sm', md: 'md' }}>
+              <Table variant="simple" size={{ base: 'sm', md: 'md' }}>
                 <Thead>
                   <Tr>
-                    <Th>Konu</Th>
-                    <Th>Açıklama</Th>
-                    <Th>Durum</Th>
-                    <Th>Öncelik</Th>
-                    <Th>Oluşturan</Th>
-                    <Th>İşlemler</Th>
+                    <Th>{t('supportRequests.table.title')}</Th>
+                    <Th>{t('supportRequests.table.description')}</Th>
+                    <Th>{t('supportRequests.table.status')}</Th>
+                    <Th>{t('supportRequests.table.priority')}</Th>
+                    <Th>{t('common.name')}</Th>
+                    <Th w="160px" textAlign="center">{t('supportRequests.table.actions')}</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {data.items.map((row) => (
                     <Tr key={row.id}>
-                      <Td><Tooltip label={row.subject}><Text>{trimText(row.subject)}</Text></Tooltip></Td>
-                      <Td><Tooltip label={row.description}><Text>{trimText(row.description)}</Text></Tooltip></Td>
-                      <Td><Badge colorScheme={statusColor(row.status)}>{SupportRequestStatus[row.status]}</Badge></Td>
-                      <Td><Badge colorScheme={priorityColor(row.priority)}>{SupportRequestPriority[row.priority]}</Badge></Td>
+                      <Td py={2}><Tooltip label={row.subject}><Text>{trimText(row.subject)}</Text></Tooltip></Td>
+                      <Td py={2}><Tooltip label={row.description}><Text>{trimText(row.description)}</Text></Tooltip></Td>
+                      <Td><Badge colorScheme={statusColor(row.status)}>{t(`supportRequests.status.${row.status === SupportRequestStatus.InProgress ? 'inProgress' : SupportRequestStatus[row.status].toString().charAt(0).toLowerCase() + SupportRequestStatus[row.status].toString().slice(1)}`)}</Badge></Td>
+                      <Td><Badge colorScheme={priorityColor(row.priority)}>{t(`supportRequests.priority.${SupportRequestPriority[row.priority].toString().toLowerCase()}`)}</Badge></Td>
                       <Td>{row.createdUser?.name} {row.createdUser?.surname}</Td>
-                      <Td>
-                        <HStack>
-                          <Tooltip label="Detay">
-                            <IconButton aria-label="detay" icon={<InfoOutlineIcon />} size="sm" variant="ghost" onClick={() => handleOpenDetail(row.id)} />
+                      <Td py={2} minW="160px" maxW="200px" whiteSpace="nowrap" textAlign="center">
+                        <HStack spacing={2} justify="center">
+                          <Tooltip label={t('common.details')}>
+                            <IconButton aria-label="details" icon={<InfoOutlineIcon boxSize={4} />} size="sm" isRound variant="ghost" colorScheme="blue" onClick={() => handleOpenDetail(row.id)} />
                           </Tooltip>
                           {canShowDelete(row) && (
-                            <Tooltip label="Sil">
-                              <IconButton aria-label="sil" icon={<DeleteIcon />} size="sm" variant="ghost" colorScheme="red" onClick={() => setDeleteId(row.id)} />
+                            <Tooltip label={t('common.delete')}>
+                              <IconButton aria-label="delete" icon={<DeleteIcon boxSize={4} />} size="sm" isRound variant="ghost" colorScheme="red" onClick={() => setDeleteId(row.id)} />
                             </Tooltip>
                           )}
                         </HStack>

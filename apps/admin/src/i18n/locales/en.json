@@ -316,5 +316,42 @@
     "Partners.Create.Description": "Can create new partners",
     "Partners.Update": "Partner Update",
     "Partners.Update.Description": "Can update partner information"
+  },
+  "supportRequests": {
+    "title": "Support Requests",
+    "filters": {
+      "company": "Company",
+      "priority": "Priority",
+      "status": "Status",
+      "assignee": "Assignee",
+      "all": "All"
+    },
+    "table": {
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "company": "Company",
+      "priority": "Priority",
+      "status": "Status",
+      "assignee": "Assignee",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "actions": "Actions",
+      "noData": "No support requests found."
+    },
+    "priority": {
+      "low": "LOW",
+      "medium": "MEDIUM",
+      "high": "HIGH",
+      "urgent": "URGENT"
+    },
+    "status": {
+      "new": "NEW",
+      "assigned": "ASSIGNED",
+      "inProgress": "IN PROGRESS",
+      "resolved": "RESOLVED",
+      "closed": "CLOSED",
+      "onHold": "ON HOLD"
+    }
   }
 }

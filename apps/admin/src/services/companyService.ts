@@ -59,17 +59,19 @@ export interface GetCompaniesResponse {
   pagination: PaginationResponse;
 }
 
+import { USE_MOCKS } from '../config/runtime';
+
 class CompanyService {
-  private readonly API_BASE_URL = 'http://localhost:5132/api';
+  private readonly API_BASE_URL = '/api';
+  private readonly USE_MOCKS = USE_MOCKS;
 
   /**
    * Get companies list with pagination
    */
   async getCompanies(pageIndex: number = 0, pageSize: number = 10): Promise<GetCompaniesResponse> {
     try {
-      // MOCK DATA - Temporary test while backend is not running
-      console.log('Using MOCK DATA for companies');
-      const mockCompanies: Company[] = [
+      if (this.USE_MOCKS) {
+        const mockCompanies: Company[] = [
         {
           id: '1',
           name: 'TechCorp Solutions',
@@ -125,46 +127,40 @@ class CompanyService {
           createdDate: '2024-02-20T11:20:00Z',
           updatedDate: '2024-02-25T09:10:00Z'
         }
-      ];
+        ];
+        const startIndex = pageIndex * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedCompanies = mockCompanies.slice(startIndex, endIndex);
+        const totalRecords = mockCompanies.length;
+        const totalPages = Math.ceil(totalRecords / pageSize);
+        return {
+          items: paginatedCompanies,
+          pagination: {
+            index: pageIndex,
+            size: pageSize,
+            count: totalRecords,
+            pages: totalPages,
+            hasPrevious: pageIndex > 0,
+            hasNext: pageIndex < totalPages - 1
+          }
+        };
+      }
 
-      // Pagination simulation
-      const startIndex = pageIndex * pageSize;
-      const endIndex = startIndex + pageSize;
-      const paginatedCompanies = mockCompanies.slice(startIndex, endIndex);
-      
-      const totalRecords = mockCompanies.length;
-      const totalPages = Math.ceil(totalRecords / pageSize);
-      
-      return {
-        items: paginatedCompanies,
-        pagination: {
-          index: pageIndex,
-          size: pageSize,
-          count: totalRecords,
-          pages: totalPages,
-          hasPrevious: pageIndex > 0,
-          hasNext: pageIndex < totalPages - 1
+      const response = await fetch(
+        `${this.API_BASE_URL}/Companies?PageIndex=${pageIndex}&PageSize=${pageSize}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authToken') || localStorage.getItem('accessToken')}`,
+          },
         }
-      };
-
-      // Gerçek API çağrısı (backend çalıştığında)
-      // const response = await fetch(
-      //   `${this.API_BASE_URL}/Companies?PageIndex=${pageIndex}&PageSize=${pageSize}`,
-      //   {
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      //     },
-      //   }
-      // );
-
-      // if (!response.ok) {
-      //   throw new Error(`Failed to fetch companies: ${response.statusText}`);
-      // }
-
-      // const data = await response.json();
-      // return data;
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch companies: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error('Get companies error:', error);
       throw error;
@@ -228,8 +224,8 @@ class CompanyService {
    */
   async getCompanyById(id: string): Promise<Company> {
     try {
-      // MOCK DATA - Temporary test while backend is not running
-      const mockCompanies: Company[] = [
+      if (this.USE_MOCKS) {
+        const mockCompanies: Company[] = [
         {
           id: '1',
           name: 'TechCorp Solutions',
@@ -263,30 +259,24 @@ class CompanyService {
           createdDate: '2024-01-10T08:00:00Z',
           updatedDate: '2024-01-25T11:30:00Z'
         }
-      ];
-
-      const company = mockCompanies.find(c => c.id === id);
-      if (!company) {
-        throw new Error('Company not found');
+        ];
+        const company = mockCompanies.find(c => c.id === id);
+        if (!company) throw new Error('Company not found');
+        return company;
       }
-      
-      return company;
 
-      // Gerçek API çağrısı (backend çalıştığında)
-      // const response = await fetch(`${this.API_BASE_URL}/Companies/${id}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      //   },
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error(`Failed to fetch company: ${response.statusText}`);
-      // }
-
-      // const data = await response.json();
-      // return data;
+      const response = await fetch(`${this.API_BASE_URL}/Companies/${id}` ,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || localStorage.getItem('accessToken')}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch company: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error('Get company error:', error);
       throw error;
@@ -297,7 +287,7 @@ class CompanyService {
    * Get authentication token from localStorage
    */
   private getToken(): string {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken') || localStorage.getItem('accessToken');
     return token || '';
   }
 

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { userService, UserClaimsGroup } from '../services/userService';
+import { USE_MOCKS } from '../config/runtime';
 import { ClaimsState, ClaimsContextMethods, ClaimsContextType as IClaimsContextType } from '../types/claims';
 import {
   createClaimsErrorFromResponse,
@@ -122,10 +123,14 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
       //   throw createClaimsErrorFromInvalidResponse('Response is not an array', data);
       // }
 
-      // For testing different user profiles, you can change this
-      // In real implementation, decode user ID from JWT token
-      const userId = localStorage.getItem('testUserId') || 'mock-user-id';
-      const claims = await userService.getUserClaims(userId);
+      let claims: UserClaimsGroup[];
+      if (USE_MOCKS) {
+        const userId = localStorage.getItem('testUserId') || 'mock-user-id';
+        claims = await userService.getUserClaims(userId);
+      } else {
+        // Backend JWT'den kullanıcıyı okuyarak claim döner
+        claims = await userService.getUserClaimsFromAuth();
+      }
       
       // Validate claims structure
       if (!Array.isArray(claims)) {

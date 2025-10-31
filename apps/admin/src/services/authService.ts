@@ -24,7 +24,7 @@ export interface DecodedToken {
 export type AuthenticationMethod = 'Owner' | 'Customer';
 
 class AuthService {
-  private readonly API_BASE_URL = 'http://localhost:5132/api'; // Backend URL'ini buraya ekleyin
+  private readonly API_BASE_URL = '/api'; // Dev ortamında Vite proxy üzerinden
 
   /**
    * Login işlemi - Backend'e istek atar

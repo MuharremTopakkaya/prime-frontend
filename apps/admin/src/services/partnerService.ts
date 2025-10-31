@@ -45,14 +45,17 @@ export interface UpdatePartnerRequest {
   isActive?: boolean;
 }
 
+import { USE_MOCKS } from '../config/runtime';
+
 class PartnerService {
-  private readonly API_BASE_URL = 'http://localhost:5132/api';
+  private readonly API_BASE_URL = '/api';
+  private readonly USE_MOCKS = USE_MOCKS;
 
   /**
    * Get token from localStorage
    */
   private getToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('authToken') || localStorage.getItem('accessToken');
   }
 
   /**
@@ -60,8 +63,8 @@ class PartnerService {
    */
   async getPartners(pageIndex: number = 0, pageSize: number = 12): Promise<GetPartnersResponse> {
     try {
-      // MOCK DATA - Temporary test while backend is not running
-      const mockPartners: Partner[] = [
+      if (this.USE_MOCKS) {
+        const mockPartners: Partner[] = [
         {
           id: '1',
           name: 'TechCorp Solutions',
@@ -122,29 +125,25 @@ class PartnerService {
           createdDate: '2024-02-20T11:20:00Z',
           updatedDate: '2024-02-25T09:10:00Z'
         }
-      ];
+        ];
+        const startIndex = pageIndex * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedPartners = mockPartners.slice(startIndex, endIndex);
+        const totalRecords = mockPartners.length;
+        const totalPages = Math.ceil(totalRecords / pageSize);
+        return {
+          items: paginatedPartners,
+          pagination: {
+            index: pageIndex,
+            size: pageSize,
+            count: totalRecords,
+            pages: totalPages,
+            hasPrevious: pageIndex > 0,
+            hasNext: pageIndex < totalPages - 1
+          }
+        };
+      }
 
-      // Pagination simulation
-      const startIndex = pageIndex * pageSize;
-      const endIndex = startIndex + pageSize;
-      const paginatedPartners = mockPartners.slice(startIndex, endIndex);
-      
-      const totalRecords = mockPartners.length;
-      const totalPages = Math.ceil(totalRecords / pageSize);
-      
-      return {
-        items: paginatedPartners,
-        pagination: {
-          index: pageIndex,
-          size: pageSize,
-          count: totalRecords,
-          pages: totalPages,
-          hasPrevious: pageIndex > 0,
-          hasNext: pageIndex < totalPages - 1
-        }
-      };
-
-      // Gerçek API çağrısı (backend çalıştığında)
       const response = await fetch(
         `${this.API_BASE_URL}/Partners?PageIndex=${pageIndex}&PageSize=${pageSize}`,
         {
@@ -155,11 +154,9 @@ class PartnerService {
           },
         }
       );
-
       if (!response.ok) {
         throw new Error(`Failed to fetch partners: ${response.statusText}`);
       }
-
       const data = await response.json();
       return data;
     } catch (error) {
