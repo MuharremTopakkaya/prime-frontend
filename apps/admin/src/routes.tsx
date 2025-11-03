@@ -25,6 +25,7 @@ import ProfilePage from './views/profile/ProfilePage';
 import SupportRequestsPage from './views/customer/SupportRequestsPage';
 import EvrakKayitPage from './views/immib/EvrakKayitPage';
 import SupportRequestsAdminPage from './views/admin/SupportRequestsPage';
+import NotificationsPage from './views/notifications/NotificationsPage';
 
 // Auth Imports
 import SignInCentered from './views/auth/signIn';
@@ -110,6 +111,15 @@ const routes = [
     icon: <Icon as={MdDescription} width="20px" height="20px" color="inherit" />,
     component: <SupportRequestsAdminPage />,
     requiredClaims: ['SupportRequests.Read', 'SupportRequests.Admin', 'FullControl'],
+  },
+  {
+    name: 'Notifications',
+    layout: '/admin',
+    path: '/notifications',
+    icon: <Icon as={MdDescription} width="20px" height="20px" color="inherit" />, // görünmez (sidebar secondary)
+    component: <NotificationsPage />,
+    secondary: true,
+    requiredClaims: [],
   },
   {
     name: 'Profile',

@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
   useColorMode,
+  Portal,
 } from '@chakra-ui/react';
 // Custom Components
 import { ItemContent } from '../menu/ItemContent';
@@ -21,6 +22,7 @@ import { SidebarResponsive } from '../sidebar/Sidebar';
 import LanguageSwitcher from '../LanguageSwitcher';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 // Auth
 import { useAuth } from '../../contexts/AuthContext';
 import { useState, useEffect } from 'react';
@@ -29,15 +31,20 @@ import { userProfileService, UserProfile } from '../../services/userProfileServi
 // Assets
 // import navImage from '../../assets/img/layout/Navbar.png'; // Disabled: asset missing or invalid type decls
 import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
+import { Badge, Box as CBox } from '@chakra-ui/react';
+import { useNotifications } from '../../contexts/NotificationsContext';
+import { notificationService } from '../../services/notificationService';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { FaEthereum } from 'react-icons/fa';
 import routes from '../../routes';
 export default function HeaderLinks(props) {
   const { secondary } = props;
+  const { t } = useTranslation();
   const { colorMode, toggleColorMode } = useColorMode();
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const { hasUnread, lastFive, refreshInfo } = useNotifications();
   // Chakra Color Mode
   const navbarIcon = useColorModeValue('gray.400', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -136,63 +143,64 @@ export default function HeaderLinks(props) {
       </Flex>
       <SidebarResponsive routes={routes} />
       <LanguageSwitcher />
-      <Menu>
+      <Menu placement="bottom-end" gutter={24}>
         <MenuButton p="0px">
-          <Icon
-            mt="6px"
-            as={MdNotificationsNone}
-            color={navbarIcon}
-            w="18px"
-            h="18px"
-            me="10px"
-          />
+          <CBox position="relative" me="10px">
+            <Icon mt="6px" as={MdNotificationsNone} color={navbarIcon} w="18px" h="18px" />
+            {hasUnread && (
+              <Badge position="absolute" top="0" right="-2px" borderRadius="full" bg="red.500" boxSize="10px" animation="blinker 1.5s linear infinite" />
+            )}
+          </CBox>
         </MenuButton>
-        <MenuList
-          boxShadow={shadow}
-          p={{ base: "16px", md: "20px" }}
-          borderRadius={{ base: "16px", md: "20px" }}
-          bg={menuBg}
-          border="none"
-          mt={{ base: "16px", md: "22px" }}
-          me={{ base: '30px', md: 'unset' }}
-          minW={{ base: 'unset', md: '400px', xl: '450px' }}
-          maxW={{ base: '360px', md: 'unset' }}
-        >
+        <Portal>
+          <MenuList
+            boxShadow={shadow}
+            p={{ base: "16px", md: "20px" }}
+            borderRadius={{ base: "16px", md: "20px" }}
+            bg={menuBg}
+            border="none"
+            mt={0}
+            me={{ base: '30px', md: 'unset' }}
+            minW={{ base: 'unset', md: '400px', xl: '450px' }}
+            maxW={{ base: '360px', md: 'unset' }}
+            zIndex={2000}
+          >
           <Flex w="100%" mb="20px">
             <Text fontSize="md" fontWeight="600" color={textColor}>
-              Notifications
+              {t('navigation.notifications')}
             </Text>
-            <Text
-              fontSize="sm"
-              fontWeight="500"
-              color={textColorBrand}
-              ms="auto"
-              cursor="pointer"
-            >
-              Mark all read
-            </Text>
-          </Flex>
-          <Flex flexDirection="column">
-            <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              px="0"
-              borderRadius="8px"
-              mb="10px"
-            >
-              <ItemContent info="Horizon UI Dashboard PRO" />
-            </MenuItem>
-            <MenuItem
-              _hover={{ bg: 'none' }}
-              _focus={{ bg: 'none' }}
-              px="0"
-              borderRadius="8px"
-              mb="10px"
-            >
-              <ItemContent info="Horizon Design System Free" />
-            </MenuItem>
-          </Flex>
-        </MenuList>
+              <Text
+                fontSize="sm"
+                fontWeight="500"
+                color={textColorBrand}
+                ms="auto"
+                cursor="pointer"
+                onClick={async () => {
+                  try {
+                    const ids = lastFive.filter(n => !n.isRead).map(n => n.id);
+                    if (ids.length) await notificationService.markAsRead(ids);
+                    await refreshInfo();
+                  } catch {}
+                }}
+              >
+              {t('notifications.markAllRead')}
+              </Text>
+            </Flex>
+            <Flex flexDirection="column">
+              {lastFive.length === 0 && (
+              <Text color={textColor} fontSize="sm">{t('notifications.empty')}</Text>
+              )}
+              {lastFive.map((n) => (
+                <MenuItem key={n.id} _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} px="0" borderRadius="8px" mb="10px">
+                  <ItemContent info={n.title || n.message} />
+                </MenuItem>
+              ))}
+            <Button mt={2} size="sm" variant="brand" onClick={() => navigate('/admin/notifications')}>
+              {t('navigation.notifications')}
+              </Button>
+            </Flex>
+          </MenuList>
+        </Portal>
       </Menu>
 
       <Menu>

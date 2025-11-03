@@ -80,6 +80,7 @@
   },
   "navigation": {
     "dashboard": "Main Dashboard",
+    "notifications": "Notifications",
     "companies": "Companies",
     "companyDetail": "Company Detail",
     "partners": "Partners",
@@ -100,6 +101,11 @@
     "showing": "Showing",
     "to": "to",
     "entries": "entries"
+  },
+  "notifications": {
+    "markAllRead": "Mark all read",
+    "empty": "No notifications",
+    "markAsRead": "Mark as Read"
   },
   "users": {
     "users": "Users",

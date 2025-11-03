@@ -80,6 +80,7 @@
   },
   "navigation": {
     "dashboard": "Ana Sayfa",
+    "notifications": "Bildirimler",
     "companies": "Şirketler",
     "companyDetail": "Şirket Detayı",
     "partners": "İş Ortakları",
@@ -100,6 +101,11 @@
     "showing": "Gösterilen",
     "to": "-",
     "entries": "kayıt"
+  },
+  "notifications": {
+    "markAllRead": "Tümünü okundu yap",
+    "empty": "Bildirim yok",
+    "markAsRead": "Okundu işaretle"
   },
   "users": {
     "users": "Kullanıcılar",

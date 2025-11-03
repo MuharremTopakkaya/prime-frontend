@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
+import { NotificationsProvider } from '../../contexts/NotificationsContext';
 
 export default function AdminNavbar(props) {
 	const { t } = useTranslation();
@@ -64,6 +65,11 @@ export default function AdminNavbar(props) {
 			return {
 				breadcrumb: t('navigation.evrakKayit'),
 				title: t('navigation.evrakKayit')
+			};
+		} else if (path.includes('/notifications')) {
+			return {
+				breadcrumb: t('navigation.notifications'),
+				title: t('navigation.notifications')
 			};
 		}
 		
@@ -162,15 +168,17 @@ export default function AdminNavbar(props) {
 					</Breadcrumb>
 					{/* Brand text hidden to avoid duplication */}
 				</Box>
-				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
-					<AdminNavbarLinks
-						onOpen={props.onOpen}
-						logoText={props.logoText}
-						secondary={props.secondary}
-						fixed={props.fixed}
-						scrolled={scrolled}
-					/>
-				</Box>
+                <Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
+                    <NotificationsProvider>
+                        <AdminNavbarLinks
+                            onOpen={props.onOpen}
+                            logoText={props.logoText}
+                            secondary={props.secondary}
+                            fixed={props.fixed}
+                            scrolled={scrolled}
+                        />
+                    </NotificationsProvider>
+                </Box>
 			</Flex>
 			{secondary ? <Text color='white'>{message}</Text> : null}
 		</Box>
