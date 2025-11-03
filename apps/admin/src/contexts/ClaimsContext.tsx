@@ -11,7 +11,12 @@ import {
 } from '../utils/claimsErrors';
 import { FullControlClaim } from '../constants/OperationClaims';
 
-export interface ClaimsContextType extends IClaimsContextType {}
+export interface ClaimsContextType extends IClaimsContextType {
+  // Şeker fonksiyonlar: mevcut has* üzerine alias
+  can: (claimName: string) => boolean;
+  canAny: (claimNames: string[]) => boolean;
+  canAll: (claimNames: string[]) => boolean;
+}
 
 const ClaimsContext = createContext<ClaimsContextType | undefined>(undefined);
 
@@ -29,6 +34,7 @@ interface ClaimsProviderProps {
 
 export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
   const [userClaims, setUserClaims] = useState<UserClaimsGroup[]>([]);
+  const [byName, setByName] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastFetchedAt, setLastFetchedAt] = useState<number | undefined>();
@@ -61,11 +67,7 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
       return true;
     }
     
-    return userClaims.some(group => 
-      group.claims.some(claim => 
-        claim.name === claimName && claim.isAssigned
-      )
-    );
+    return !!byName[claimName];
   };
 
   const hasAnyClaim = (claimNames: string[]): boolean => {
@@ -75,6 +77,11 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
   const hasAllClaims = (claimNames: string[]): boolean => {
     return claimNames.every(claimName => hasClaim(claimName));
   };
+
+  // Alias helpers (dış API şekerleri)
+  const can = hasClaim;
+  const canAny = hasAnyClaim;
+  const canAll = hasAllClaims;
 
   /**
    * Refresh claims from API
@@ -137,6 +144,14 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
         throw createClaimsErrorFromInvalidResponse('Claims response is not an array', claims);
       }
       
+      // Normalize -> byName map oluştur
+      const map: Record<string, boolean> = {};
+      claims.forEach(group => {
+        group.claims.forEach(c => {
+          if (c.isAssigned) map[c.name] = true;
+        });
+      });
+      setByName(map);
       setUserClaims(claims);
       setLastFetchedAt(Date.now());
       setCacheExpiry(Date.now() + CACHE_DURATION);
@@ -202,6 +217,9 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
     hasClaim,
     hasAnyClaim,
     hasAllClaims,
+    can,
+    canAny,
+    canAll,
     isAdmin,
     isCustomer,
     loading,
