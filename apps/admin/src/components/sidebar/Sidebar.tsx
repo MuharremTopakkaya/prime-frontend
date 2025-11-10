@@ -107,7 +107,7 @@ export function SidebarResponsive(props) {
           <DrawerBody 
             maxW={{ base: '100%', sm: '285px' }} 
             px={{ base: '20px', sm: '0rem' }} 
-            pb='0'>
+            pb='40px'>
             <Scrollbars
               autoHide
               renderTrackVertical={renderTrack}

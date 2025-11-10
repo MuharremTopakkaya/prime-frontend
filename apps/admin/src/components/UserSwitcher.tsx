@@ -1,13 +1,20 @@
 import React from 'react';
-import { Box, Button, VStack, Text, HStack, Badge, IconButton } from '@chakra-ui/react';
+import { Box, Button, VStack, Text, HStack, Badge, IconButton, useBreakpointValue } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useClaims } from '../contexts/ClaimsContext';
-import { useNavigate } from 'react-router-dom';
 
 const UserSwitcher: React.FC = () => {
   const { userClaims, isAdmin, isCustomer } = useClaims();
-  const navigate = useNavigate();
-  const [collapsed, setCollapsed] = React.useState(false);
+  const isDesktop = useBreakpointValue({ base: false, lg: true });
+  const [collapsed, setCollapsed] = React.useState(true);
+
+  React.useEffect(() => {
+    if (isDesktop) {
+      setCollapsed(false);
+    } else {
+      setCollapsed(true);
+    }
+  }, [isDesktop]);
 
   const switchUser = (userId: string) => {
     localStorage.setItem('testUserId', userId);
@@ -37,10 +44,10 @@ const UserSwitcher: React.FC = () => {
         border="1px solid"
         borderColor="gray.200"
         zIndex={1000}
-        display={{ base: "none", lg: "flex" }}
         alignItems="center"
         gap={2}
         _dark={{ bg: "navy.800", borderColor: "blue.600" }}
+        display={{ base: "flex", lg: "flex" }}
       >
         <Text fontSize="xs" color="gray.700" _dark={{ color: "white" }}>Test User Switcher</Text>
         <IconButton aria-label="Expand switcher" size="xs" icon={<ChevronUpIcon />} onClick={() => setCollapsed(false)} />
@@ -51,8 +58,8 @@ const UserSwitcher: React.FC = () => {
   return (
     <Box 
       position="fixed" 
-      bottom="20px" 
-      right="20px" 
+      bottom={{ base: '16px', lg: '20px' }} 
+      right={{ base: '16px', lg: '20px' }} 
       bg="white" 
       p={4} 
       borderRadius="md" 
@@ -60,7 +67,9 @@ const UserSwitcher: React.FC = () => {
       border="1px solid"
       borderColor="gray.200"
       zIndex={1000}
-      display={{ base: "none", lg: "block" }}
+      display={{ base: "block", lg: "block" }}
+      w={{ base: 'calc(100% - 32px)', sm: '260px', lg: 'auto' }}
+      maxW={{ base: '320px', lg: 'unset' }}
       _dark={{
         bg: "navy.800",
         borderColor: "blue.600"

@@ -41,6 +41,11 @@ export default function AdminNavbar(props) {
 				breadcrumb: t('navigation.partners'),
 				title: t('navigation.partners')
 			};
+        } else if (path.includes('/support-requests')) {
+			return {
+				breadcrumb: t('supportRequests.title'),
+				title: t('supportRequests.title')
+			};
 		} else if (path.includes('/default')) {
 			return {
 				breadcrumb: t('navigation.dashboard'),
