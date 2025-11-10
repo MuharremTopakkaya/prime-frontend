@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm install && npm run build --workspace=@prime/admin",
-  "outputDirectory": "apps/admin/dist",
+  "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
     {
