@@ -12,13 +12,9 @@ const UserSwitcher: React.FC = () => {
   const switchUser = (userId: string) => {
     localStorage.setItem('testUserId', userId);
     
-    // Otomatik yönlendirme - Customer seçildiğinde de admin default'a yönlendir
-    navigate('/admin/default');
-    
-    // Sayfayı yenile
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+    // Root'a yönlendir - App.tsx'teki authentication kontrolü yapılacak
+    // Customer seçildiğinde login ekranına, admin seçildiğinde admin default'a yönlendirecek
+    window.location.href = '/';
   };
 
   const getAssignedClaims = () => {
