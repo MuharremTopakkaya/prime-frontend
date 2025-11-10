@@ -1,13 +1,5 @@
 {
-  "version": 2,
-  "buildCommand": "npm install && npm run build --workspace=@prime/admin",
-  "outputDirectory": "dist",
-  "installCommand": "npm install",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+  "//": "This root vercel.json is deprecated. See apps/admin/vercel.json.",
+  "note": "Please use apps/admin/vercel.json for the admin app configuration."
 }
 
