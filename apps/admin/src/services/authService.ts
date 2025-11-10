@@ -32,8 +32,20 @@ class AuthService {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
       // MOCK DATA - Database bağlantısı olmadığı için geçici test
-      if (credentials.email === 'test@gmail.com' && credentials.password === 'Tester123.') {
-        // Mock token - Owner authentication method
+      // Admin test kullanıcıları (Owner authentication method)
+      const adminUsers = [
+        { email: 'test@gmail.com', password: 'Tester123.' },
+        { email: 'salihkutluk@mail.com', password: '123456' },
+        { email: 'adem@mail.com', password: '123456' },
+        { email: 'salihsaygili@mail.com', password: '123456' }
+      ];
+
+      const isAdminUser = adminUsers.some(
+        user => user.email === credentials.email && user.password === credentials.password
+      );
+
+      if (isAdminUser) {
+        // Mock token - Owner authentication method (Admin)
         const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzM3MzQ4MDAwLCJleHAiOjE3Mzc5NTI4MDAsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvYXV0aGVudGljYXRpb25tZXRob2QiOiJPd25lciJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
         
         return {

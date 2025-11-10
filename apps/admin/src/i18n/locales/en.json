@@ -158,7 +158,7 @@
     "loginError": "An error occurred during login. Please try again."
   },
   "evrakKayit": {
-    "pageTitle": "IMMIB Document Records System",
+    "pageTitle": "HİB Document Records System",
     "totalDocuments": "Total Documents",
     "registeredDocumentsCount": "Number of registered documents",
     "approvedByUnion": "Union Approval",

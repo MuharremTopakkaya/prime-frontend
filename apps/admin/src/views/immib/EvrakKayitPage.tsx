@@ -52,7 +52,79 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon, DownloadIcon, ViewIcon, EditIcon } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
-import evrakData from '../../assets/birlik_onay_20251028_225717.json';
+// import evrakData from '../../assets/birlik_onay_20251028_225717.json'; // Geçici olarak devre dışı
+
+// Geçici mock veri (eksik JSON yerine)
+const evrakData = {
+  statistics: {
+    totalRecords: 3,
+    birlikOnay: 1,
+    ret: 1,
+    totalTlAmount: 1250000,
+  },
+  records: [
+    {
+      evrakNo: 'EVR-2025-0001',
+      evrakTarihi: '2025-10-28',
+      destekTuru: 'Yurt Dışı Fuar Desteği',
+      surec: 'İncelemede',
+      sonuc: '',
+      faaliyetDetayi: 'Almanya Hannover Messe katılımı',
+      ilgiliUzman: 'A. Uzman',
+      destekBaslangicTarihi: '2025-10-01',
+      destekBitisTarihi: '2025-10-05',
+      eksikYazisiTarihi: '',
+      retTarihi: '',
+      onOnayTarihi: '2025-10-20',
+      onOnaySayisi: 'ON-2025/123',
+      onOnayTutari: '350000',
+      tahakkukTarihi: '',
+      tlTutari: '350000',
+      abdDolari: '10000',
+      status: 'unknown',
+    },
+    {
+      evrakNo: 'EVR-2025-0002',
+      evrakTarihi: '2025-10-29',
+      destekTuru: 'Pazarlama Desteği',
+      surec: 'Tamamlandı',
+      sonuc: 'Birlik Onay',
+      faaliyetDetayi: 'Dijital reklam kampanyası',
+      ilgiliUzman: 'B. Uzman',
+      destekBaslangicTarihi: '2025-09-01',
+      destekBitisTarihi: '2025-09-30',
+      eksikYazisiTarihi: '',
+      retTarihi: '',
+      onOnayTarihi: '2025-10-10',
+      onOnaySayisi: 'ON-2025/145',
+      onOnayTutari: '500000',
+      tahakkukTarihi: '2025-10-25',
+      tlTutari: '500000',
+      abdDolari: '15000',
+      status: 'approved',
+    },
+    {
+      evrakNo: 'EVR-2025-0003',
+      evrakTarihi: '2025-10-30',
+      destekTuru: 'Danışmanlık Desteği',
+      surec: 'Sonuçlandı',
+      sonuc: 'Ret',
+      faaliyetDetayi: 'Kurumsal kimlik danışmanlığı',
+      ilgiliUzman: 'C. Uzman',
+      destekBaslangicTarihi: '2025-08-15',
+      destekBitisTarihi: '2025-09-15',
+      eksikYazisiTarihi: '2025-10-05',
+      retTarihi: '2025-10-18',
+      onOnayTarihi: '',
+      onOnaySayisi: '',
+      onOnayTutari: '',
+      tahakkukTarihi: '',
+      tlTutari: '400000',
+      abdDolari: '12000',
+      status: 'rejected',
+    },
+  ],
+};
 
 interface EvrakRecord {
   evrakNo: string;

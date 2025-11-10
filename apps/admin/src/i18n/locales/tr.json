@@ -158,7 +158,7 @@
     "loginError": "Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin."
   },
   "evrakKayit": {
-    "pageTitle": "IMMIB Evrak Kayıt Sistemi",
+    "pageTitle": "HİB Evrak Kayıt Sistemi",
     "totalDocuments": "Toplam Evrak",
     "registeredDocumentsCount": "Kayıtlı evrak sayısı",
     "approvedByUnion": "Birlik Onay",
