@@ -1,11 +1,12 @@
 {
+  "version": 2,
+  "buildCommand": "npm install && npm run build --workspace=@prime/admin",
+  "outputDirectory": "apps/admin/dist",
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "buildCommand": "cd apps/admin && npm install && npm run build",
-  "outputDirectory": "apps/admin/dist"
+  ]
 }
 
