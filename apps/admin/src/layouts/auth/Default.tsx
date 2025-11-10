@@ -52,13 +52,14 @@ function AuthIllustration(props) {
             borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}></Flex>
         </Box>
         
-        {/* TOS Products Section */}
+        {/* TOS Products Section - Positioned to the left of dark mode toggle */}
         <Box
-          position="absolute"
-          bottom={{ base: "-67px", md: "120px" }}
-          left={{ base: "16px", md: "20px" }}
-          zIndex={isOpen ? 0 : 1}
+          position="fixed"
+          bottom="30px"
+          right={{ base: "105px", md: "105px" }}
+          zIndex={isOpen ? 0 : 99}
           pointerEvents={isOpen ? 'none' : 'auto'}
+          display={{ base: "none", md: "block" }}
         >
           <Button
             onClick={onOpen}

@@ -12,12 +12,8 @@ const UserSwitcher: React.FC = () => {
   const switchUser = (userId: string) => {
     localStorage.setItem('testUserId', userId);
     
-    // Otomatik yönlendirme
-    if (userId === 'customer-user') {
-      navigate('/customer/dashboard');
-    } else {
-      navigate('/admin/default');
-    }
+    // Otomatik yönlendirme - Customer seçildiğinde de admin default'a yönlendir
+    navigate('/admin/default');
     
     // Sayfayı yenile
     setTimeout(() => {

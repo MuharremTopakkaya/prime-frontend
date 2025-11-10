@@ -442,7 +442,7 @@ function SignIn() {
         </Flex>
       </Flex>
       {/* Video Play Floating Button */}
-      <Tooltip label='Tanıtım Videosu' openDelay={300} placement='left'>
+      {/* <Tooltip label='Tanıtım Videosu' openDelay={300} placement='left'>
         <IconButton
           aria-label='Tanıtım videosunu oynat'
           icon={<FiPlay />}
@@ -460,7 +460,7 @@ function SignIn() {
           pointerEvents={isVideoOpen ? 'none' : 'auto'}
           transition='opacity 0.2s ease'
         />
-      </Tooltip>
+      </Tooltip> */}
 
       {/* Video Modal */}
       <Modal isOpen={isVideoOpen} onClose={closeVideo} size={{ base: 'md', md: 'xl' }} isCentered>

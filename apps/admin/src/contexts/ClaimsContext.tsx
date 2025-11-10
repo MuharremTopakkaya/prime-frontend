@@ -10,6 +10,8 @@ import {
   shouldLogoutOnError,
 } from '../utils/claimsErrors';
 import { FullControlClaim } from '../constants/OperationClaims';
+import { useAuth } from './AuthContext';
+import { authService } from '../services/authService';
 
 export interface ClaimsContextType extends IClaimsContextType {
   // Şeker fonksiyonlar: mevcut has* üzerine alias
@@ -33,6 +35,7 @@ interface ClaimsProviderProps {
 }
 
 export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
+  const { loading: authLoading, isAuthenticated } = useAuth();
   const [userClaims, setUserClaims] = useState<UserClaimsGroup[]>([]);
   const [byName, setByName] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,9 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
   
   // Cache duration: 5 minutes (300000 ms)
   const CACHE_DURATION = 5 * 60 * 1000;
+  
+  // If auth is still loading, claims should also be loading
+  const isLoading = authLoading || loading;
 
   // Check if user has FullControl claim
   const isAdmin = userClaims.some(group => 
@@ -98,10 +104,30 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
       setLoading(true);
       setError(null);
       
+      // Wait for auth context to finish loading
+      if (authLoading) {
+        setLoading(false);
+        return;
+      }
+      
+      // If user is not authenticated, don't try to fetch claims
+      if (!isAuthenticated) {
+        setLoading(false);
+        setError(null);
+        setUserClaims([]);
+        setByName({});
+        return;
+      }
+      
       // Get current user ID from localStorage or token
-      const token = localStorage.getItem('authToken') || localStorage.getItem('accessToken');
+      const token = authService.getToken();
       if (!token) {
-        throw new Error('No authentication token found');
+        // Token yoksa hata verme, sadece boş claims döndür
+        setLoading(false);
+        setError(null);
+        setUserClaims([]);
+        setByName({});
+        return;
       }
 
       // TODO: Replace with real API call
@@ -167,7 +193,7 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [CACHE_DURATION]);
+  }, [CACHE_DURATION, authLoading, isAuthenticated]);
 
   /**
    * Invalidate cache and force refresh
@@ -189,13 +215,22 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
     return Date.now() >= cacheExpiry;
   }, [lastFetchedAt, cacheExpiry]);
 
-  // Auto-refresh on mount
+  // Auto-refresh on mount - Wait for auth to be ready
   useEffect(() => {
+    // Wait for auth context to finish loading before checking claims
+    if (authLoading) {
+      setLoading(true);
+      return;
+    }
+    
     // Check if we need to refresh (cache expired or never fetched)
     if (shouldRefresh()) {
       refreshClaims();
+    } else {
+      // If we have cached claims and auth is ready, we're done loading
+      setLoading(false);
     }
-  }, [refreshClaims, shouldRefresh]);
+  }, [refreshClaims, shouldRefresh, authLoading]);
 
   // TODO: Auto-refresh on token refresh (when auth context refreshes token)
   // useEffect(() => {
@@ -222,7 +257,7 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
     canAll,
     isAdmin,
     isCustomer,
-    loading,
+    loading: isLoading,
     error,
     lastFetchedAt,
     cacheExpiry,

@@ -48,6 +48,11 @@ export function SidebarLinks(props) {
   // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
   const createLinks = (routes) => {
     return routes.map((route, index) => {
+      // Skip route if it should be hidden from sidebar
+      if (route.hideFromSidebar) {
+        return null;
+      }
+      
       // Check if user has required claims for this route
       const hasRequiredClaims = route.requiredClaims ? 
         route.requiredClaims.length === 0 || hasAnyClaim(route.requiredClaims) : 

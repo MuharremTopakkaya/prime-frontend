@@ -17,7 +17,7 @@ import MainDashboard from './views/admin/default';
 import NFTMarketplace from './views/admin/marketplace';
 import Profile from './views/admin/profile';
 import DataTables from './views/admin/dataTables';
-import RTL from './views/admin/rtl';
+// import RTL from './views/admin/rtl'; // Commented out - RTL Admin route is disabled
 import CompaniesPage from './views/companies/CompaniesPage';
 import CompanyDetailPage from './views/companies/CompanyDetailPage';
 import PartnersPage from './views/partners/PartnersPage';
@@ -136,15 +136,16 @@ const routes = [
     icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
     component: <SignInCentered />,
     requiredClaims: [], // Auth sayfası için claim gerekmez
+    hideFromSidebar: true, // Sidebar'da gösterme
   },
-  {
-    name: 'RTL Admin',
-    layout: '/rtl',
-    path: '/rtl-default',
-    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <RTL />,
-    requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
-  },
+  // {
+  //   name: 'RTL Admin',
+  //   layout: '/rtl',
+  //   path: '/rtl-default',
+  //   icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
+  //   component: <RTL />,
+  //   requiredClaims: ['FullControl'], // Sadece admin'ler görebilir
+  // },
 ];
 
 export default routes;
