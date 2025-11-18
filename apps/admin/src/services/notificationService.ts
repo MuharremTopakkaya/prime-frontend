@@ -1,8 +1,17 @@
 import { USE_MOCKS } from '../config/runtime';
+import i18n from '../i18n';
 
 export interface NotificationInfo {
   hasUnRead: boolean;
-  lastFive: UserNotification[];
+  items: UserNotification[];
+  pagination?: {
+    index: number;
+    size: number;
+    count: number;
+    pages: number;
+    hasPrevious: boolean;
+    hasNext: boolean;
+  };
 }
 
 export interface UserNotification {
@@ -28,9 +37,18 @@ export interface GetNotificationsResponse {
 }
 
 class NotificationService {
-  private readonly API_BASE_URL = '/api';
+  private readonly API_BASE_URL = '/api/Notification';
   private getToken(): string | null {
     return localStorage.getItem('authToken') || localStorage.getItem('accessToken');
+  }
+
+  private buildHeaders(includeJson = true) {
+    const headers: Record<string, string> = {};
+    if (includeJson) headers['Content-Type'] = 'application/json';
+    const token = this.getToken();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    headers['Accept-Language'] = i18n.language || 'en';
+    return headers;
   }
 
   async getInfoFromAuth(): Promise<NotificationInfo> {
@@ -43,8 +61,8 @@ class NotificationService {
         ],
       };
     }
-    const res = await fetch(`${this.API_BASE_URL}/Notifications/GetInfoFromAuth`, {
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.getToken()}` },
+    const res = await fetch(`${this.API_BASE_URL}/FromAuth`, {
+      headers: this.buildHeaders(),
     });
     if (!res.ok) throw new Error(`Failed to fetch notification info: ${res.statusText}`);
     return res.json();
@@ -72,8 +90,8 @@ class NotificationService {
         },
       };
     }
-    const res = await fetch(`${this.API_BASE_URL}/Notifications?PageIndex=${pageIndex}&PageSize=${pageSize}`, {
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.getToken()}` },
+    const res = await fetch(`${this.API_BASE_URL}?PageRequest.PageIndex=${pageIndex}&PageRequest.PageSize=${pageSize}`, {
+      headers: this.buildHeaders(false),
     });
     if (!res.ok) throw new Error(`Failed to fetch notifications: ${res.statusText}`);
     return res.json();
@@ -81,10 +99,10 @@ class NotificationService {
 
   async markAsRead(ids: string[]): Promise<void> {
     if (USE_MOCKS) return;
-    const res = await fetch(`${this.API_BASE_URL}/Notifications/MarkAsRead`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.getToken()}` },
-      body: JSON.stringify({ ids }),
+    const res = await fetch(`${this.API_BASE_URL}`, {
+      method: 'PUT',
+      headers: this.buildHeaders(),
+      body: JSON.stringify({ Ids: ids }),
     });
     if (!res.ok) throw new Error(`Failed to mark notifications as read: ${res.statusText}`);
   }

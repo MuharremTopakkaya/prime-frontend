@@ -44,7 +44,7 @@ export default function HeaderLinks(props) {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const { hasUnread, lastFive, refreshInfo } = useNotifications();
+  const { hasUnread, lastFive, refreshInfo, markAllRead } = useNotifications();
   // Chakra Color Mode
   const navbarIcon = useColorModeValue('gray.400', 'white');
   let menuBg = useColorModeValue('white', 'navy.800');
@@ -107,40 +107,6 @@ export default function HeaderLinks(props) {
         borderRadius={{ base: "20px", md: "30px" }}
         display={{ base: "none", md: "block" }}
       />
-      <Flex
-        bg={ethBg}
-        display={secondary ? 'flex' : 'none'}
-        borderRadius="30px"
-        ms="auto"
-        p="6px"
-        align="center"
-        me="6px"
-      >
-        <Flex
-          align="center"
-          justify="center"
-          bg={ethBox}
-          h="29px"
-          w="29px"
-          borderRadius="30px"
-          me="7px"
-        >
-          <Icon color={ethColor} w="9px" h="14px" as={FaEthereum} />
-        </Flex>
-        <Text
-          w="max-content"
-          color={ethColor}
-          fontSize="sm"
-          fontWeight="700"
-          me="6px"
-        >
-          1,924
-          <Text as="span" display={{ base: 'none', md: 'unset' }}>
-            {' '}
-            ETH
-          </Text>
-        </Text>
-      </Flex>
       <SidebarResponsive routes={routes} />
       <LanguageSwitcher />
       <Menu placement="bottom-end" gutter={24}>
@@ -175,13 +141,7 @@ export default function HeaderLinks(props) {
                 color={textColorBrand}
                 ms="auto"
                 cursor="pointer"
-                onClick={async () => {
-                  try {
-                    const ids = lastFive.filter(n => !n.isRead).map(n => n.id);
-                    if (ids.length) await notificationService.markAsRead(ids);
-                    await refreshInfo();
-                  } catch {}
-                }}
+                onClick={markAllRead}
               >
               {t('notifications.markAllRead')}
               </Text>

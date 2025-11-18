@@ -159,8 +159,40 @@ class CompanyService {
       if (!response.ok) {
         throw new Error(`Failed to fetch companies: ${response.statusText}`);
       }
-      const data = await response.json();
-      return data;
+      const raw = await response.json();
+
+      // Backend şu anda Domain.Paging.GetListResponse döndürüyor
+      // Frontend ise { items, pagination: { ... } } bekliyor.
+      // Bu yüzden response'u normalize ediyoruz.
+      const items: Company[] = raw?.items ?? raw?.Items ?? [];
+
+      const paginationSource =
+        raw?.pagination ??
+        {
+          index: raw?.index ?? raw?.Index ?? pageIndex,
+          size: raw?.size ?? raw?.Size ?? pageSize,
+          count: raw?.count ?? raw?.Count ?? items.length,
+          pages: raw?.pages ?? raw?.Pages ?? Math.max(1, Math.ceil((raw?.count ?? raw?.Count ?? items.length) / (raw?.size ?? raw?.Size ?? pageSize))),
+          hasPrevious: raw?.hasPrevious ?? raw?.HasPrevious ?? pageIndex > 0,
+          hasNext:
+            raw?.hasNext ??
+            raw?.HasNext ??
+            ((raw?.index ?? raw?.Index ?? pageIndex) < ((raw?.pages ?? raw?.Pages ?? 1) - 1)),
+        };
+
+      const normalizedResponse: GetCompaniesResponse = {
+        items,
+        pagination: {
+          index: paginationSource.index ?? paginationSource.Index ?? pageIndex,
+          size: paginationSource.size ?? paginationSource.Size ?? pageSize,
+          count: paginationSource.count ?? paginationSource.Count ?? items.length,
+          pages: paginationSource.pages ?? paginationSource.Pages ?? 1,
+          hasPrevious: paginationSource.hasPrevious ?? paginationSource.HasPrevious ?? false,
+          hasNext: paginationSource.hasNext ?? paginationSource.HasNext ?? false,
+        },
+      };
+
+      return normalizedResponse;
     } catch (error) {
       console.error('Get companies error:', error);
       throw error;
@@ -215,6 +247,28 @@ class CompanyService {
       return data;
     } catch (error) {
       console.error('Update company error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete company
+   */
+  async deleteCompany(id: string): Promise<void> {
+    try {
+      const response = await fetch(`${this.API_BASE_URL}/Companies/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.getToken()}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete company: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Delete company error:', error);
       throw error;
     }
   }

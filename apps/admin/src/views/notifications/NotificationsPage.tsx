@@ -39,7 +39,7 @@ const NotificationsPage: React.FC = () => {
   const cardText = useColorModeValue('gray.800', 'gray.100');
 
   return (
-    <Box>
+    <Box mt={81}>
       <Heading size='md' mb={3} color={cardText}>{t('navigation.notifications')}</Heading>
       <Stack spacing={3} mt={{ base: 0, md: '90px' }} pt={0}>
         {data?.items.map(n => {
@@ -69,10 +69,12 @@ const NotificationsPage: React.FC = () => {
           );
         })}
       </Stack>
-      <Flex mt={4} justify='space-between'>
-        <Button onClick={() => setPageIndex(p => Math.max(0, p - 1))} isDisabled={!data?.pagination.hasPrevious}>Önceki</Button>
-        <Text>Sayfa {data ? data.pagination.index + 1 : 1} / {data ? data.pagination.pages : 1}</Text>
-        <Button onClick={() => setPageIndex(p => p + 1)} isDisabled={!data?.pagination.hasNext}>Sonraki</Button>
+      <Flex mt={4} justify='space-between' align='center'>
+        <Button onClick={() => setPageIndex(p => Math.max(0, p - 1))} isDisabled={!data?.pagination?.hasPrevious}>Önceki</Button>
+        <Text>
+          {`Sayfa ${data?.pagination ? data.pagination.index + 1 : 1} / ${data?.pagination?.pages ?? 1}`}
+        </Text>
+        <Button onClick={() => setPageIndex(p => p + 1)} isDisabled={!data?.pagination?.hasNext}>Sonraki</Button>
       </Flex>
     </Box>
   );

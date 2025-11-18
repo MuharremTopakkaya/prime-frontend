@@ -14,7 +14,8 @@ export interface PaginationRequest {
   pageSize: number;
 }
 
-export interface PaginationResponse {
+export interface GetPartnersResponse {
+  items: Partner[];
   index: number;
   size: number;
   count: number;
@@ -23,15 +24,8 @@ export interface PaginationResponse {
   hasNext: boolean;
 }
 
-export interface GetPartnersResponse {
-  items: Partner[];
-  pagination: PaginationResponse;
-}
-
 export interface CreatePartnerRequest {
   name: string;
-  apiKey: string;
-  apiToken: string;
   contactEmail: string;
   isActive: boolean;
 }
@@ -39,10 +33,8 @@ export interface CreatePartnerRequest {
 export interface UpdatePartnerRequest {
   id: string;
   name: string;
-  apiKey?: string;
-  apiToken?: string;
-  contactEmail?: string;
-  isActive?: boolean;
+  contactEmail: string;
+  isActive: boolean;
 }
 
 import { USE_MOCKS } from '../config/runtime';
@@ -133,14 +125,12 @@ class PartnerService {
         const totalPages = Math.ceil(totalRecords / pageSize);
         return {
           items: paginatedPartners,
-          pagination: {
-            index: pageIndex,
-            size: pageSize,
-            count: totalRecords,
-            pages: totalPages,
-            hasPrevious: pageIndex > 0,
-            hasNext: pageIndex < totalPages - 1
-          }
+          index: pageIndex,
+          size: pageSize,
+          count: totalRecords,
+          pages: totalPages,
+          hasPrevious: pageIndex > 0,
+          hasNext: pageIndex < totalPages - 1
         };
       }
 
@@ -158,7 +148,16 @@ class PartnerService {
         throw new Error(`Failed to fetch partners: ${response.statusText}`);
       }
       const data = await response.json();
-      return data;
+
+      return {
+        items: data.items ?? [],
+        index: data.index ?? 0,
+        size: data.size ?? pageSize,
+        count: data.count ?? 0,
+        pages: data.pages ?? 0,
+        hasPrevious: data.hasPrevious ?? false,
+        hasNext: data.hasNext ?? false,
+      };
     } catch (error) {
       console.error('Get partners error:', error);
       throw error;

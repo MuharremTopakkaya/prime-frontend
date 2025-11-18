@@ -5,6 +5,7 @@ interface NotificationsContextType {
   hasUnread: boolean;
   lastFive: UserNotification[];
   refreshInfo: () => Promise<void>;
+  markAllRead: () => Promise<void>;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
@@ -23,18 +24,28 @@ export const NotificationsProvider: React.FC<React.PropsWithChildren> = ({ child
     try {
       const info = await notificationService.getInfoFromAuth();
       setHasUnread(info.hasUnRead);
-      setLastFive(info.lastFive || []);
+      setLastFive(info.items || []);
     } catch (e) {
       // sessizce yut: bildirim yoksa kritik değil
     }
   }, []);
+
+  const markAllRead = useCallback(async () => {
+    try {
+      const unreadIds = lastFive.filter(n => !n.isRead).map(n => n.id);
+      if (unreadIds.length) await notificationService.markAsRead(unreadIds);
+      await refreshInfo();
+    } catch {
+      // ignore
+    }
+  }, [lastFive, refreshInfo]);
 
   useEffect(() => {
     refreshInfo();
   }, [refreshInfo]);
 
   return (
-    <NotificationsContext.Provider value={{ hasUnread, lastFive, refreshInfo }}>
+    <NotificationsContext.Provider value={{ hasUnread, lastFive, refreshInfo, markAllRead }}>
       {children}
     </NotificationsContext.Provider>
   );

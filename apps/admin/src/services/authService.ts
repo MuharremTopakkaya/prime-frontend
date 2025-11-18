@@ -31,56 +31,25 @@ class AuthService {
    */
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
-      // MOCK DATA - Database bağlantısı olmadığı için geçici test
-      // Admin test kullanıcıları (Owner authentication method)
-      const adminUsers = [
-        { email: 'test@gmail.com', password: 'Tester123.' },
-        { email: 'salihkutluk@mail.com', password: '123456' },
-        { email: 'adem@mail.com', password: '123456' },
-        { email: 'salihsaygili@mail.com', password: '123456' }
-      ];
-
-      const isAdminUser = adminUsers.some(
-        user => user.email === credentials.email && user.password === credentials.password
-      );
-
-      if (isAdminUser) {
-        // Mock token - Owner authentication method (Admin)
-        const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzM3MzQ4MDAwLCJleHAiOjE3Mzc5NTI4MDAsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvYXV0aGVudGljYXRpb25tZXRob2QiOiJPd25lciJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        
-        return {
-          accessToken: {
-            token: mockToken,
-            expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-          }
-        };
-      }
-      
-      if (credentials.email === 'customer@test.com' && credentials.password === 'Customer123.') {
-        // Mock token - Customer authentication method
-        const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzM3MzQ4MDAwLCJleHAiOjE3Mzc5NTI4MDAsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvYXV0aGVudGljYXRpb25tZXRob2QiOiJDdXN0b21lciJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-        
-        return {
-          accessToken: {
-            token: mockToken,
-            expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-          }
-        };
-      }
-      
-      throw new Error('Invalid credentials');
-
-      // Gerçek API çağrısı
       const response = await fetch(`${this.API_BASE_URL}/Auth/Login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(credentials),
+        credentials: 'include',
       });
 
       if (!response.ok) {
-        throw new Error(`Login failed: ${response.statusText}`);
+        // Backend tipik olarak ProblemDetails döndürür, mesajı yüzeye çıkar
+        let errorMessage = `Login failed: ${response.status} ${response.statusText}`;
+        try {
+          const errorBody = await response.json();
+          errorMessage = errorBody?.Detail || errorBody?.message || errorMessage;
+        } catch {
+          // JSON parse hatasını sessizce yut
+        }
+        throw new Error(errorMessage);
       }
 
       const data: LoginResponse = await response.json();

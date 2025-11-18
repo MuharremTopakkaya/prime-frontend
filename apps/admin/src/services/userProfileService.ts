@@ -35,7 +35,7 @@ export interface UpdateProfileResponse {
 import { USE_MOCKS } from '../config/runtime';
 
 class UserProfileService {
-  private baseUrl = 'http://localhost:5132/api/Users';
+  private baseUrl = '/api/Users';
   private getAuthHeaders() {
     const token = localStorage.getItem('authToken') || localStorage.getItem('accessToken');
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };

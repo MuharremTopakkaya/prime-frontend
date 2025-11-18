@@ -23,6 +23,12 @@ import {
   AlertIcon,
   useToast,
   useDisclosure,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
   Card,
   CardBody,
   CardHeader,
@@ -58,6 +64,10 @@ const CompaniesPage: React.FC = () => {
   const [hasNext, setHasNext] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [deletingCompany, setDeletingCompany] = useState<Company | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
 
   const fetchCompanies = async (pageIndex: number) => {
     try {
@@ -149,6 +159,48 @@ const CompaniesPage: React.FC = () => {
 
   const handleDetails = (company: Company) => {
     navigate(`/admin/companies/${company.id}`);
+  };
+
+  const handleDeleteCompany = (company: Company) => {
+    if (!canDeleteCompanies) {
+      toast({
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToDeleteCompany'),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    setDeletingCompany(company);
+    onDeleteOpen();
+  };
+
+  const confirmDeleteCompany = async () => {
+    if (!deletingCompany) return;
+    setDeleting(true);
+    try {
+      await companyService.deleteCompany(deletingCompany.id);
+      toast({
+        title: t('companies.companyDeletedSuccessfully'),
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      onDeleteClose();
+      fetchCompanies(currentPage);
+    } catch (err) {
+      toast({
+        title: t('errors.somethingWentWrong'),
+        description: err instanceof Error ? err.message : 'Unknown error',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setDeleting(false);
+      setDeletingCompany(null);
+    }
   };
 
   const getStatusBadge = (status: OperationalStatus) => {
@@ -436,6 +488,40 @@ const CompaniesPage: React.FC = () => {
                               >
                                 {t('common.details')}
                               </MenuItem>
+                              <ProtectedComponent 
+                                requiredClaims={['Companies.Admin', 'FullControl']}
+                                requireAny={true}
+                                fallback={
+                                  <MenuItem 
+                                    isDisabled
+                                    _hover={{
+                                      bg: "gray.100",
+                                      _dark: {
+                                        bg: "gray.600"
+                                      }
+                                    }}
+                                    color="gray.500"
+                                    _dark={{ color: "gray.500" }}
+                                  >
+                                    {t('common.delete')} ({t('permissions.noPermission')})
+                                  </MenuItem>
+                                }
+                              >
+                                <MenuItem 
+                                  onClick={() => handleDeleteCompany(company)}
+                                  color="red.500"
+                                  _hover={{
+                                    bg: "gray.100",
+                                    _dark: {
+                                      bg: "gray.600",
+                                      color: "red.400"
+                                    }
+                                  }}
+                                  _dark={{ color: "red.400" }}
+                                >
+                                  {t('common.delete')}
+                                </MenuItem>
+                              </ProtectedComponent>
                             </MenuList>
                           </Menu>
                         </Td>
@@ -469,6 +555,33 @@ const CompaniesPage: React.FC = () => {
         onCompanySaved={handleCompanySaved}
         onCompanyUpdated={handleCompanyUpdated}
       />
+
+      <AlertDialog
+        isOpen={isDeleteOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onDeleteClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              {t('companies.confirmDeleteCompany')}
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              {deletingCompany?.name}
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onDeleteClose}>
+                {t('common.cancel')}
+              </Button>
+              <Button colorScheme="red" onClick={confirmDeleteCompany} ml={3} isLoading={deleting}>
+                {t('common.delete')}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Box>
   );
 };

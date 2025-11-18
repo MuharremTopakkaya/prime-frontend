@@ -50,13 +50,10 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
   const isLoading = authLoading || loading;
 
   // Check if user has FullControl claim
-  const isAdmin = userClaims.some(group => 
-    group.group === 'FullControl' && 
-    group.claims.some(claim => claim.name === 'FullControl' && claim.isAssigned)
-  );
+  const isAdminFromClaims = !!byName[FullControlClaim] || !!byName['Admin'];
 
   // Check if user is customer (has only Read claims, no Admin claims)
-  const isCustomer = !isAdmin && userClaims.some(group => 
+  const isCustomer = !isAdminFromClaims && userClaims.some(group => 
     group.claims.some(claim => 
       claim.isAssigned && 
       (claim.name.includes('.Read') || claim.name.includes('Companies.Read') || claim.name.includes('Partners.Read')) &&
@@ -69,7 +66,7 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
 
   const hasClaim = (claimName: string): boolean => {
     // If user has FullControl, they can do everything
-    if (isAdmin) {
+    if (isAdminFromClaims) {
       return true;
     }
     
@@ -174,7 +171,12 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
       const map: Record<string, boolean> = {};
       claims.forEach(group => {
         group.claims.forEach(c => {
-          if (c.isAssigned) map[c.name] = true;
+          if (c.isAssigned) {
+            map[c.name] = true;
+            if (c.name === 'Admin') {
+              map[FullControlClaim] = true;
+            }
+          }
         });
       });
       setByName(map);
@@ -255,7 +257,7 @@ export const ClaimsProvider: React.FC<ClaimsProviderProps> = ({ children }) => {
     can,
     canAny,
     canAll,
-    isAdmin,
+    isAdmin: isAdminFromClaims,
     isCustomer,
     loading: isLoading,
     error,

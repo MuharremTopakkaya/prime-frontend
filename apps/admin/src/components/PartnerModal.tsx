@@ -12,22 +12,17 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   useToast,
-  InputGroup,
-  InputRightElement,
-  IconButton,
   Switch,
   FormHelperText,
 } from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 interface PartnerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (partnerData: { name: string; apiKey: string; apiToken: string; contactEmail: string; isActive: boolean }) => void;
+  onSave: (partnerData: { name: string; contactEmail: string; isActive: boolean }) => void;
   isEditMode?: boolean;
-  initialData?: { name: string; apiKey: string; apiToken: string; contactEmail: string; isActive: boolean };
+  initialData?: { name: string; apiKey?: string; apiToken?: string; contactEmail: string; isActive: boolean };
   loading?: boolean;
 }
 
@@ -42,31 +37,29 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
   const { t } = useTranslation();
   const toast = useToast();
   const [name, setName] = useState('');
-  const [apiKey, setApiKey] = useState('');
-  const [apiToken, setApiToken] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [isActive, setIsActive] = useState(true);
-  const [showApiKey, setShowApiKey] = useState(false);
-  const [showApiToken, setShowApiToken] = useState(false);
+  const [apiKeyDisplay, setApiKeyDisplay] = useState('');
+  const [apiTokenDisplay, setApiTokenDisplay] = useState('');
 
   useEffect(() => {
     if (initialData) {
       setName(initialData.name);
-      setApiKey(initialData.apiKey);
-      setApiToken(initialData.apiToken);
       setContactEmail(initialData.contactEmail);
       setIsActive(initialData.isActive);
+      setApiKeyDisplay(initialData.apiKey ?? '');
+      setApiTokenDisplay(initialData.apiToken ?? '');
     } else {
       setName('');
-      setApiKey('');
-      setApiToken('');
       setContactEmail('');
       setIsActive(true);
+      setApiKeyDisplay('');
+      setApiTokenDisplay('');
     }
   }, [initialData, isOpen]);
 
   const handleSubmit = () => {
-    if (!name.trim() || !apiKey.trim() || !apiToken.trim() || !contactEmail.trim()) {
+    if (!name.trim() || !contactEmail.trim()) {
       toast({
         title: t('errors.validationError'),
         description: t('errors.required'),
@@ -77,11 +70,11 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
       return;
     }
 
-    onSave({ name, apiKey, apiToken, contactEmail, isActive });
+    onSave({ name, contactEmail, isActive });
   };
 
   const isFormValid = () => {
-    return name.trim() !== '' && apiKey.trim() !== '' && apiToken.trim() !== '' && contactEmail.trim() !== '';
+    return name.trim() !== '' && contactEmail.trim() !== '';
   };
 
   return (
@@ -140,77 +133,49 @@ const PartnerModal: React.FC<PartnerModalProps> = ({
             />
           </FormControl>
 
-          <FormControl isRequired mb={4}>
-            <FormLabel
-              color="gray.600"
-              _dark={{
-                color: "gray.300"
-              }}
-            >
-              {t('partners.apiKey')}
-            </FormLabel>
-            <InputGroup>
-              <Input
-                type={showApiKey ? 'text' : 'password'}
-                placeholder={t('partners.apiKey')}
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                _dark={{
-                  bg: "navy.700",
-                  borderColor: "blue.500",
-                  color: "white",
-                  _placeholder: {
-                    color: "gray.400"
-                  }
-                }}
-              />
-              <InputRightElement>
-                <IconButton
-                  aria-label={showApiKey ? t('partners.hideApiKey') : t('partners.showApiKey')}
-                  icon={showApiKey ? <ViewOffIcon /> : <ViewIcon />}
-                  onClick={() => setShowApiKey(!showApiKey)}
-                  variant="ghost"
-                  size="sm"
+          {isEditMode && (
+            <>
+              <FormControl mb={4}>
+                <FormLabel
+                  color="gray.600"
+                  _dark={{
+                    color: "gray.300"
+                  }}
+                >
+                  {t('partners.apiKey')}
+                </FormLabel>
+                <Input
+                  value={apiKeyDisplay}
+                  isReadOnly
+                  _dark={{
+                    bg: "navy.700",
+                    borderColor: "blue.500",
+                    color: "white",
+                  }}
                 />
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
+              </FormControl>
 
-          <FormControl isRequired mb={4}>
-            <FormLabel
-              color="gray.600"
-              _dark={{
-                color: "gray.300"
-              }}
-            >
-              {t('partners.apiToken')}
-            </FormLabel>
-            <InputGroup>
-              <Input
-                type={showApiToken ? 'text' : 'password'}
-                placeholder={t('partners.apiToken')}
-                value={apiToken}
-                onChange={(e) => setApiToken(e.target.value)}
-                _dark={{
-                  bg: "navy.700",
-                  borderColor: "blue.500",
-                  color: "white",
-                  _placeholder: {
-                    color: "gray.400"
-                  }
-                }}
-              />
-              <InputRightElement>
-                <IconButton
-                  aria-label={showApiToken ? t('partners.hideApiToken') : t('partners.showApiToken')}
-                  icon={showApiToken ? <ViewOffIcon /> : <ViewIcon />}
-                  onClick={() => setShowApiToken(!showApiToken)}
-                  variant="ghost"
-                  size="sm"
+              <FormControl mb={4}>
+                <FormLabel
+                  color="gray.600"
+                  _dark={{
+                    color: "gray.300"
+                  }}
+                >
+                  {t('partners.apiToken')}
+                </FormLabel>
+                <Input
+                  value={apiTokenDisplay}
+                  isReadOnly
+                  _dark={{
+                    bg: "navy.700",
+                    borderColor: "blue.500",
+                    color: "white",
+                  }}
                 />
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
+              </FormControl>
+            </>
+          )}
 
           <FormControl isRequired mb={4}>
             <FormLabel

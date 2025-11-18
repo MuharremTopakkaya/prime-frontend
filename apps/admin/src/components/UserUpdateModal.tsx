@@ -24,6 +24,7 @@ interface UserUpdateModalProps {
   onSave: (userData: { name: string; surname: string; email: string; password?: string }) => void;
   initialData?: { name: string; surname: string; email: string };
   loading?: boolean;
+  mode?: 'create' | 'edit';
 }
 
 const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
@@ -32,6 +33,7 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
   onSave,
   initialData,
   loading = false,
+  mode = 'edit',
 }) => {
   const { t } = useTranslation();
   const toast = useToast();
@@ -41,6 +43,7 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [updatePassword, setUpdatePassword] = useState(false);
+  const isCreateMode = mode === 'create';
 
   useEffect(() => {
     if (initialData) {
@@ -54,8 +57,8 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
     }
     setPassword('');
     setPasswordRepeat('');
-    setUpdatePassword(false);
-  }, [initialData, isOpen]);
+    setUpdatePassword(isCreateMode);
+  }, [initialData, isOpen, isCreateMode]);
 
   const handleSubmit = () => {
     if (!name.trim() || !surname.trim() || !email.trim()) {
@@ -130,7 +133,7 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
             color: "white"
           }}
         >
-          {t('users.updateUser')}
+          {isCreateMode ? t('users.createUser') : t('users.updateUser')}
         </ModalHeader>
         <ModalCloseButton
           color="gray.500"
@@ -214,20 +217,23 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
               />
             </FormControl>
 
-            <FormControl>
-              <Checkbox
-                isChecked={updatePassword}
-                onChange={(e) => setUpdatePassword(e.target.checked)}
-                color="gray.600"
-                _dark={{
-                  color: "gray.300"
-                }}
-              >
-                {t('users.updatePassword')}
-              </Checkbox>
-            </FormControl>
+            {!isCreateMode && (
+              <FormControl>
+                <Checkbox
+                  isChecked={updatePassword}
+                  onChange={(e) => setUpdatePassword(e.target.checked)}
+                  colorScheme="brand"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.300"
+                  }}
+                >
+                  {t('users.updatePassword')}
+                </Checkbox>
+              </FormControl>
+            )}
 
-            {updatePassword && (
+            {(isCreateMode || updatePassword) && (
               <>
                 <FormControl isRequired>
                   <FormLabel
@@ -307,7 +313,7 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
             isLoading={loading}
             isDisabled={!isFormValid()}
           >
-            {t('common.update')}
+            {isCreateMode ? t('common.create') : t('common.update')}
           </Button>
         </ModalFooter>
       </ModalContent>

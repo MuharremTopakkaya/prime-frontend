@@ -45,6 +45,7 @@ const CompanyDetailPage: React.FC = () => {
   const { 
     canViewUsers, 
     canEditUsers, 
+    canCreateUsers,
     canManagePermissions 
   } = useClaimCheck();
   
@@ -55,6 +56,7 @@ const CompanyDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [isClaimsSidebarOpen, setIsClaimsSidebarOpen] = useState(false);
   const [selectedUserForClaims, setSelectedUserForClaims] = useState<User | null>(null);
@@ -116,33 +118,75 @@ const CompanyDetailPage: React.FC = () => {
       return;
     }
     setEditingUser(user);
+    setIsCreatingUser(false);
     setIsUserModalOpen(true);
   };
 
-  const handleSaveUser = async (userData: { name: string; surname: string; email: string; password?: string }) => {
-    if (!editingUser) return;
-    
-    setSaving(true);
-    try {
-      await userService.updateUser({
-        id: editingUser.id,
-        name: userData.name,
-        surname: userData.surname,
-        email: userData.email,
-        ...(userData.password && { password: userData.password }),
-      });
-      
+  const handleAddUser = () => {
+    if (!canCreateUsers) {
       toast({
-        title: t('users.userUpdatedSuccessfully'),
-        status: 'success',
+        title: t('permissions.permissionError'),
+        description: t('permissions.noPermissionToAddUser'),
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
+      return;
+    }
+
+    setEditingUser(null);
+    setIsCreatingUser(true);
+    setIsUserModalOpen(true);
+  };
+
+  const handleCloseUserModal = () => {
+    setIsUserModalOpen(false);
+    setEditingUser(null);
+    setIsCreatingUser(false);
+  };
+
+  const handleSaveUser = async (userData: { name: string; surname: string; email: string; password?: string }) => {
+    if (!id) return;
+    
+    setSaving(true);
+    try {
+      if (isCreatingUser) {
+        await userService.createUser({
+          companyId: id,
+          name: userData.name,
+          surname: userData.surname,
+          email: userData.email,
+          password: userData.password ?? '',
+        });
+
+        toast({
+          title: t('users.userCreatedSuccessfully'),
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else if (editingUser) {
+        await userService.updateUser({
+          id: editingUser.id,
+          companyId: id,
+          name: userData.name,
+          surname: userData.surname,
+          email: userData.email,
+          ...(userData.password && { password: userData.password }),
+        });
+        
+        toast({
+          title: t('users.userUpdatedSuccessfully'),
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       
-      setIsUserModalOpen(false);
+      handleCloseUserModal();
       fetchUsers(); // Refresh users list
     } catch (err: any) {
-      console.error('Error updating user:', err);
+      console.error('Error saving user:', err);
       toast({
         title: t('errors.somethingWentWrong'),
         description: err.message || t('errors.validationError'),
@@ -323,10 +367,19 @@ const CompanyDetailPage: React.FC = () => {
             bg: "navy.800"
           }}
         >
-          <CardHeader>
+          <CardHeader display="flex" alignItems="center" justifyContent="space-between">
             <Text fontSize="lg" fontWeight="bold">
               {t('users.users')}
             </Text>
+            <ProtectedComponent
+              requiredClaims={['Users.Create', 'Users.Admin', 'FullControl']}
+              requireAny={true}
+              fallback={null}
+            >
+              <Button size="sm" colorScheme="brand" onClick={handleAddUser}>
+                {t('users.addUser')}
+              </Button>
+            </ProtectedComponent>
           </CardHeader>
         <CardBody p={0}>
           {usersLoading ? (
@@ -375,7 +428,7 @@ const CompanyDetailPage: React.FC = () => {
                       <Td color="gray.700" _dark={{ color: "gray.300" }}>{user.surname}</Td>
                       <Td color="gray.700" _dark={{ color: "gray.300" }}>{user.email}</Td>
                       <Td color="gray.700" _dark={{ color: "gray.300" }}>
-                        {formatDate(user.createdDate)}
+                        {user.createdDate ? formatDate(user.createdDate) : '-'}
                       </Td>
                       <Td>
                         <Menu>
@@ -478,14 +531,15 @@ const CompanyDetailPage: React.FC = () => {
 
       <UserUpdateModal
         isOpen={isUserModalOpen}
-        onClose={() => setIsUserModalOpen(false)}
+        onClose={handleCloseUserModal}
         onSave={handleSaveUser}
-        initialData={editingUser ? { 
-          name: editingUser.name, 
-          surname: editingUser.surname, 
-          email: editingUser.email 
-        } : undefined}
+        initialData={
+          editingUser && !isCreatingUser
+            ? { name: editingUser.name, surname: editingUser.surname, email: editingUser.email }
+            : undefined
+        }
         loading={saving}
+        mode={isCreatingUser ? 'create' : 'edit'}
       />
 
       <UserClaimsSidebar

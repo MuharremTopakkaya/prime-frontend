@@ -146,10 +146,10 @@ const PartnersPage: React.FC = () => {
     try {
       const response = await partnerService.getPartners(currentPage, 12);
       setPartners(response.items);
-      setTotalPages(response.pagination.pages);
-      setTotalRecords(response.pagination.count);
-      setHasPrevious(response.pagination.hasPrevious);
-      setHasNext(response.pagination.hasNext);
+      setTotalPages(response.pages);
+      setTotalRecords(response.count);
+      setHasPrevious(response.hasPrevious);
+      setHasNext(response.hasNext);
     } catch (err) {
       console.error('Error fetching partners:', err);
       setError('Failed to load partners');
@@ -194,15 +194,13 @@ const PartnersPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSavePartner = async (partnerData: { name: string; apiKey: string; apiToken: string; contactEmail: string; isActive: boolean }) => {
+  const handleSavePartner = async (partnerData: { name: string; contactEmail: string; isActive: boolean }) => {
     setSaving(true);
     try {
       if (isEditMode && editingPartner) {
         await partnerService.updatePartner({
           id: editingPartner.id,
           name: partnerData.name,
-          apiKey: partnerData.apiKey,
-          apiToken: partnerData.apiToken,
           contactEmail: partnerData.contactEmail,
           isActive: partnerData.isActive,
         });
@@ -632,10 +630,10 @@ const PartnersPage: React.FC = () => {
         isEditMode={isEditMode}
         initialData={editingPartner ? { 
           name: editingPartner.name, 
-          apiKey: editingPartner.apiKey,
-          apiToken: editingPartner.apiToken,
           contactEmail: editingPartner.contactEmail,
-          isActive: editingPartner.isActive
+          isActive: editingPartner.isActive,
+          apiKey: editingPartner.apiKey,
+          apiToken: editingPartner.apiToken
         } : undefined}
         loading={saving}
       />

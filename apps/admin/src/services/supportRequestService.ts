@@ -134,8 +134,8 @@ class SupportRequestService {
   // Admin methods
   async getListForAdmin(pageIndex = 0, pageSize = 10, filters?: SupportRequestListFilters): Promise<GetListResponse<SupportRequestAdminListItemDto>> {
     const params = new URLSearchParams({
-      PageIndex: String(pageIndex),
-      PageSize: String(pageSize),
+      'PageRequest.PageIndex': String(pageIndex),
+      'PageRequest.PageSize': String(pageSize),
     });
     if (filters?.companyId) params.append('CompanyId', filters.companyId);
     if (filters?.priority) params.append('Priority', String(filters.priority));

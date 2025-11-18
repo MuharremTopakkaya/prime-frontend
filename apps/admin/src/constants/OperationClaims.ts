@@ -33,6 +33,7 @@ export const CompaniesOperationClaims = {
   Read: 'Companies.Read',
   Create: 'Companies.Create',
   Update: 'Companies.Update',
+  Delete: 'Companies.Delete',
 } as const;
 
 /**
@@ -44,6 +45,7 @@ export const PartnersOperationClaims = {
   Read: 'Partners.Read',
   Create: 'Partners.Create',
   Update: 'Partners.Update',
+  Delete: 'Partners.Delete',
 } as const;
 
 /**

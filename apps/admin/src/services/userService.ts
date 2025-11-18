@@ -41,10 +41,19 @@ export interface UserClaimsGroup {
 
 export interface UpdateUserRequest {
   id: string;
+  companyId: string;
   name: string;
   surname: string;
   email: string;
   password?: string;
+}
+
+export interface CreateUserRequest {
+  companyId: string;
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
 }
 
 export interface UpdateUserClaimsRequest {
@@ -183,6 +192,44 @@ class UserService {
       return data;
     } catch (error) {
       console.error('Update user error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create user
+   */
+  async createUser(userData: CreateUserRequest): Promise<User> {
+    try {
+      if (this.USE_MOCKS) {
+        return {
+          id: `mock-${Date.now()}`,
+          name: userData.name,
+          surname: userData.surname,
+          email: userData.email,
+          createdDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString(),
+        };
+      }
+
+      const response = await fetch(`${this.API_BASE_URL}/Users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.getToken()}`,
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Failed to create user: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Create user error:', error);
       throw error;
     }
   }
