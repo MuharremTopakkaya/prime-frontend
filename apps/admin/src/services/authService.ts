@@ -1,4 +1,6 @@
 // Auth Service - JWT token decode ve authentication method kontrolü
+import { USE_MOCKS } from '../config/runtime';
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -23,14 +25,131 @@ export interface DecodedToken {
 
 export type AuthenticationMethod = 'Owner' | 'Customer';
 
+interface MockUser {
+  id: string;
+  email: string;
+  password: string;
+  authenticationMethod: AuthenticationMethod;
+  roles: string[];
+  fullName: string;
+}
+
+const MOCK_USERS: MockUser[] = [
+  {
+    id: 'owner-1',
+    email: 'salikkutluk@mail.com',
+    password: '123456',
+    authenticationMethod: 'Owner',
+    roles: ['Admin'],
+    fullName: 'Salih Kutluk',
+  },
+  {
+    id: 'owner-2',
+    email: 'salihsaygili@mail.com',
+    password: '123456',
+    authenticationMethod: 'Owner',
+    roles: ['Admin'],
+    fullName: 'Salih Saygılı',
+  },
+  {
+    id: 'customer-1',
+    email: 'adem@mail.com',
+    password: '123456',
+    authenticationMethod: 'Customer',
+    roles: ['Customer'],
+    fullName: 'Adem Müşteri',
+  },
+];
+
+type NodeBufferLike = {
+  from: (input: string, encoding?: string) => {
+    toString: (encoding?: string) => string;
+  };
+};
+
+const toBase64 = (value: string): string => {
+  if (typeof window === 'undefined') {
+    const nodeBuffer = (globalThis as { Buffer?: NodeBufferLike }).Buffer;
+    if (nodeBuffer) {
+      return nodeBuffer.from(value, 'utf-8').toString('base64');
+    }
+    // SSR ortamında Buffer yoksa basit bir fallback kullan
+    return BufferFallback(value);
+  }
+  return btoa(unescape(encodeURIComponent(value)));
+};
+
+const BufferFallback = (input: string): string => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  let str = encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+    String.fromCharCode(Number.parseInt(p1, 16))
+  );
+  let output = '';
+  for (let block = 0, charCode: number, i = 0, map = chars;
+    str.charAt(i | 0) || ((map = '='), i % 1);
+    output += map.charAt(63 & (block >> (8 - (i % 1) * 8)))
+  ) {
+    charCode = str.charCodeAt((i += 3 / 4));
+    if (charCode > 0xff) {
+      throw new Error('Invalid character in BufferFallback');
+    }
+    block = (block << 8) | charCode;
+  }
+  return output;
+};
+
+const base64UrlEncode = (obj: Record<string, unknown>): string => {
+  const base64 = toBase64(JSON.stringify(obj));
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
+const createMockToken = (user: MockUser): string => {
+  const header = { alg: 'HS256', typ: 'JWT' };
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    sub: user.id,
+    email: user.email,
+    role: user.roles,
+    name: user.fullName,
+    'http://schemas.microsoft.com/ws/2008/06/identity/claims/authenticationmethod': user.authenticationMethod,
+    exp: now + 7 * 24 * 60 * 60,
+    iat: now,
+  };
+  return `${base64UrlEncode(header)}.${base64UrlEncode(payload)}.mock-signature`;
+};
+
 class AuthService {
   private readonly API_BASE_URL = '/api'; // Dev ortamında Vite proxy üzerinden
+  private readonly USE_MOCKS = USE_MOCKS;
 
   /**
    * Login işlemi - Backend'e istek atar
    */
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
+      if (this.USE_MOCKS) {
+        const matchedUser = MOCK_USERS.find(
+          (user) =>
+            user.email.toLowerCase() === credentials.email.toLowerCase() &&
+            user.password === credentials.password
+        );
+
+        if (!matchedUser) {
+          throw new Error('Geçersiz kullanıcı adı veya şifre');
+        }
+
+        const token = createMockToken(matchedUser);
+        const expiration = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+        return {
+          accessToken: {
+            token,
+            expirationDate: expiration,
+          },
+          requiredAuthenticatorType: 'Password',
+        };
+      }
+
       const response = await fetch(`${this.API_BASE_URL}/Auth/Login`, {
         method: 'POST',
         headers: {
