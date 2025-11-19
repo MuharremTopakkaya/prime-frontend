@@ -37,7 +37,7 @@ interface MockUser {
 const MOCK_USERS: MockUser[] = [
   {
     id: 'owner-1',
-    email: 'salikkutluk@mail.com',
+    email: 'salihkutluk@mail.com',
     password: '123456',
     authenticationMethod: 'Owner',
     roles: ['Admin'],
